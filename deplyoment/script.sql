@@ -1,3 +1,19 @@
+-- user: table
+CREATE TABLE `user` (
+                        `id` bigint NOT NULL,
+                        `name` varchar(50) NOT NULL,
+                        `gender` tinyint NOT NULL COMMENT '性别 男1 女0',
+                        `grade` varchar(20) NOT NULL COMMENT '年级',
+                        `academy` varchar(20) NOT NULL COMMENT '学院',
+                        `phone_number` varchar(20) NOT NULL,
+                        `social_info` varchar(255) DEFAULT NULL COMMENT '社交信息',
+                        PRIMARY KEY (`id`),
+                        UNIQUE KEY `name` (`name`),
+                        KEY `name_2` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- No native definition for element: name_2 (index)
+
 -- item: table
 CREATE TABLE `item` (
   `id` bigint NOT NULL,
@@ -47,22 +63,6 @@ CREATE TABLE `purchase_info` (
 
 -- No native definition for element: item_id (index)
 
--- user: table
-CREATE TABLE `user` (
-  `id` bigint NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `gender` tinyint NOT NULL COMMENT '性别 男1 女0',
-  `grade` varchar(20) NOT NULL COMMENT '年级',
-  `academy` varchar(20) NOT NULL COMMENT '学院',
-  `phone_number` varchar(20) NOT NULL,
-  `social_info` varchar(255) DEFAULT NULL COMMENT '社交信息',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `name_2` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- No native definition for element: name_2 (index)
-
 -- user_pwd: table
 CREATE TABLE `user_pwd` (
   `uid` bigint NOT NULL,
@@ -72,3 +72,18 @@ CREATE TABLE `user_pwd` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+-- user: table
+CREATE TABLE `user` (
+                        `id` bigint NOT NULL,
+                        `name` varchar(50) NOT NULL,
+                        `gender` tinyint NOT NULL COMMENT '性别 男1 女0',
+                        `grade` varchar(20) NOT NULL COMMENT '年级',
+                        `academy` varchar(20) NOT NULL COMMENT '学院',
+                        `phone_number` varchar(20) NOT NULL,
+                        `social_info` varchar(255) DEFAULT NULL COMMENT '社交信息',
+                        PRIMARY KEY (`id`),
+                        UNIQUE KEY `name` (`name`),
+                        KEY `name_2` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- No native definition for element: name_2 (index)
