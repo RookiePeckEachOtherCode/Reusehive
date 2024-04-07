@@ -47,21 +47,27 @@ public class ChatController {
      */
     @OnOpen
     public void onOpen(Session session,@PathParam("username") String username,@PathParam("tousername") String tousername){
-        onlineClientNumber.incrementAndGet();//在线数+1
-        onlineClientMap.put(username,session);//添加当前连接的session
-        log.info("时间[{}]：与用户[{}]的连接成功，当前连接编号[{}]，当前连接总数[{}]",
-                new Date().toLocaleString(),
-                username,
-                session.getId(),
-                onlineClientNumber);
+        synchronized (session) {
+            onlineClientNumber.incrementAndGet();//在线数+1
+            onlineClientMap.put(username, session);//添加当前连接的session
+            log.info("时间[{}]：与用户[{}]的连接成功，当前连接编号[{}]，当前连接总数[{}]",
+                    new Date().toLocaleString(),
+                    username,
+                    session.getId(),
+                    onlineClientNumber);
 
-        try {
-            List<Message> messageList = chatService.getMessageList(username, tousername);
-            for(Message i:messageList){
-                session.getAsyncRemote().sendText(i.getContent());
+            try {
+                List<Message> messageList = chatService.getMessageList(username, tousername);
+
+                for (Message i : messageList) {
+                    session.getBasicRemote().sendText(i.getContent());
+                }
+
+            } catch (NullPointerException e) {
+                log.info("未找到聊天记录");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        }catch (NullPointerException e){
-            log.info("未找到聊天记录");
         }
     }
 
