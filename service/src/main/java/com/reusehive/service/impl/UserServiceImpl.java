@@ -8,11 +8,13 @@ import com.reusehive.mapper.UserPasswordMapper;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.PasswordUtils;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Resource
     private UserPasswordMapper userPasswordMapper;
@@ -22,18 +24,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long register(User user, UserPassword userPassword) {
         userMapper.insert(user);
-        userPassword.setId(user.getId());
+        userPassword.setUid(user.getId());
+
+        var hashPassword = PasswordUtils.encrypt(userPassword.getPassword());
+        userPassword.setPassword(hashPassword);
+
         userPasswordMapper.insert(userPassword);
         return user.getId();
     }
 
     @Override
     public Long login(String name, String password) {
-        var uid = userMapper.getUserIdByName(name);
-
-        if (uid == null) {
-            throw new RuntimeException("用户不存在");
-        }
+        var uid = userMapper.getUserIdByName(name).getId();
 
         var userPassword = userPasswordMapper.selectOneById(uid);
 
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return null;
+        return userMapper.selectOneById(id);
     }
 
     @Override

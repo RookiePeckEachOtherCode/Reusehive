@@ -1,5 +1,6 @@
 package com.reusehive.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.reusehive.entity.None;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
@@ -45,7 +46,7 @@ public class UserController {
         try {
             var uid = userService.register(user, userPassword);
             return Result.ok(uid);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             var msg = "注册失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -60,6 +61,7 @@ public class UserController {
     public Result<Long> login(String name, String password) {
         try {
             var uid = userService.login(name, password);
+            StpUtil.login(uid);
             return Result.ok(uid);
         } catch (RuntimeException e) {
             var msg = "登陆失败: " + e.getMessage();
@@ -73,7 +75,8 @@ public class UserController {
      */
     @GetMapping("/user/{id}")
     public Result<User> getUserById(@PathVariable Long id) {
-        return Result.ok();
+        var user = userService.getUserById(id);
+        return Result.ok(user);
     }
 
     /**
