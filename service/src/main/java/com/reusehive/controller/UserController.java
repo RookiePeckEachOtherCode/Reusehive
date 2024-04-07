@@ -1,9 +1,14 @@
 package com.reusehive.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.reusehive.entity.None;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
+import com.reusehive.entity.database.UserPassword;
+import com.reusehive.service.UserService;
 import com.reusehive.utils.Result;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +20,11 @@ import java.util.List;
  * 用户接口
  */
 @RestController
+@Slf4j
 public class UserController {
+    @Resource
+    private UserService userService;
+
     /**
      * 用户注册
      */
@@ -28,9 +37,20 @@ public class UserController {
             String grade,
             String academy,
             String phone_number,
-            String social_info
+            String social_info,
+            String avatar_img,
+            String back_img
     ) {
-        return Result.ok();
+        var user = new User(null, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
+        var userPassword = new UserPassword(null, password);
+        try {
+            var uid = userService.register(user, userPassword);
+            return Result.ok(uid);
+        } catch (Exception e) {
+            var msg = "注册失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -39,7 +59,15 @@ public class UserController {
     @PostMapping("/user/login")
     //返回uid
     public Result<Long> login(String name, String password) {
-        return Result.ok();
+        try {
+            var uid = userService.login(name, password);
+            StpUtil.login(uid);
+            return Result.ok(uid);
+        } catch (RuntimeException e) {
+            var msg = "登陆失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -47,7 +75,8 @@ public class UserController {
      */
     @GetMapping("/user/{id}")
     public Result<User> getUserById(@PathVariable Long id) {
-        return Result.ok();
+        var user = userService.getUserById(id);
+        return Result.ok(user);
     }
 
     /**
