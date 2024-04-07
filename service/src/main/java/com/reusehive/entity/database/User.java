@@ -25,4 +25,8 @@ public class User {
     private String phone_number;
 
     private String social_info;
+
+    private String avatar_img;
+
+    private String back_img;
 }
