@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long login(String name, String password) {
-        var uid = userMapper.getUserIdByName(name).getId();
+        var uid = userMapper.getUserByName(name).getId();
 
         var userPassword = userPasswordMapper.selectOneById(uid);
 
@@ -53,26 +53,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByName(String name) {
-        return null;
+        return userMapper.getUserByName(name);
     }
 
     @Override
     public List<User> getAllUser() {
-        return null;
+        return userMapper.selectAll();
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user, UserPassword userPassword) {
+        userMapper.update(user);
 
+        var hashPassword = PasswordUtils.encrypt(userPassword.getPassword());
+        userPassword.setPassword(hashPassword);
+
+        userPasswordMapper.update(userPassword);
     }
 
     @Override
     public void deleteUser(Long id) {
+        var user = new User();
+        user.setId(id);
 
+        var userPassword = new UserPassword();
+        userPassword.setUid(id);
+
+        userPasswordMapper.delete(userPassword);
+        userMapper.delete(user);
     }
 
     @Override
     public UserItemsInfo getUserItemsInfo(Long id) {
+        var user = userMapper.selectOneById(id);
         return null;
     }
 }

@@ -84,7 +84,8 @@ public class UserController {
      */
     @GetMapping("/user/all")
     public Result<List<User>> getAllUser() {
-        return Result.ok();
+        var userList = userService.getAllUser();
+        return Result.ok(userList);
     }
 
     /**
@@ -92,7 +93,8 @@ public class UserController {
      */
     @GetMapping("/user/name/{name}")
     public Result<User> getUserByName(@PathVariable String name) {
-        return Result.ok();
+        var user = userService.getUserByName(name);
+        return Result.ok(user);
     }
 
     /**
@@ -106,8 +108,15 @@ public class UserController {
             String grade,
             String academy,
             String phone_number,
-            String social_info
+            String social_info,
+            String avatar_img,
+            String back_img
     ) {
+        Long id = Long.valueOf(StpUtil.getLoginId().toString());
+        var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
+        var userPassword = new UserPassword(id, password);
+        userService.updateUser(user, userPassword);
+
         return Result.ok();
     }
 
@@ -116,6 +125,7 @@ public class UserController {
      */
     @PostMapping("/user/delete")
     public Result<None> deleteUser(Long id) {
+        userService.deleteUser(id);
         return Result.ok();
     }
 
@@ -124,6 +134,7 @@ public class UserController {
      */
     @GetMapping("/user/{id}/items")
     public Result<UserItemsInfo> getUserItemsInfo(@PathVariable Long id) {
+        var userItemInfo = userService.getUserItemsInfo(id);
         return Result.ok();
     }
 }
