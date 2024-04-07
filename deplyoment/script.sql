@@ -75,10 +75,8 @@ CREATE TABLE `message` (
                            `id` bigint NOT NULL,
                            `create_time` datetime,
                            `content` text NOT NULL,
-                           `toid` bigint,
-                           `fromid` bigint,
-                           PRIMARY KEY (`id`),
-                           FOREIGN KEY (`toid`) REFERENCES `user` (`id`),
-                           FOREIGN KEY (`fromid`) REFERENCES `user` (`id`)
+                           `tousername` text,
+                           `fromusername` text,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

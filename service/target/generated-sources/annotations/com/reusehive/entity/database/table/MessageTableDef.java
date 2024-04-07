@@ -10,13 +10,13 @@ public class MessageTableDef extends TableDef {
 
     public final QueryColumn ID = new QueryColumn(this, "id");
 
-    public final QueryColumn TOID = new QueryColumn(this, "toid");
-
-    public final QueryColumn FROMID = new QueryColumn(this, "fromid");
-
     public final QueryColumn CONTENT = new QueryColumn(this, "content");
 
     public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
+
+    public final QueryColumn TOUSERNAME = new QueryColumn(this, "tousername");
+
+    public final QueryColumn FROMUSERNAME = new QueryColumn(this, "fromusername");
 
     /**
      * 所有字段。
@@ -26,7 +26,7 @@ public class MessageTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, TOID, FROMID, CONTENT, CREATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, CONTENT, CREATE_TIME, TOUSERNAME, FROMUSERNAME};
 
     public MessageTableDef() {
         super("", "message");
