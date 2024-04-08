@@ -57,7 +57,7 @@ CREATE TABLE purchase_info(
     PRIMARY KEY (id,uid,item_id),
     FOREIGN KEY (uid) REFERENCES user(id),
     FOREIGN KEY (item_id) REFERENCES item(id)
-)
+);
 
 
 CREATE TABLE `message` (
