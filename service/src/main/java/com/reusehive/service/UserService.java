@@ -24,4 +24,6 @@ public interface UserService {
 
     UserItemsInfo getUserItemsInfo(Long id);
 
+    void uploadUserIcon(String url,Long id);
+
 }

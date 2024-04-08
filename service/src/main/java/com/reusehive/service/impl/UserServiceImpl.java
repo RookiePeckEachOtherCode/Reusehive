@@ -1,5 +1,6 @@
 package com.reusehive.service.impl;
 
+import com.mybatisflex.core.util.UpdateEntity;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
@@ -74,5 +75,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserItemsInfo getUserItemsInfo(Long id) {
         return null;
+    }
+
+    @Override
+    public void uploadUserIcon(String url,Long id) {
+        User user= UpdateEntity.of(User.class,id);
+        user.setAvatar_img(null);
+        user.setAvatar_img(url);
+        userMapper.update(user);
+
     }
 }

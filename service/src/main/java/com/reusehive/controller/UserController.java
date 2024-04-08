@@ -6,6 +6,7 @@ import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
+import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private MinioUtils minioUtils;
     /**
      * 用户注册
      */
@@ -126,4 +130,13 @@ public class UserController {
     public Result<UserItemsInfo> getUserItemsInfo(@PathVariable Long id) {
         return Result.ok();
     }
+
+    @PostMapping("/user/{id}/upload")
+    public Result<String> UploadIcon(MultipartFile file,@PathVariable Long id){
+        String url = minioUtils.UploadUserIcon(file, id.toString());
+        userService.uploadUserIcon(url,id);
+        return Result.ok(url);
+    }
+
+
 }
