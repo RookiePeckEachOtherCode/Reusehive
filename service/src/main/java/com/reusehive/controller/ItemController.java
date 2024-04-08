@@ -1,6 +1,7 @@
 package com.reusehive.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.reusehive.consts.ItemConst;
 import com.reusehive.entity.None;
 import com.reusehive.entity.database.Item;
 import com.reusehive.service.ItemService;
@@ -33,7 +34,7 @@ public class ItemController {
             Double prices
     ) {
         var uid = StpUtil.getLoginIdAsLong();
-        var item = new Item(null, uid, name, description, prices);
+        var item = new Item(null, uid, name, description, prices, ItemConst.UNDO);
         try {
             itemService.newItem(item);
             return Result.ok(item.getId());
@@ -101,7 +102,7 @@ public class ItemController {
             Double prices
     ) {
         var uid = StpUtil.getLoginIdAsLong();
-        var item = new Item(id, null, name, description, prices);
+        var item = new Item(id, null, name, description, prices, -1);
 
         try {
             itemService.updateItem(item, uid);
@@ -129,4 +130,51 @@ public class ItemController {
         }
     }
 
+    /**
+     * 更新物品状态为未交易
+     */
+    @PostMapping("/item/update/status/undo")
+    public Result<None> updateItemStatusUndo(Long id) {
+        var uid = StpUtil.getLoginIdAsLong();
+        try {
+            itemService.updateItemStatus(id, uid, ItemConst.UNDO);
+            return Result.ok();
+        } catch (RuntimeException e) {
+            var msg = "更新物品状态为未交易失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
+
+    /**
+     * 更新物品状态为交易中
+     */
+    @PostMapping("/item/update/status/trading")
+    public Result<None> updateItemStatusTrading(Long id) {
+        var uid = StpUtil.getLoginIdAsLong();
+        try {
+            itemService.updateItemStatus(id, uid, ItemConst.TRADING);
+            return Result.ok();
+        } catch (RuntimeException e) {
+            var msg = "更新物品状态为交易中失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
+
+    /**
+     * 更新物品状态为已完成
+     */
+    @PostMapping("/item/update/status/done")
+    public Result<None> updateItemStatusDone(Long id) {
+        var uid = StpUtil.getLoginIdAsLong();
+        try {
+            itemService.updateItemStatus(id, uid, ItemConst.DONE);
+            return Result.ok();
+        } catch (RuntimeException e) {
+            var msg = "更新物品状态为已完成失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
 }
