@@ -86,6 +86,7 @@ public class UserServiceImpl implements UserService {
         userPasswordMapper.update(userPassword);
     }
 
+
     @Override
     public UserItemsInfo getUserItemsInfo(Long id) {
         var user = this.getUserById(id);
@@ -100,6 +101,5 @@ public class UserServiceImpl implements UserService {
         user.setAvatar_img(null);
         user.setAvatar_img(url);
         userMapper.update(user);
-
     }
 }

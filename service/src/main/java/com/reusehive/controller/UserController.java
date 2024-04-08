@@ -164,7 +164,14 @@ public class UserController {
      */
     @GetMapping("/user/{id}/items")
     public Result<UserItemsInfo> getUserItemsInfo(@PathVariable Long id) {
-        return Result.ok();
+        try {
+            var userItemInfo = userService.getUserItemsInfo(id);
+            return Result.ok(userItemInfo);
+        } catch (Exception e) {
+            var msg = "获取用户信息及其物品列表失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     @PostMapping("/user/{id}/upload")

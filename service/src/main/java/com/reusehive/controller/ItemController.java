@@ -32,7 +32,7 @@ public class ItemController {
             String description,
             Double prices
     ) {
-        var uid = Long.valueOf(StpUtil.getLoginId().toString());
+        var uid = StpUtil.getLoginIdAsLong();
         var item = new Item(null, uid, name, description, prices);
         try {
             itemService.newItem(item);
@@ -100,7 +100,7 @@ public class ItemController {
             String description,
             Double prices
     ) {
-        var uid = Long.valueOf(StpUtil.getLoginId().toString());
+        var uid = StpUtil.getLoginIdAsLong();
         var item = new Item(id, null, name, description, prices);
 
         try {
@@ -118,7 +118,7 @@ public class ItemController {
      */
     @PostMapping("/item/delete")
     public Result<None> deleteItem(Long id) {
-        var uid = Long.valueOf(StpUtil.getLoginId().toString());
+        var uid = StpUtil.getLoginIdAsLong();
         try {
             itemService.deleteItem(id, uid);
             return Result.ok();
