@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long register(User user, UserPassword userPassword) {
+        var dbUser = this.getUserByName(user.getName());
+        if (dbUser != null) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+
         userMapper.insert(user);
         userPassword.setUid(user.getId());
 
