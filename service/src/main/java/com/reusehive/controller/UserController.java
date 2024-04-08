@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -173,13 +172,13 @@ public class UserController {
             return Result.error(msg);
         }
     }
-
-    @PostMapping("/user/{id}/upload")
-    public Result<String> UploadIcon(MultipartFile file, @PathVariable Long id) {
-        String url = minioUtils.UploadUserIcon(file, id.toString());
-        userService.uploadUserIcon(url, id);
-        return Result.ok(url);
-    }
-
-
+//
+//    @PostMapping("/user/{id}/upload")
+//    public Result<String> UploadIcon(MultipartFile file, @PathVariable Long id) {
+//        String url = minioUtils.UploadUserIcon(file, id.toString());
+//        userService.uploadUserIcon(url, id);
+//        return Result.ok(url);
+//    }
+//
+//
 }
