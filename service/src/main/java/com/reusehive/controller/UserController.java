@@ -29,6 +29,7 @@ public class UserController {
 
     @Resource
     private MinioUtils minioUtils;
+
     /**
      * 用户注册
      */
@@ -72,6 +73,15 @@ public class UserController {
             log.error(msg);
             return Result.error(msg);
         }
+    }
+
+    /**
+     * 退出登陆
+     */
+    @GetMapping("/user/logout")
+    public Result<None> logout() {
+        StpUtil.logout();
+        return Result.ok();
     }
 
     /**
@@ -132,9 +142,9 @@ public class UserController {
     }
 
     @PostMapping("/user/{id}/upload")
-    public Result<String> UploadIcon(MultipartFile file,@PathVariable Long id){
+    public Result<String> UploadIcon(MultipartFile file, @PathVariable Long id) {
         String url = minioUtils.UploadUserIcon(file, id.toString());
-        userService.uploadUserIcon(url,id);
+        userService.uploadUserIcon(url, id);
         return Result.ok(url);
     }
 

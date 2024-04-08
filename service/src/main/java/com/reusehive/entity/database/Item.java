@@ -6,10 +6,12 @@ import com.mybatisflex.annotation.Table;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Table("item")
 public class Item {
     @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)

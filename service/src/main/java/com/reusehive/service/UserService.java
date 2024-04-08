@@ -7,6 +7,7 @@ import com.reusehive.entity.database.UserPassword;
 import java.util.List;
 
 public interface UserService {
+
     Long register(User user, UserPassword userPassword);
 
     Long login(String name, String password);
@@ -19,11 +20,8 @@ public interface UserService {
 
     void updateUser(User user);
 
-    void deleteUser(Long id);
-
-
     UserItemsInfo getUserItemsInfo(Long id);
 
-    void uploadUserIcon(String url,Long id);
+    void uploadUserIcon(String url, Long id);
 
 }
