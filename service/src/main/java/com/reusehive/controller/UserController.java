@@ -89,8 +89,14 @@ public class UserController {
      */
     @GetMapping("/user/{id}")
     public Result<User> getUserById(@PathVariable Long id) {
-        var user = userService.getUserById(id);
-        return Result.ok(user);
+        try {
+            var user = userService.getUserById(id);
+            return Result.ok(user);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -98,7 +104,14 @@ public class UserController {
      */
     @GetMapping("/user/all")
     public Result<List<User>> getAllUser() {
-        return Result.ok();
+        try {
+            var userLIst = userService.getAllUser();
+            return Result.ok(userLIst);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -106,7 +119,14 @@ public class UserController {
      */
     @GetMapping("/user/name/{name}")
     public Result<User> getUserByName(@PathVariable String name) {
-        return Result.ok();
+        try {
+            var user = userService.getUserByName(name);
+            return Result.ok(user);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -120,17 +140,23 @@ public class UserController {
             String grade,
             String academy,
             String phone_number,
-            String social_info
+            String social_info,
+            String avatar_img,
+            String back_img
     ) {
-        return Result.ok();
-    }
+        var id = StpUtil.getLoginIdAsLong();
 
-    /**
-     * 删除用户
-     */
-    @PostMapping("/user/delete")
-    public Result<None> deleteUser(Long id) {
-        return Result.ok();
+        var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
+        var userPassword = new UserPassword(id, password);
+
+        try {
+            userService.updateUser(user, userPassword);
+            return Result.ok();
+        } catch (Exception e) {
+            var msg = "修改用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**

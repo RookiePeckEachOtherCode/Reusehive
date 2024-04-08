@@ -77,8 +77,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user, UserPassword userPassword) {
         userMapper.update(user);
+
+        var hashPassword = PasswordUtils.encrypt(userPassword.getPassword());
+        userPassword.setPassword(hashPassword);
+
+        userPasswordMapper.update(userPassword);
     }
 
     @Override

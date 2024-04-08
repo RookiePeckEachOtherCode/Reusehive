@@ -18,7 +18,7 @@ public interface UserService {
 
     List<User> getAllUser();
 
-    void updateUser(User user);
+    void updateUser(User user, UserPassword userPassword);
 
     UserItemsInfo getUserItemsInfo(Long id);
 
