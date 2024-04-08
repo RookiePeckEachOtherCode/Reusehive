@@ -60,4 +60,11 @@ public class ItemServiceImpl implements ItemService {
 
         itemMapper.deleteById(id);
     }
+
+    @Override
+    public void updateItemStatus(Long id, long uid, int type) {
+        var dbItem = itemMapper.selectOneById(id);
+        dbItem.setType(type);
+        itemMapper.update(dbItem);
+    }
 }

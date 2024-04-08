@@ -16,4 +16,6 @@ public interface ItemService {
     void updateItem(Item item, Long uid);
 
     void deleteItem(Long id, Long uid);
+
+    void updateItemStatus(Long id, long uid, int type);
 }

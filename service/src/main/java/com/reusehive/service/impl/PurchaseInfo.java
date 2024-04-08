@@ -1,23 +1,18 @@
-package com.reusehive.entity.database;
+package com.reusehive.service.impl;
 
 import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
+@Table("purchase_info")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("purchase_info")
 public class PurchaseInfo {
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
     private Long id;
 
     private Long uid;
@@ -25,13 +20,12 @@ public class PurchaseInfo {
     @Column("item_id")
     private Long itemId;
 
+    private Double prices;
+
+    private Boolean lock;
+
+    @Column("create_time")
     private LocalDateTime createTime;
-
-    private double prices;
-
-    private int type;
-
-    private boolean lock;
 
     @Column("lock_time")
     private LocalDateTime lockTime;
