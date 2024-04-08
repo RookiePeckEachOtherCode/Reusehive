@@ -1,10 +1,14 @@
 package com.reusehive.service.impl;
 
+import com.mybatisflex.core.query.QueryChain;
+import com.mybatisflex.core.util.UpdateEntity;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
+import com.reusehive.entity.database.table.UserTableDef;
 import com.reusehive.mapper.UserMapper;
 import com.reusehive.mapper.UserPasswordMapper;
+import com.reusehive.service.ItemService;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.PasswordUtils;
 import jakarta.annotation.Resource;
@@ -20,9 +24,17 @@ public class UserServiceImpl implements UserService {
     private UserPasswordMapper userPasswordMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private ItemService itemService;
 
     @Override
     public Long register(User user, UserPassword userPassword) {
+        var dbUser = this.getUserByName(user.getName());
+        if (dbUser != null) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+
         userMapper.insert(user);
         userPassword.setUid(user.getId());
 
@@ -35,7 +47,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long login(String name, String password) {
-        var uid = userMapper.getUserByName(name).getId();
+        var uid = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
+                .where(UserTableDef.USER.NAME.eq(name))
+                .one().getId();
+
 
         var userPassword = userPasswordMapper.selectOneById(uid);
 
@@ -53,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByName(String name) {
-        return userMapper.getUserByName(name);
+        return QueryChain.of(userMapper).where(UserTableDef.USER.NAME.eq(name)).one();
     }
 
     @Override
@@ -71,21 +86,20 @@ public class UserServiceImpl implements UserService {
         userPasswordMapper.update(userPassword);
     }
 
-    @Override
-    public void deleteUser(Long id) {
-        var user = new User();
-        user.setId(id);
-
-        var userPassword = new UserPassword();
-        userPassword.setUid(id);
-
-        userPasswordMapper.delete(userPassword);
-        userMapper.delete(user);
-    }
 
     @Override
     public UserItemsInfo getUserItemsInfo(Long id) {
-        var user = userMapper.selectOneById(id);
-        return null;
+        var user = this.getUserById(id);
+        var items = itemService.getItemByUid(id);
+
+        return new UserItemsInfo(user, items);
+    }
+
+    @Override
+    public void uploadUserIcon(String url, Long id) {
+        User user = UpdateEntity.of(User.class, id);
+        user.setAvatar_img(null);
+        user.setAvatar_img(url);
+        userMapper.update(user);
     }
 }

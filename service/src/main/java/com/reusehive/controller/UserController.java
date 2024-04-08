@@ -6,6 +6,7 @@ import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
+import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +26,9 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @Resource
+    private MinioUtils minioUtils;
 
     /**
      * 用户注册
@@ -71,12 +76,27 @@ public class UserController {
     }
 
     /**
+     * 退出登陆
+     */
+    @GetMapping("/user/logout")
+    public Result<None> logout() {
+        StpUtil.logout();
+        return Result.ok();
+    }
+
+    /**
      * 根据id获取用户信息
      */
     @GetMapping("/user/{id}")
     public Result<User> getUserById(@PathVariable Long id) {
-        var user = userService.getUserById(id);
-        return Result.ok(user);
+        try {
+            var user = userService.getUserById(id);
+            return Result.ok(user);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -84,8 +104,14 @@ public class UserController {
      */
     @GetMapping("/user/all")
     public Result<List<User>> getAllUser() {
-        var userList = userService.getAllUser();
-        return Result.ok(userList);
+        try {
+            var userLIst = userService.getAllUser();
+            return Result.ok(userLIst);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -93,8 +119,14 @@ public class UserController {
      */
     @GetMapping("/user/name/{name}")
     public Result<User> getUserByName(@PathVariable String name) {
-        var user = userService.getUserByName(name);
-        return Result.ok(user);
+        try {
+            var user = userService.getUserByName(name);
+            return Result.ok(user);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -112,21 +144,19 @@ public class UserController {
             String avatar_img,
             String back_img
     ) {
-        Long id = Long.valueOf(StpUtil.getLoginId().toString());
+        var id = StpUtil.getLoginIdAsLong();
+
         var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
         var userPassword = new UserPassword(id, password);
-        userService.updateUser(user, userPassword);
 
-        return Result.ok();
-    }
-
-    /**
-     * 删除用户
-     */
-    @PostMapping("/user/delete")
-    public Result<None> deleteUser(Long id) {
-        userService.deleteUser(id);
-        return Result.ok();
+        try {
+            userService.updateUser(user, userPassword);
+            return Result.ok();
+        } catch (Exception e) {
+            var msg = "修改用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
 
     /**
@@ -134,7 +164,22 @@ public class UserController {
      */
     @GetMapping("/user/{id}/items")
     public Result<UserItemsInfo> getUserItemsInfo(@PathVariable Long id) {
-        var userItemInfo = userService.getUserItemsInfo(id);
-        return Result.ok();
+        try {
+            var userItemInfo = userService.getUserItemsInfo(id);
+            return Result.ok(userItemInfo);
+        } catch (Exception e) {
+            var msg = "获取用户信息及其物品列表失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
     }
+
+    @PostMapping("/user/{id}/upload")
+    public Result<String> UploadIcon(MultipartFile file, @PathVariable Long id) {
+        String url = minioUtils.UploadUserIcon(file, id.toString());
+        userService.uploadUserIcon(url, id);
+        return Result.ok(url);
+    }
+
+
 }
