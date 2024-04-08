@@ -30,7 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private ItemMapper itemMapper;
 
     @Override
-    public void CreatePurchase(Long user_id, Long item_id,Double price,Long loginid) {
+    public void CreatePurchase(Long user_id, Long item_id,Double price) {
         PurchaseInfo purchaseInfo =new PurchaseInfo();
         purchaseInfo.setId(null);purchaseInfo.setCreateTime(LocalDateTime.now());
         purchaseInfo.setPrices(price);purchaseInfo.setUid(user_id);
