@@ -15,7 +15,7 @@ public class PurchaseController {
      * 建立交易
      */
     @PostMapping("/purchase/new")
-    public Result<None> newPurchase(Long uid, @RequestParam("item_id") Long itemId) {
+    public Result<None> newPurchase(@RequestParam("uid") Long uid, @RequestParam("item_id") Long ItemId) {
         return Result.ok();
     }
 
@@ -23,9 +23,15 @@ public class PurchaseController {
      * 结束交易
      */
     @PostMapping("/purchase/end")
-    public Result<None> endPurchase(Long id) {
+    public Result<None> endPurchase(@RequestParam("item_id") Long ItemId) {
         return Result.ok();
     }
+
+    /**
+     * 取消交易
+     */
+    @PostMapping("/purchase/cancel")
+    public Result<None> cancelPurchase(@RequestParam("item_id") Long ItemId,@RequestParam("uid") Long uid){return  Result.ok();}
 
     /**
      * 获取用户交易列表
@@ -41,6 +47,16 @@ public class PurchaseController {
 
     @GetMapping("/purchase/{id}")
     public Result<PurchaseInfo> getPurchaseById(@PathVariable Long id) {
+        return Result.ok();
+    }
+
+    /**
+     *下架物品
+     */
+
+    @PostMapping("/purchase/remove")
+    public Result<None> removeItem(@RequestParam("item_id") Long ItemId){
+
         return Result.ok();
     }
 }
