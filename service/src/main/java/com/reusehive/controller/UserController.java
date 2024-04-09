@@ -29,6 +29,7 @@ public class UserController {
     @Resource
     private MinioUtils minioUtils;
 
+
     /**
      * 用户注册
      */
@@ -168,6 +169,21 @@ public class UserController {
             return Result.ok(userItemInfo);
         } catch (Exception e) {
             var msg = "获取用户信息及其物品列表失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
+    /**
+     *获取用户聊天对象
+     */
+    @GetMapping("/user/chatsinfo")
+    public Result<List<User>> getUserChatsInfo(){
+        var uid = StpUtil.getLoginIdAsLong();
+        try {
+            List<User> userChatInfo = userService.getUserChatInfo(uid);
+            return Result.ok(userChatInfo);
+        }catch (Exception e){
+            var msg = "获取用户信息聊天信息失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
         }

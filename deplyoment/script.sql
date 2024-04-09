@@ -66,4 +66,12 @@ CREATE TABLE purchase_info
     PRIMARY KEY (id, uid, item_id),
     FOREIGN KEY (uid) REFERENCES user (id),
     FOREIGN KEY (item_id) REFERENCES item (id)
-)
+);
+
+CREATE TABLE message (
+                         id BIGINT PRIMARY KEY,
+                         tousername VARCHAR(255),
+                         fromusername VARCHAR(255),
+                         content TEXT,
+                         createTime TIMESTAMP
+);

@@ -3,11 +3,15 @@ package com.reusehive.service.impl;
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.util.UpdateEntity;
 import com.reusehive.entity.UserItemsInfo;
+import com.reusehive.entity.database.Message;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
+import com.reusehive.entity.database.table.MessageTableDef;
 import com.reusehive.entity.database.table.UserTableDef;
+import com.reusehive.mapper.MessageMapper;
 import com.reusehive.mapper.UserMapper;
 import com.reusehive.mapper.UserPasswordMapper;
+import com.reusehive.service.ChatService;
 import com.reusehive.service.ItemService;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.PasswordUtils;
@@ -15,7 +19,10 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -26,6 +33,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private ItemService itemService;
+
+    @Resource
+    MessageMapper messageMapper;
 
     @Override
     public Long register(User user, UserPassword userPassword) {
@@ -104,5 +114,24 @@ public class UserServiceImpl implements UserService {
         user.setAvatar_img(null);
         user.setAvatar_img(url);
         userMapper.update(user);
+    }
+
+    @Override
+    public List<User> getUserChatInfo(Long uid) {
+        List<User> userList = new ArrayList<>();
+        User user = getUserById(uid);
+        List<Message> messages = QueryChain.of(messageMapper)
+                .where(MessageTableDef.MESSAGE.FROMUSERNAME.eq(user.getName()))
+                .list();
+        Set<String> tousernameSet = new HashSet<>();
+        for (Message message : messages) {
+            User user1 = getUserByName(message.getTousername());
+            if (!tousernameSet.contains(message.getTousername())) {
+                userList.add(user1);
+                tousernameSet.add(message.getTousername());
+            }
+        }
+
+        return userList;
     }
 }

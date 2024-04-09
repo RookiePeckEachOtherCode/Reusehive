@@ -24,4 +24,6 @@ public interface UserService {
 
     void uploadUserIcon(String url, Long id);
 
+    List<User> getUserChatInfo(Long uid);
+
 }
