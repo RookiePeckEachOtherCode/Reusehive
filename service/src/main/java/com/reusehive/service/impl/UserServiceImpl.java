@@ -47,18 +47,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long login(String name, String password) {
-        var uid = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
+        var user = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
                 .where(UserTableDef.USER.NAME.eq(name))
-                .one().getId();
+                .one();
 
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
 
-        var userPassword = userPasswordMapper.selectOneById(uid);
+        var userPassword = userPasswordMapper.selectOneById(user.getId());
 
         if (!PasswordUtils.check(password, userPassword.getPassword())) {
             throw new RuntimeException("密码错误");
         }
 
-        return uid;
+        return user.getId();
     }
 
     @Override
