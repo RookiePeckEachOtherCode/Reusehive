@@ -6,6 +6,7 @@ import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,8 +29,6 @@ public class PurchaseInfo {
     private LocalDateTime createTime;
 
     private double prices;
-
-    private int type;
 
     private boolean lock;
 

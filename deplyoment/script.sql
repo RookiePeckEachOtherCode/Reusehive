@@ -38,20 +38,6 @@ CREATE TABLE item
     FOREIGN KEY (uid) REFERENCES user (id)
 );
 
-CREATE TABLE manager
-(
-    id   BIGINT PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL
-);
-
-CREATE TABLE manager_pwd
-(
-    id       BIGINT PRIMARY KEY,
-    password VARCHAR(255),
-
-    FOREIGN KEY (id) REFERENCES manager (id)
-);
-
 CREATE TABLE purchase_info
 (
     id          BIGINT,
@@ -66,4 +52,12 @@ CREATE TABLE purchase_info
     PRIMARY KEY (id, uid, item_id),
     FOREIGN KEY (uid) REFERENCES user (id),
     FOREIGN KEY (item_id) REFERENCES item (id)
-)
+);
+
+CREATE TABLE message (
+                         id BIGINT PRIMARY KEY,
+                         tousername VARCHAR(255),
+                         fromusername VARCHAR(255),
+                         content TEXT,
+                         createTime TIMESTAMP
+);
