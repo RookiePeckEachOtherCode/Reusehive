@@ -10,10 +10,10 @@ export const loginApi=(data:{password:string;username:string})=>{
     });
 }
 
-export const registerApi=(data:{password:string;user:string })=>{
+export const registerApi=(data:{password:string;username:string })=>{
     return $http({
         method:"post",
-        url:"",
+        url:"http://127.0.0.1:4523/m1/4280410-0-default/user/register",
         params:data
     })
 }

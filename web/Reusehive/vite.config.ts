@@ -4,7 +4,7 @@ import { internalIpV4 } from "internal-ip";
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-
+import { TDesignResolver } from 'unplugin-vue-components/resolvers';
 // @ts-expect-error process is a nodejs global
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM);
 
@@ -13,10 +13,20 @@ export default defineConfig(async () => ({
   plugins: [
       vue(),
       AutoImport({
-          resolvers: [ElementPlusResolver()],
+          resolvers: [
+              ElementPlusResolver(),
+              TDesignResolver({
+                  library: 'mobile-vue'
+              }),
+          ],
       }),
       Components({
-          resolvers: [ElementPlusResolver()],
+          resolvers: [
+              ElementPlusResolver(),
+              TDesignResolver({
+                  library: 'mobile-vue'
+              }),
+          ],
       }),
   ],
 

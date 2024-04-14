@@ -8,8 +8,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElFooter: typeof import('element-plus/es')['ElFooter']
+    ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElMain: typeof import('element-plus/es')['ElMain']
     Greet: typeof import('./src/components/Greet.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TButton: typeof import('tdesign-mobile-vue')['Button']
+    TImage: typeof import('tdesign-mobile-vue')['Image']
+    TTabPanel: typeof import('tdesign-mobile-vue')['TabPanel']
+    TTabs: typeof import('tdesign-mobile-vue')['Tabs']
   }
 }
