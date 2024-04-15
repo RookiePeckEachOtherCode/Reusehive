@@ -25,7 +25,7 @@
           </div>
         </template>
       </t-tab-panel>
-      <t-tab-panel value="fourth" >
+      <t-tab-panel value="fourth">
         <template #label>
           <div class="label-content" @click="goto(4)">
             <icon-font name="app" size="large" />
@@ -41,11 +41,11 @@
 <script lang="ts" setup>
 import { IconFont } from 'tdesign-icons-vue-next';
 import router from "../router";
-const goto=(id)=>{
-  if(id===1)router.push({name:'item'})
-  if(id===2)router.push({name:'purchase'})
-  if(id===3)router.push({name:'item'})
-  if(id===4)router.push({name:'home'})
+const goto = (id: number) => {
+  if (id === 1) router.push({ name: 'item-list' })
+  if (id === 2) router.push({ name: 'purchase' })
+  if (id === 3) router.push({ name: 'item' })
+  if (id === 4) router.push({ name: 'home' })
 }
 </script>
 

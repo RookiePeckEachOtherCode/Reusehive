@@ -1,58 +1,42 @@
 <template>
 
-  <div class="app-container" >
+  <div class="app-container">
     <div class="app-header" v-if="showNavBar">
     </div>
+    <div class="app-body">
       <RouterView></RouterView>
     </div>
+  </div>
   <div class="app-footer">
     <Tabs>
-
     </Tabs>
   </div>
 </template>
 
 
 <script setup lang="ts">
+import { ref } from "vue";
 import Tabs from "./Tabs.vue";
 //375 628
+const showNavBar = ref(true);
 </script>
 <style scoped>
-
-html,
-body {
-  margin: 0;
-  height: 100%;
-  width: 375px;
-}
-
 .app-container {
-
+  display: flex;
+  flex-direction: column;
+  min-height: 92vh;
   background-color: #6aeb62;
 
-  .app-header {}
-  height: 580px;
   .app-body {
-    height: calc(100vh - var(--van-nav-bar-height) - var(--van-tabbar-height));
-    overflow: auto;
+    flex: 1;
   }
 
-  .app-body-noNavBar {
-    height: calc(100vh  - var(--van-tabbar-height));
-    overflow: auto;
+  .app-footer {
+    .app-footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
   }
-
-  .app-body-noTabBar {
-    height: calc(100vh - var(--van-nav-bar-height));
-    overflow: auto;
-  }
-
-  .app-body-noNavBar-noTabBar {
-    height: calc(100vh);
-    overflow: auto;
-  }
-
-  .app-footer {}
-
 }
 </style>
