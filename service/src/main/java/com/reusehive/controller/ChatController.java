@@ -130,18 +130,17 @@ public class ChatController {
     }
     private void sendMessage(String message,String username,String tousername){
         Session session = onlineClientMap.get(username);
-        session.getAsyncRemote().sendText(message);
-        try {
-            session=onlineClientMap.get(tousername);
-            session.getAsyncRemote().sendText(message);
-        }catch (NullPointerException e){
-            log.info("对方用户不在线");
-        }
         Message nmsg=new Message();
         nmsg.setTousername(tousername);
         nmsg.setFromusername(username);
         nmsg.setContent(message);
         nmsg.setCreateTime(LocalDateTime.now());
+        try {
+            session=onlineClientMap.get(tousername);
+            session.getAsyncRemote().sendText(JSON.toJSONString(nmsg));
+        }catch (NullPointerException e){
+            log.info("对方用户不在线");
+        }
         chatService.AddMessage(nmsg);
     }
 
