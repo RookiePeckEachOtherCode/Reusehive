@@ -33,7 +33,8 @@ CREATE TABLE item
     description VARCHAR(255),
     prices      DECIMAL(10, 2) NOT NULL,
 
-    type        TINYINT        NOT NULL COMMENT '0未交易; 1交易中; 2交易结束',
+    item_status TINYINT        NOT NULL COMMENT '0未交易; 1交易中; 2交易结束',
+    item_type   VARCHAR(100)   NOT NULL COMMENT '电子数码，书籍资料，服装饰品，体育器材，生活用品，其他',
 
     FOREIGN KEY (uid) REFERENCES user (id)
 );
@@ -54,10 +55,11 @@ CREATE TABLE purchase_info
     FOREIGN KEY (item_id) REFERENCES item (id)
 );
 
-CREATE TABLE message (
-                         id BIGINT PRIMARY KEY,
-                         tousername VARCHAR(255),
-                         fromusername VARCHAR(255),
-                         content TEXT,
-                         createTime TIMESTAMP
+CREATE TABLE message
+(
+    id           BIGINT PRIMARY KEY,
+    tousername   VARCHAR(255),
+    fromusername VARCHAR(255),
+    content      TEXT,
+    createTime   TIMESTAMP
 );

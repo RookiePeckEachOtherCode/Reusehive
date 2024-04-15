@@ -6,7 +6,6 @@ import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
-import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,6 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
-
-    @Resource
-    private MinioUtils minioUtils;
-
 
     /**
      * 用户注册
@@ -173,16 +168,17 @@ public class UserController {
             return Result.error(msg);
         }
     }
+
     /**
-     *获取用户聊天对象
+     * 获取用户聊天对象
      */
     @GetMapping("/user/chatsinfo")
-    public Result<List<User>> getUserChatsInfo(){
+    public Result<List<User>> getUserChatsInfo() {
         var uid = StpUtil.getLoginIdAsLong();
         try {
             List<User> userChatInfo = userService.getUserChatInfo(uid);
             return Result.ok(userChatInfo);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "获取用户信息聊天信息失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
