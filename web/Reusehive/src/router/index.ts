@@ -16,8 +16,14 @@ const router = createRouter({
             component: () => import("../pages/login.vue")
         },
         {
+            path:"/updateinfo",
+            name:"updateinfo",
+            component:()=>import("../pages/updateinfo.vue")
+        },
+        {
             path: "/main",
             name: "main",
+            redirect:"/main/item",
             component: () => import("../layout/main.vue"),
             children: [
                 {
@@ -39,7 +45,7 @@ const router = createRouter({
                     path: "home",
                     name: "home",
                     component: () => import("../pages/userhome.vue")
-                }
+                },
             ]
         }
 

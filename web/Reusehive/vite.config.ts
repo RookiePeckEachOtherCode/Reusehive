@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { TDesignResolver } from 'unplugin-vue-components/resolvers';
+import { VantResolver } from '@vant/auto-import-resolver';
 // @ts-expect-error process is a nodejs global
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM);
 
@@ -18,6 +19,7 @@ export default defineConfig(async () => ({
               TDesignResolver({
                   library: 'mobile-vue'
               }),
+              VantResolver(),
           ],
       }),
       Components({
@@ -26,6 +28,7 @@ export default defineConfig(async () => ({
               TDesignResolver({
                   library: 'mobile-vue'
               }),
+              VantResolver(),
           ],
       }),
   ],

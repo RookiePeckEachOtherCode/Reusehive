@@ -1,4 +1,5 @@
 package com.reusehive.controller;
+import com.alibaba.fastjson2.JSON;
 import com.reusehive.entity.database.Message;
 import com.reusehive.service.ChatService;
 import com.reusehive.service.UserService;
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 @RestController
 @Slf4j
@@ -60,7 +62,7 @@ public class ChatController {
                 List<Message> messageList = chatService.getMessageList(username, tousername);
 
                 for (Message i : messageList) {
-                    session.getBasicRemote().sendText(i.getContent());
+                    session.getBasicRemote().sendText(JSON.toJSONString(i));
                 }
 
             } catch (NullPointerException e) {
