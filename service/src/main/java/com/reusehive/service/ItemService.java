@@ -17,5 +17,7 @@ public interface ItemService {
 
     void deleteItem(Long id, Long uid);
 
-    void updateItemStatus(Long id, long uid, int type);
+    void updateItemStatus(Long id, long uid, int status);
+
+    List<Item> getItemByType(String type);
 }

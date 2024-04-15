@@ -1,7 +1,7 @@
 package com.reusehive.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.reusehive.consts.ItemConst;
+import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.None;
 import com.reusehive.entity.database.Item;
 import com.reusehive.service.ItemService;
@@ -31,10 +31,11 @@ public class ItemController {
     public Result<Long> newItem(
             String name,
             String description,
-            Double prices
+            Double prices,
+            String itemType
     ) {
         var uid = StpUtil.getLoginIdAsLong();
-        var item = new Item(null, uid, name, description, prices, ItemConst.UNDO);
+        var item = new Item(null, uid, name, description, prices, ItemStatus.UNDO, itemType);
         try {
             itemService.newItem(item);
             return Result.ok(item.getId());
@@ -99,10 +100,11 @@ public class ItemController {
             Long id,
             String name,
             String description,
-            Double prices
+            Double prices,
+            String type
     ) {
         var uid = StpUtil.getLoginIdAsLong();
-        var item = new Item(id, null, name, description, prices, -1);
+        var item = new Item(id, null, name, description, prices, -1, type);
 
         try {
             itemService.updateItem(item, uid);
@@ -137,7 +139,7 @@ public class ItemController {
     public Result<None> updateItemStatusUndo(Long id) {
         var uid = StpUtil.getLoginIdAsLong();
         try {
-            itemService.updateItemStatus(id, uid, ItemConst.UNDO);
+            itemService.updateItemStatus(id, uid, ItemStatus.UNDO);
             return Result.ok();
         } catch (RuntimeException e) {
             var msg = "更新物品状态为未交易失败: " + e.getMessage();
@@ -153,7 +155,7 @@ public class ItemController {
     public Result<None> updateItemStatusTrading(Long id) {
         var uid = StpUtil.getLoginIdAsLong();
         try {
-            itemService.updateItemStatus(id, uid, ItemConst.TRADING);
+            itemService.updateItemStatus(id, uid, ItemStatus.TRADING);
             return Result.ok();
         } catch (RuntimeException e) {
             var msg = "更新物品状态为交易中失败: " + e.getMessage();
@@ -169,7 +171,7 @@ public class ItemController {
     public Result<None> updateItemStatusDone(Long id) {
         var uid = StpUtil.getLoginIdAsLong();
         try {
-            itemService.updateItemStatus(id, uid, ItemConst.DONE);
+            itemService.updateItemStatus(id, uid, ItemStatus.DONE);
             return Result.ok();
         } catch (RuntimeException e) {
             var msg = "更新物品状态为已完成失败: " + e.getMessage();
@@ -177,4 +179,20 @@ public class ItemController {
             return Result.error(msg);
         }
     }
+
+    /**
+     * 根据物品类型获取物品列表
+     */
+    @GetMapping("/item/type/{type}")
+    public Result<List<Item>> getItemByType(@PathVariable String type) {
+        try {
+            var items = itemService.getItemByType(type);
+            return Result.ok(items);
+        } catch (RuntimeException e) {
+            var msg = "获取物品列表失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
+
 }

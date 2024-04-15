@@ -31,22 +31,40 @@ const router = createRouter({
           component: () => import("../pages/item-list.vue"),
         },
         {
-          path: "purchase",
-          name: "purchase",
-          component: () => import("../pages/purchase.vue"),
+            path:"/updateinfo",
+            name:"updateinfo",
+            component:()=>import("../pages/updateinfo.vue")
         },
         {
-          path: "home",
-          name: "home",
-          component: () => import("../pages/userhome.vue"),
-        },
-      ],
-    },
-    {
-      path: "/item-detail",
-      name: "item-detail",
-      component: () => import("../pages/item-detial.vue"),
-    },
-  ],
-});
-export default router;
+            path: "/main",
+            name: "main",
+            redirect:"/main/item",
+            component: () => import("../layout/main.vue"),
+            children: [
+                {
+                    path: "message",
+                    name: "message",
+                    component: () => import("../pages/message.vue")
+                },
+                {
+                    path: "item",
+                    name: "item",
+                    component: () => import("../pages/item.vue")
+                },
+                {
+                    path: "purchase",
+                    name: "purchase",
+                    component: () => import("../pages/purchase.vue")
+                },
+                {
+                    path: "home",
+                    name: "home",
+                    component: () => import("../pages/userhome.vue")
+                },
+            ]
+        }
+
+    ]
+
+})
+export default router

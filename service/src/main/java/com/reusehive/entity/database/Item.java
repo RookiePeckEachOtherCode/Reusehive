@@ -1,5 +1,6 @@
 package com.reusehive.entity.database;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -25,5 +26,8 @@ public class Item {
 
     private Double prices;
 
-    private int type;
+    @Column("item_status")
+    private int itemStatus;
+    @Column("item_type")
+    private String itemType;
 }

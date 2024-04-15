@@ -16,13 +16,16 @@
     "element-plus": "^2.7.0",
     "json-bigint": "^1.0.0",
     "pinia": "^2.1.7",
+    "sass": "^1.75.0",
     "tdesign-mobile-vue": "^1.1.1",
-    "vant": "^4.8.10",
+    "vant": "^4.8.11",
     "vue": "^3.3.4",
+    "vue-native-websocket": "^2.0.15",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": ">=2.0.0-beta.0",
+    "@vant/auto-import-resolver": "^1.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "internal-ip": "^7.0.0",
     "less": "^4.2.0",

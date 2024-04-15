@@ -202,6 +202,7 @@
 <script lang="ts" setup>
 import {loginApi, registerApi} from "../apis/UserApi.ts";
 import {reactive, ref} from "vue";
+import router from "../router";
 
 
 const form = reactive({
@@ -211,11 +212,13 @@ const form = reactive({
 
 const login = async () => {
   const res = await loginApi({password: form.password, username: form.username})
+  if(res.code===1)await router.push({name: "main"})
   console.log(res)
 }
 
 const register = async () => {
   const res = await registerApi({password:form.password,username:form.username})
+  if(res.code===1)await router.push({name: "main"})
 }
 
 </script>

@@ -3,6 +3,7 @@ package com.reusehive.service.impl;
 
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.util.UpdateEntity;
+import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.PurchaseInfo;
 import com.reusehive.entity.database.table.ItemTableDef;
@@ -12,7 +13,6 @@ import com.reusehive.mapper.PurchaseMapper;
 import com.reusehive.service.PurchaseService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,20 +30,23 @@ public class PurchaseServiceImpl implements PurchaseService {
     private ItemMapper itemMapper;
 
     @Override
-    public void CreatePurchase(Long user_id, Long item_id,Double price) {
-        PurchaseInfo purchaseInfo =new PurchaseInfo();
-        purchaseInfo.setId(null);purchaseInfo.setCreateTime(LocalDateTime.now());
-        purchaseInfo.setPrices(price);purchaseInfo.setUid(user_id);
-        purchaseInfo.setLock(false);purchaseInfo.setItemId(item_id);
+    public void CreatePurchase(Long user_id, Long item_id, Double price) {
+        PurchaseInfo purchaseInfo = new PurchaseInfo();
+        purchaseInfo.setId(null);
+        purchaseInfo.setCreateTime(LocalDateTime.now());
+        purchaseInfo.setPrices(price);
+        purchaseInfo.setUid(user_id);
+        purchaseInfo.setLock(false);
+        purchaseInfo.setItemId(item_id);
         purchaseInfo.setLockTime(LocalDateTime.now());
         purchaseMapper.insert(purchaseInfo);
 
         Item iteminfo = QueryChain.of(itemMapper).where(ItemTableDef.ITEM.ID.eq(item_id)).one();
-        if(Objects.equals(iteminfo.getUid(), user_id))throw new RuntimeException("无法和自己建立交易");
+        if (Objects.equals(iteminfo.getUid(), user_id)) throw new RuntimeException("无法和自己建立交易");
 
 
-        Item item=UpdateEntity.of(Item.class,item_id);
-        item.setType(1);
+        Item item = UpdateEntity.of(Item.class, item_id);
+        item.setItemStatus(ItemStatus.TRADING);
         itemMapper.update(item);
 
     }
@@ -53,7 +56,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         PurchaseInfo purchaseInfo = GetPurchaseInfoById(purchase_id);
 
         Item item = UpdateEntity.of(Item.class, purchaseInfo.getItemId());
-        item.setType(2);
+        item.setItemStatus(ItemStatus.DONE);
         itemMapper.update(item);
 
         PurchaseInfo NewInfo = UpdateEntity.of(PurchaseInfo.class, purchase_id);
@@ -82,9 +85,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     public void CanclePurchase(Long purchase_id) {
         PurchaseInfo purchaseInfo = GetPurchaseInfoById(purchase_id);
         List<PurchaseInfo> infos = QueryChain.of(purchaseMapper).where(PurchaseInfoTableDef.PURCHASE_INFO.ITEM_ID.eq(purchaseInfo.getItemId())).list();
-        if (infos.size()==1){
+        if (infos.size() == 1) {
             Item item = UpdateEntity.of(Item.class, purchaseInfo.getItemId());
-            item.setType(0);
+            item.setItemStatus(ItemStatus.UNDO);
         }
         purchaseMapper.deleteById(purchase_id);
     }
