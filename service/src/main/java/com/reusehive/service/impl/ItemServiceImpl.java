@@ -1,6 +1,7 @@
 package com.reusehive.service.impl;
 
 import com.mybatisflex.core.query.QueryChain;
+import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.table.ItemTableDef;
 import com.reusehive.mapper.ItemMapper;
@@ -34,7 +35,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAllItem() {
-        return itemMapper.selectAll();
+        return QueryChain.of(itemMapper)
+                .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
+                .list();
     }
 
     @Override
@@ -62,9 +65,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void updateItemStatus(Long id, long uid, int type) {
+    public void updateItemStatus(Long id, long uid, int status) {
         var dbItem = itemMapper.selectOneById(id);
-        dbItem.setType(type);
+        dbItem.setItemStatus(status);
         itemMapper.update(dbItem);
+    }
+
+    @Override
+    public List<Item> getItemByType(String type) {
+        return QueryChain.of(itemMapper)
+                .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
+                .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
+                .list();
     }
 }
