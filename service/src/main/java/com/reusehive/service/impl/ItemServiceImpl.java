@@ -3,7 +3,10 @@ package com.reusehive.service.impl;
 import com.mybatisflex.core.query.QueryChain;
 import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.database.Item;
+import com.reusehive.entity.database.ItemImage;
+import com.reusehive.entity.database.table.ItemImageTableDef;
 import com.reusehive.entity.database.table.ItemTableDef;
+import com.reusehive.mapper.ItemImageMapper;
 import com.reusehive.mapper.ItemMapper;
 import com.reusehive.service.ItemService;
 import jakarta.annotation.Resource;
@@ -15,6 +18,8 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
+    @Resource
+    private ItemImageMapper itemImageMapper;
 
     @Override
     public void newItem(Item item) {
@@ -77,5 +82,19 @@ public class ItemServiceImpl implements ItemService {
                 .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
                 .list();
+    }
+
+    @Override
+    public List<String> getItemImage(Long id) {
+        return QueryChain.of(itemImageMapper)
+                .select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
+                .where(ItemImageTableDef.ITEM_IMAGE.ITEM_ID.eq(id))
+                .list()
+                .stream().map(ItemImage::getImageUrl).toList();
+    }
+
+    @Override
+    public void addItemImage(Long id, List<String> imageUrl) {
+        itemImageMapper.insertBatch(imageUrl.stream().map(url -> new ItemImage(null, id, url)).toList());
     }
 }
