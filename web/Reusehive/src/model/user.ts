@@ -1,5 +1,5 @@
 class User {
-  id: number;
+  id: String;
   name: string;
   gender: string;
   grade: string;
@@ -10,7 +10,7 @@ class User {
   back_img: string;
 
   constructor(
-    id: number,
+    id: String,
     name: string,
     gender: string,
     grade: string,

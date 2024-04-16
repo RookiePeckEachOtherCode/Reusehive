@@ -63,7 +63,7 @@ const swiperList = [
 ];
 
 const user = ref(new User(
-    114514,
+    '114514',
     '啊米诺斯',
     '男',
     '2022级',
@@ -75,8 +75,8 @@ const user = ref(new User(
 ));
 
 const item = new Item(
-    114514,
-    114514,
+    '114514',
+    '114514',
     '讯景rx5700显卡',
     '讯景rx5700显卡，性能正常，外观看图片，鲁大师跑分33w左右，砍价勿扰谢谢',
     1145,

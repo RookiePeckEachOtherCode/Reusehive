@@ -1,14 +1,14 @@
 class Item {
-  id: number;
-  uid: number;
+  id: String;
+  uid: String;
   name: string;
   description: string;
   prices: number;
   type: number;
 
   constructor(
-    id: number,
-    uid: number,
+    id: String,
+    uid: String,
     name: string,
     description: string,
     prices: number,
