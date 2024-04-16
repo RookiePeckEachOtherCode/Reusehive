@@ -1,29 +1,37 @@
 <template>
-  <p>message</p>
+  <t-navbar title="消息记录" :fixed="false"></t-navbar>
+  <t-pull-down-refresh v-model="refreshing" @refresh="loadData" style="max-height: 688px;min-height: 688px;background-color: white" >
+    <t-list :async-loading="loading" >
+      <t-cell v-for="item in List" :key="item.id">
+        <el-avatar src="{{item.avatar_img}}" style="position: absolute;padding: 0;left: 0;margin-left: 10px"></el-avatar>
+        <span class="cell" @click="gochat(item.name)">{{ item.name }}</span>
+      </t-cell>
+    </t-list>
+  </t-pull-down-refresh>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted,onMounted } from "vue";
-const url="ws://127.0.0.1:8888/chat/lingluo/114514"
-onMounted(()=>{
-  init();
+import {userChatInfoApi} from "../apis/UserApi.ts";
+import {onMounted, ref} from "vue";
+import router from "../router";
+const loading = ref('');
+const refreshing = ref(false);
+const List=ref([])
+onMounted(async ()=>{
+  await loadData();
 })
-const init=async ()=>{
-  var socket = new WebSocket(url);
-  socket.onopen = function () {
-    console.log("websocket已打开");
-  };
-  socket.onmessage=function (msg) {
-      console.log(msg.data  )
-  }
-  socket.onclose = function () {
-    console.log("websocket已关闭");
-  };
-  //发生了错误事件
-  socket.onerror = function () {
-    console.log("websocket发生了错误");
-  }
+const loadData=async ()=>{
+  const res=await userChatInfoApi();
+  List.value=res.data;
+  return true;
 }
+const gochat=(name:string)=>{
+  router.push({name:"chat",query:{tousername:name}});
+
+}
+
+
+
 </script>
 <style scoped>
 

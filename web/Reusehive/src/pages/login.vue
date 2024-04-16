@@ -225,17 +225,18 @@ const register = async () => {
 <style scoped>
 .login-container {
   .login-header {
-    width: 355px;
+    width: 100vw;
     height: 220px;
     background: #6aeb62;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: -20px;
-    padding: 0px 10px;
+    padding: 0;
 
     svg {
-      height: 200px;
+      height: 100px;
+      width: 100px;
     }
   }
 
@@ -282,6 +283,7 @@ const register = async () => {
   .login-forget {
     text-align: right;
     font-size: 11px;
+    margin-left: 30px;
     color: #1989fa !important;
     margin-bottom: 20px;
   }

@@ -76,7 +76,7 @@ const goinfo=async ()=>{
       z-index: 0;
     }
 
-    width: 375px;
+    width: 100vw;
     height: 220px;
     background-image: url("https://ts1.cn.mm.bing.net/th/id/R-C.33d86fa9c27e626bec6e5f194b6a6cc4?rik=azDIozTOJ%2f7QxQ&riu=http%3a%2f%2fwww.deskcar.com%2fdesktop%2ffengjing%2f2014325205802%2f9.jpg&ehk=DVCHelgY3vSZMMlEns9iEYYwg0JPtHEt8DTYTY9nPXM%3d&risl=&pid=ImgRaw&r=0");
     background-size: cover;
