@@ -1,7 +1,7 @@
 <template>
     <div class="item-list-container">
-        <div class="item-list" v-for="it in itemDetails">
-            <itemCard :item="it.item" :fImage="it.images[0].toString"></itemCard>
+        <div class="item-list" v-for="detail in itemDetails">
+            <itemCard :itemDetail="(detail)"></itemCard>
         </div>
     </div>
 </template>
@@ -10,13 +10,14 @@
 import { getAllItemsApi, getItemImageApi } from '../apis/ItemApi'
 import Item from '../model/item';
 import { onMounted, ref } from 'vue';
-import ItemDetial from '../model/itemDetial';
-import itemCard from '../layout/itemCard.vue'
-let itemDetails = ref(new Array<ItemDetial>);
+import itemCard from '../component/itemCard.vue'
+import ItemDetail from '../model/itemDetail';
+
+let itemDetails = ref(new Array<ItemDetail>);
 
 
-onMounted(() => {
-    getAll();
+onMounted(async () => {
+    await getAll();
 })
 
 
@@ -26,15 +27,23 @@ const getAll = async () => {
         items = res.data;
     });
 
-    items.forEach((item: Item) => {
-        getItemImageApi({ id: item.id }).then(res => {
-            itemDetails.value.push(
-                new ItemDetial(item, res.data)
-            )
-        });
-    })
+    const imagePromises = items.map((item: Item) => getItemImageApi({ id: item.id }));
+
+    const images = await Promise.all(imagePromises);
+
+    itemDetails.value = items.map((item, index) => {
+        return new ItemDetail(item, images[index].data);
+    });
 }
+
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.item-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+</style>

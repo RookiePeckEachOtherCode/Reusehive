@@ -1,25 +1,25 @@
 class Item {
   id: String;
   uid: String;
-  name: string;
-  description: string;
+  name: String;
+  description: String;
   prices: number;
   type: number;
 
   constructor(
-    id: String,
-    uid: String,
-    name: string,
-    description: string,
-    prices: number,
-    type: number
+    id?: String,
+    uid?: String,
+    name?: String,
+    description?: String,
+    prices?: number,
+    type?: number
   ) {
-    this.id = id;
-    this.uid = uid;
-    this.name = name;
-    this.description = description;
-    this.prices = prices;
-    this.type = type;
+    this.id = id || "";
+    this.uid = uid || "";
+    this.name = name || "";
+    this.description = description || "";
+    this.prices = prices || 1000000;
+    this.type = type || 0;
   }
 }
 

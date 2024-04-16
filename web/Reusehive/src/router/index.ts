@@ -16,9 +16,9 @@ const router = createRouter({
       component: () => import("../pages/login.vue"),
     },
     {
-      path: "/itemdetial",
-      name: "itemdetial",
-      component: () => import("../pages/item-detial.vue"),
+      path: "/item",
+      name: "item",
+      component: () => import("../pages/item.vue"),
     },
     {
       path: "/updateinfo",

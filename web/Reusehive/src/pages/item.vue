@@ -17,7 +17,7 @@
         </div>
         <div class="item-images">
             <t-swiper :navigation="{ type: 'dots' }" :autoplay="true" @click="" @change="">
-                <t-swiper-item v-for="(item, index) in swiperList" :key="index" style="height: 192px">
+                <t-swiper-item v-for="(item, index) in images" :key="index" style="height: 192px">
                     <img :src="item" class="img" />
                 </t-swiper-item>
             </t-swiper>
@@ -44,44 +44,51 @@
 </template>
 
 <script setup lang="ts">
-import { h, ref } from 'vue';
+import { h, onMounted, ref } from 'vue';
 import router from '../router';
 import Item from '../model/item';
 import User from '../model/user';
 import { ChatIcon, StarIcon, BeerIcon } from 'tdesign-icons-vue-next';
+import { getItemByItemIdApi, getItemImageApi } from '../apis/ItemApi';
+import { getUserInfoByUidApi } from '../apis/UserApi';
 const chatIcon = () => h(ChatIcon, { size: '24px' })
 const starIcon = () => h(StarIcon, { size: '24px' })
 const beerIcon = () => h(BeerIcon, { size: '24px' })
 
-const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
-const swiperList = [
-    `${imageCdn}/swiper1.png`,
-    `${imageCdn}/swiper2.png`,
-    `${imageCdn}/swiper1.png`,
-    `${imageCdn}/swiper2.png`,
-    `${imageCdn}/swiper1.png`,
-];
+onMounted(async () => {
+    const tid = router.currentRoute.value.query.tid as string
+    const uid = router.currentRoute.value.query.uid as string
 
-const user = ref(new User(
-    '114514',
-    '啊米诺斯',
-    '男',
-    '2022级',
-    '计算机工程学院',
-    '1145141919810',
-    '这个人很懒，什么都没有留下',
-    'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
-    'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
-));
 
-const item = new Item(
-    '114514',
-    '114514',
-    '讯景rx5700显卡',
-    '讯景rx5700显卡，性能正常，外观看图片，鲁大师跑分33w左右，砍价勿扰谢谢',
-    1145,
-    0
-);
+    await getItemByItemIdApi({ id: tid }).then(
+        res => item.value = res.data
+    )
+    await getUserInfoByUidApi({ id: uid }).then(
+        res => user.value = res.data
+    )
+
+    await getItemImageApi({ id: tid }).then(
+        res => images.value = res.data
+    )
+
+})
+
+// let user: User;
+// let item: Item;
+// let images: Array<string>;
+
+// const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
+// const swiperList = [
+//     `${imageCdn}/swiper1.png`,
+//     `${imageCdn}/swiper2.png`,
+//     `${imageCdn}/swiper1.png`,
+//     `${imageCdn}/swiper2.png`,
+//     `${imageCdn}/swiper1.png`,
+// ];
+
+const item = ref<Item>(new Item);
+const user = ref<User>(new User);
+const images = ref(new Array<string>);
 
 const goBack = () => {
     router.back();
@@ -142,7 +149,7 @@ const goBack = () => {
 
 .price {
     margin-top: 12px;
-    margin-left: 10px;
+    margin-left: 8px;
 
     .symbol {
         font-size: 18px;

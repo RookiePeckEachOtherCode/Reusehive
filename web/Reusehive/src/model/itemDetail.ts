@@ -1,6 +1,6 @@
 import Item from "./item";
 
-class ItemDetial {
+class ItemDetail {
   item: Item;
   images: Array<String>;
 
@@ -10,4 +10,4 @@ class ItemDetial {
   }
 }
 
-export default ItemDetial;
+export default ItemDetail;
