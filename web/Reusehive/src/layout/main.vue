@@ -29,6 +29,7 @@ const showNavBar = ref(true);
 
   .app-body {
     flex: 1;
+
   }
 
   .app-footer {

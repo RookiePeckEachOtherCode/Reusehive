@@ -1,15 +1,17 @@
 import {defineStore} from "pinia";
 
 export const LocalStorage=defineStore("main-store",()=>{
-    const setToken = (token: string, userId: string) => {
+    const setToken = (token: string, userId: string,username:string) => {
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", userId);
+        localStorage.setItem("username",username)
     };
     const CheckToken = () => {
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("user_id");
-        if (token && userId) {
-            setToken(token, userId);
+        const username=localStorage.getItem("username")
+        if (token && userId&& username) {
+            setToken(token, userId,username);
             return true;
         }
         return false;
@@ -24,12 +26,16 @@ export const LocalStorage=defineStore("main-store",()=>{
     const getToken=()=>{
         return localStorage.getItem("token")
     }
+    const getusername=()=>{
+        return localStorage.getItem("username");
+    }
     return {
         setToken,
         CheckToken,
         removeToken,
         getUserId,
         getToken,
+        getusername,
     };
 
 });

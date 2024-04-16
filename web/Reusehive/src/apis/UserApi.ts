@@ -25,3 +25,12 @@ export const userChatInfoApi=()=>{
 
     })
 }
+
+export const getUserInfoByName=(data:{name:String})=>{
+    return $http({
+        method:"get",
+        url:"http://127.0.0.1:4523/m1/4280410-0-default/user/1",
+        //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/" + data.id,
+        params:data
+    })
+}
