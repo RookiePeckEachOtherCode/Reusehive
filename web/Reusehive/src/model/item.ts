@@ -1,26 +1,12 @@
-class Item {
-  id: String;
-  uid: String;
-  name: String;
-  description: String;
-  prices: number;
-  type: number;
+import BaseItem from "./baseItem.ts";
 
-  constructor(
-    id?: String,
-    uid?: String,
-    name?: String,
-    description?: String,
-    prices?: number,
-    type?: number
-  ) {
-    this.id = id || "";
-    this.uid = uid || "";
-    this.name = name || "";
-    this.description = description || "";
-    this.prices = prices || 1000000;
-    this.type = type || 0;
+class Item {
+  item: BaseItem;
+  images: Array<String>;
+
+  constructor(item?: BaseItem, images?: Array<String>) {
+    this.item = item || new BaseItem();
+    this.images = images || [];
   }
 }
-
 export default Item;

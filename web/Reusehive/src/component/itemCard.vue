@@ -1,16 +1,15 @@
 <template>
     <div class="container" @click="goToItem()">
         <div class="item-image">
-            <t-image shape="round" :src="itemDetail?.images[0]" fit=" cover"
-                :style="{ width: '20vh', height: '25vh' }"></t-image>
+            <t-image shape="round" :src="fimage" fit=" cover" :style="{ width: '20vh', height: '25vh' }"></t-image>
         </div>
         <div class="item-desc">
-            {{ itemDetail?.item.description }}
+            {{ item!.description }}
         </div>
         <div class="price">
             <span class="symbol">¥</span>
             <span class="data">
-                {{ itemDetail?.item.prices }}
+              {{item!.prices}}
             </span>
         </div>
     </div>
@@ -18,18 +17,24 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-import ItemDetail from '../model/itemDetail';
+import { defineProps, onMounted, ref } from 'vue';
 import router from '../router';
 
+onMounted(() => {
+    fimage.value = props.images![0].toString() ?? '';
+})
+
+
+const fimage = ref('')
 
 const props = defineProps({
-    itemDetail: ItemDetail
+    images: Array<String>,
+    item: Object
 })
 
 const goToItem = () => {
-    const tid: string = props.itemDetail?.item?.id.toString() ?? '';
-    const uid: string = props.itemDetail?.item?.uid.toString() ?? '';
+    const tid: string = props.item?.id.toString() ?? '';
+    const uid: string = props.item?.uid.toString() ?? '';
     router.push({
         path: `/item`,
         query: {

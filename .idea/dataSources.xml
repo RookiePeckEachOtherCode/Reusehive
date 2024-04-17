@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="reusehive@localhost" uuid="445ca907-6f8b-4340-994e-845856da6ab9">
+    <data-source source="LOCAL" name="reusehive@localhost" uuid="2bc6db8b-2a3d-49d5-ae06-bbafad1fe1ed">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>

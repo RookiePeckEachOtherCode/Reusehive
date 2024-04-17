@@ -2,6 +2,7 @@ package com.reusehive.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.reusehive.consts.ItemStatus;
+import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.None;
 import com.reusehive.entity.database.Item;
 import com.reusehive.service.ItemService;
@@ -50,10 +51,10 @@ public class ItemController {
      * 根据id获取物品信息
      */
     @GetMapping("/item/{id}")
-    public Result<Item> getItemById(@PathVariable Long id) {
+    public Result<ItemDetail> getItemById(@PathVariable Long id) {
         try {
-            var item = itemService.getItemById(id);
-            return Result.ok(item);
+            var itemDetail = itemService.getItemById(id);
+            return Result.ok(itemDetail);
         } catch (RuntimeException e) {
             var msg = "获取物品信息失败: " + e.getMessage();
             log.error(msg);
@@ -81,10 +82,10 @@ public class ItemController {
      * 获取所有物品列表
      */
     @GetMapping("/item/all")
-    public Result<List<Item>> getAllItem() {
+    public Result<List<ItemDetail>> getAllItem() {
         try {
-            var items = itemService.getAllItem();
-            return Result.ok(items);
+            var itemDetails = itemService.getAllItem();
+            return Result.ok(itemDetails);
         } catch (RuntimeException e) {
             var msg = "获取所有物品列表失败: " + e.getMessage();
             log.error(msg);

@@ -13,12 +13,12 @@
             </div>
         </div>
         <div class="item-title">
-            <p>{{ item.name }}</p>
+            <p>{{ item.item.name }}</p>
         </div>
         <div class="item-images">
             <t-swiper :navigation="{ type: 'dots' }" :autoplay="true" @click="" @change="">
-                <t-swiper-item v-for="(item, index) in images" :key="index" style="height: 192px">
-                    <img :src="item" class="img" />
+                <t-swiper-item v-for="(url, index) in item.images" :key="index" style="height: 192px">
+                    <img :src="url.toString()" class="img" />
                 </t-swiper-item>
             </t-swiper>
         </div>
@@ -26,11 +26,11 @@
             <div class="price">
                 <span class="symbol">¥</span>
                 <span class="data">
-                    {{ item.prices }}
+                    {{ item.item.prices }}
                 </span>
             </div>
             <div class="desc">
-                <p>{{ item.description }}</p>
+                <p>{{ item.item.description }}</p>
             </div>
             <div class="botbar">
                 <t-button class="chat-icon" theme="primary" :icon="chatIcon">
@@ -46,18 +46,18 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from 'vue';
 import router from '../router';
-import Item from '../model/item';
 import User from '../model/user';
 import { ChatIcon, StarIcon, BeerIcon } from 'tdesign-icons-vue-next';
-import { getItemByItemIdApi, getItemImageApi } from '../apis/ItemApi';
+import { getItemByItemIdApi } from '../apis/ItemApi';
 import { getUserInfoByUidApi } from '../apis/UserApi';
+import Item from '../model/item.ts';
 const chatIcon = () => h(ChatIcon, { size: '24px' })
 const starIcon = () => h(StarIcon, { size: '24px' })
 const beerIcon = () => h(BeerIcon, { size: '24px' })
 
 onMounted(async () => {
-    const tid = router.currentRoute.value.query.tid as string
-    const uid = router.currentRoute.value.query.uid as string
+    const tid = router.currentRoute.value.query.tid?.toString() ?? ' ';
+    const uid = router.currentRoute.value.query.uid?.toString() ?? ' ';
 
 
     await getItemByItemIdApi({ id: tid }).then(
@@ -66,15 +66,10 @@ onMounted(async () => {
     await getUserInfoByUidApi({ id: uid }).then(
         res => user.value = res.data
     )
-
-    await getItemImageApi({ id: tid }).then(
-        res => images.value = res.data
-    )
-
 })
 
 // let user: User;
-// let item: Item;
+// let item: BaseItem;
 // let images: Array<string>;
 
 // const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
@@ -86,9 +81,8 @@ onMounted(async () => {
 //     `${imageCdn}/swiper1.png`,
 // ];
 
-const item = ref<Item>(new Item);
-const user = ref<User>(new User);
-const images = ref(new Array<string>);
+const item = ref<Item>(new Item());
+const user = ref<User>(new User());
 
 const goBack = () => {
     router.back();
