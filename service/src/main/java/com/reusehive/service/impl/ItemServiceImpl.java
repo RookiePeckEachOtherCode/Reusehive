@@ -1,15 +1,21 @@
 package com.reusehive.service.impl;
 
+import static com.reusehive.entity.database.table.ItemImageTableDef.ITEM_IMAGE;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.mybatisflex.core.query.QueryChain;
 import com.reusehive.consts.ItemStatus;
+import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Item;
+import com.reusehive.entity.database.ItemImage;
 import com.reusehive.entity.database.table.ItemTableDef;
 import com.reusehive.mapper.ItemMapper;
 import com.reusehive.service.ItemService;
-import jakarta.annotation.Resource;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import jakarta.annotation.Resource;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -22,8 +28,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById(Long id) {
-        return itemMapper.selectOneById(id);
+    public ItemDetail getItemById(Long id) {
+//        return itemMapper.selectOneById(id);
+        var item=itemMapper.selectOneById(id);
+        var images=QueryChain.of(itemImageMapper).select(ITEM_IMAGE.IMAGE_URL)
+                .where(ITEM_IMAGE.ITEM_ID.eq(id))
+                .list()
+                .stream()
+                .map(ItemImage::getImageUrl)
+                .toList();
+        return new ItemDetail(item,images);
+
     }
 
     @Override
@@ -34,10 +49,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getAllItem() {
+    public List<ItemDetail> getAllItem() {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
-                .list();
+                .list()
+                .stream()
+                .map(it-> new ItemDetail(it,this.getItemImage(it.getId())))
+                .toList();
     }
 
     @Override
@@ -77,5 +95,19 @@ public class ItemServiceImpl implements ItemService {
                 .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
                 .list();
+    }
+
+    @Override
+    public List<String> getItemImage(Long id) {
+        return QueryChain.of(itemImageMapper)
+                .select(ITEM_IMAGE.IMAGE_URL)
+                .where(ITEM_IMAGE.ITEM_ID.eq(id))
+                .list()
+                .stream().map(ItemImage::getImageUrl).toList();
+    }
+
+    @Override
+    public void addItemImage(Long id, List<String> imageUrl) {
+        itemImageMapper.insertBatch(imageUrl.stream().map(url -> new ItemImage(null, id, url)).toList());
     }
 }

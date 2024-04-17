@@ -63,3 +63,13 @@ CREATE TABLE message
     content      TEXT,
     createTime   TIMESTAMP
 );
+
+CREATE TABLE item_image
+(
+    id      BIGINT PRIMARY KEY,
+    item_id BIGINT,
+    image_url VARCHAR(255),
+
+    INDEX (item_id),
+    FOREIGN KEY (item_id) REFERENCES item (id)
+)

@@ -116,6 +116,4 @@ const exit=()=>{
   router.push({name:"message"})
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

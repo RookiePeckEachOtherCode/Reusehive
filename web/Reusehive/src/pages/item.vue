@@ -13,12 +13,12 @@
             </div>
         </div>
         <div class="item-title">
-            <p>{{ item.name }}</p>
+            <p>{{ item.item.name }}</p>
         </div>
         <div class="item-images">
             <t-swiper :navigation="{ type: 'dots' }" :autoplay="true" @click="" @change="">
-                <t-swiper-item v-for="(item, index) in swiperList" :key="index" style="height: 192px">
-                    <img :src="item" class="img" />
+                <t-swiper-item v-for="(url, index) in item.images" :key="index" style="height: 192px">
+                    <img :src="url.toString()" class="img" />
                 </t-swiper-item>
             </t-swiper>
         </div>
@@ -26,11 +26,11 @@
             <div class="price">
                 <span class="symbol">¥</span>
                 <span class="data">
-                    {{ item.prices }}
+                    {{ item.item.prices }}
                 </span>
             </div>
             <div class="desc">
-                <p>{{ item.description }}</p>
+                <p>{{ item.item.description }}</p>
             </div>
             <div class="botbar">
                 <t-button class="chat-icon" theme="primary" :icon="chatIcon">
@@ -44,44 +44,45 @@
 </template>
 
 <script setup lang="ts">
-import { h, ref } from 'vue';
+import { h, onMounted, ref } from 'vue';
 import router from '../router';
-import Item from '../model/item';
 import User from '../model/user';
 import { ChatIcon, StarIcon, BeerIcon } from 'tdesign-icons-vue-next';
+import { getItemByItemIdApi } from '../apis/ItemApi';
+import { getUserInfoByUidApi } from '../apis/UserApi';
+import Item from '../model/item.ts';
 const chatIcon = () => h(ChatIcon, { size: '24px' })
 const starIcon = () => h(StarIcon, { size: '24px' })
 const beerIcon = () => h(BeerIcon, { size: '24px' })
 
-const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
-const swiperList = [
-    `${imageCdn}/swiper1.png`,
-    `${imageCdn}/swiper2.png`,
-    `${imageCdn}/swiper1.png`,
-    `${imageCdn}/swiper2.png`,
-    `${imageCdn}/swiper1.png`,
-];
+onMounted(async () => {
+    const tid = router.currentRoute.value.query.tid?.toString() ?? ' ';
+    const uid = router.currentRoute.value.query.uid?.toString() ?? ' ';
 
-const user = ref(new User(
-    114514,
-    '啊米诺斯',
-    '男',
-    '2022级',
-    '计算机工程学院',
-    '1145141919810',
-    '这个人很懒，什么都没有留下',
-    'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
-    'https://tdesign.gtimg.com/mobile/demos/avatar1.png',
-));
 
-const item = new Item(
-    114514,
-    114514,
-    '讯景rx5700显卡',
-    '讯景rx5700显卡，性能正常，外观看图片，鲁大师跑分33w左右，砍价勿扰谢谢',
-    1145,
-    0
-);
+    await getItemByItemIdApi({ id: tid }).then(
+        res => item.value = res.data
+    )
+    await getUserInfoByUidApi({ id: uid }).then(
+        res => user.value = res.data
+    )
+})
+
+// let user: User;
+// let item: BaseItem;
+// let images: Array<string>;
+
+// const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
+// const swiperList = [
+//     `${imageCdn}/swiper1.png`,
+//     `${imageCdn}/swiper2.png`,
+//     `${imageCdn}/swiper1.png`,
+//     `${imageCdn}/swiper2.png`,
+//     `${imageCdn}/swiper1.png`,
+// ];
+
+const item = ref<Item>(new Item());
+const user = ref<User>(new User());
 
 const goBack = () => {
     router.back();
@@ -142,7 +143,7 @@ const goBack = () => {
 
 .price {
     margin-top: 12px;
-    margin-left: 10px;
+    margin-left: 8px;
 
     .symbol {
         font-size: 18px;

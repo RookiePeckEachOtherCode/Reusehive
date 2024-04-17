@@ -1,5 +1,6 @@
 package com.reusehive.service;
 
+import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Item;
 
 import java.util.List;
@@ -7,11 +8,11 @@ import java.util.List;
 public interface ItemService {
     void newItem(Item item);
 
-    Item getItemById(Long id);
+    ItemDetail getItemById(Long id);
 
     List<Item> getItemByUid(Long uid);
 
-    List<Item> getAllItem();
+    List<ItemDetail> getAllItem();
 
     void updateItem(Item item, Long uid);
 
