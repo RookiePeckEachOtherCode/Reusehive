@@ -3,11 +3,9 @@
   <div class="app-container">
     <div class="app-header" v-if="showNavBar">
     </div>
-    <el-scrollbar height="90vh">
-      <div class="app-body">
-        <RouterView></RouterView>
-      </div>
-    </el-scrollbar>
+    <div class="app-body">
+      <RouterView></RouterView>
+    </div>
   </div>
   <div class="app-footer">
     <Tabs>
@@ -26,9 +24,20 @@ const showNavBar = ref(true);
 .app-container {
   display: flex;
   flex-direction: column;
+  min-height: 92vh;
+  background-color: #6aeb62;
+
+  .app-body {
+    flex: 1;
+
+  }
 
   .app-footer {
-    position: fixed;
+    .app-footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
   }
 }
 </style>

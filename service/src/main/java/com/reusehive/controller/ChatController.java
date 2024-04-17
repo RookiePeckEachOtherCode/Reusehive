@@ -1,5 +1,6 @@
 package com.reusehive.controller;
 import com.alibaba.fastjson2.JSON;
+import com.reusehive.config.MessageComparator;
 import com.reusehive.entity.database.Message;
 import com.reusehive.service.ChatService;
 import com.reusehive.service.UserService;
@@ -17,10 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -60,7 +58,7 @@ public class ChatController {
 
             try {
                 List<Message> messageList = chatService.getMessageList(username, tousername);
-
+                messageList.sort(new MessageComparator());
                 for (Message i : messageList) {
                     session.getBasicRemote().sendText(JSON.toJSONString(i));
                 }

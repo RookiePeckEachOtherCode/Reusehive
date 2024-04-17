@@ -21,8 +21,4 @@ public interface ItemService {
     void updateItemStatus(Long id, long uid, int status);
 
     List<Item> getItemByType(String type);
-
-    List<String> getItemImage(Long id);
-
-    void addItemImage(Long id, List<String> imageUrl);
 }

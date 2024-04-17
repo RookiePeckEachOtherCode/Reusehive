@@ -196,34 +196,4 @@ public class ItemController {
         }
     }
 
-    /**
-     * 根据物品id获取物品图片url列表
-     */
-    @GetMapping("/item/image")
-    public Result<List<String>> getItemImage(Long id) {
-        try {
-            var images = itemService.getItemImage(id);
-            return Result.ok(images);
-        } catch (RuntimeException e) {
-            var msg = "获取物品图片失败: " + e.getMessage();
-            log.error(msg);
-            return Result.error(msg);
-        }
-    }
-
-    /**
-     * 根据id添加物品图片
-     */
-    @PostMapping("/item/image/add")
-    public Result<None> addItemImage(Long id, List<String> imageUrl) {
-        try {
-            itemService.addItemImage(id, imageUrl);
-            return Result.ok();
-        } catch (RuntimeException e) {
-            var msg = "添加物品图片失败: " + e.getMessage();
-            log.error(msg);
-            return Result.error(msg);
-        }
-    }
-
 }

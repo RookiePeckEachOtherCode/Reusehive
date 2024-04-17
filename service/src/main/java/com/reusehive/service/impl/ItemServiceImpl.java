@@ -1,27 +1,26 @@
 package com.reusehive.service.impl;
 
+import static com.reusehive.entity.database.table.ItemImageTableDef.ITEM_IMAGE;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.mybatisflex.core.query.QueryChain;
 import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.ItemImage;
 import com.reusehive.entity.database.table.ItemTableDef;
-import com.reusehive.mapper.ItemImageMapper;
 import com.reusehive.mapper.ItemMapper;
 import com.reusehive.service.ItemService;
+
 import jakarta.annotation.Resource;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static com.reusehive.entity.database.table.ItemImageTableDef.ITEM_IMAGE;
 
 @Service
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
-    @Resource
-    private ItemImageMapper itemImageMapper;
 
     @Override
     public void newItem(Item item) {
