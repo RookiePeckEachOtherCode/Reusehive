@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import("../pages/item.vue"),
     },
     {
+      path: "/item/new",
+      name: "itme-new",
+      component: () => import("../pages/item-new.vue"),
+    },
+    {
       path: "/updateinfo",
       name: "updateinfo",
       component: () => import("../pages/updateinfo.vue"),
