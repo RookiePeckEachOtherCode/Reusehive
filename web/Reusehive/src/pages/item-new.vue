@@ -5,23 +5,33 @@
         </div>
 
         <div class="item-form">
-            <t-form ref="form" reset-type="initial" show-error-message label-align="left">
+            <t-form reset-type="initial" show-error-message label-align="left" @submit="onSubmit">
                 <t-form-item label="名称" name="name">
-                    <t-input align="right" borderless placeholder="请输入内容"></t-input>
+                    <t-input align="right" borderless placeholder="请输入内容" v-model="formData.name"></t-input>
                 </t-form-item>
                 <p>描述</p>
                 <t-form-item name="description" labelWidth="5">
-                    <t-textarea class=" des" autosize></t-textarea>
+                    <t-textarea class="des" autosize v-model="formData.description"></t-textarea>
                 </t-form-item>
                 <t-form-item name="prices" label="价格">
-                    <t-input align="right" placeholder="0.00" suffix="元" />
+                    <t-input align="right" placeholder="0.00" suffix="元" v-model="formData.prices" />
                 </t-form-item>
                 <t-form-item labelWidth="5">
-                    <t-cell arrow title="选择类型" :note="itemTypeStatus.type" @click="itemTypeStatus.show = true" />
+                    <t-cell arrow title="选择类型" :note="itemType.type.join('')" @click="itemType.show = true"
+                        v-model="formData.itemType" />
+
+                    <t-popup v-model="itemType.show" placement="bottom">
+                        <t-picker v-model="itemType.type" :columns="ItemTypeOption" @confirm="onConfirm"
+                            @cancel="itemType.show = false" />
+                    </t-popup>
+                </t-form-item>
+                <t-form-item label="上传照片" name="photo">
+                    <t-upload class="upload"></t-upload>
                 </t-form-item>
                 <div class="submit">
-                    <t-button class="submit-bt" theme="primary">发布</t-button>
+                    <t-button class="submit-bt" theme="primary" type="submit">发布</t-button>
                 </div>
+
             </t-form>
         </div>
     </div>
@@ -29,22 +39,33 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import router from '../router';
+import ItemTypeOption from '../const/itemTypeOption';
 
-const itemTypeStatus = reactive({
+const itemType = reactive({
     show: false,
-    type: ''
+    type: []
 })
 
-const form = reactive({
-    name: String,
-    description: String,
-    prices: Number,
-    itemType: String
+const formData = reactive({
+    name: '',
+    description: '',
+    prices: '',
+    itemType: '',
 })
+
+const onConfirm = () => {
+    itemType.show = false;
+}
 
 const goBack = () => {
     router.back()
 }
+
+const onSubmit = () => {
+    console.log('Dont touch me!!!!!')
+    console.log("It is unfinished")
+}
+
 
 </script>
 <style scoped>
@@ -54,6 +75,7 @@ const goBack = () => {
 }
 
 p {
+    margin-top: 10px;
     padding-left: 16px;
 }
 

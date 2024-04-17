@@ -20,9 +20,27 @@ onMounted(async () => {
     await getAll();
 })
 
+let isLoading = ref(false);
+const CACHE_DURATION = 5 * 60 * 1000; // 5分钟
+
+const isCacheValid = () => {
+    const cacheTimestamp = localStorage.getItem('cacheItemTimestamp');
+    if (!cacheTimestamp) return false;
+    const timestamp = parseInt(cacheTimestamp);
+    return Date.now() - timestamp <= CACHE_DURATION;
+};
+
+
 
 const getAll = async () => {
-    let items = new Array<Item>;
+    if (isLoading.value || isCacheValid()) {
+        itemDetails.value = JSON.parse(localStorage.getItem('itemDetails') || '[]');
+        return;
+    }
+
+    isLoading.value = true;
+
+    let items = new Array<Item>();
     await getAllItemsApi().then(res => {
         items = res.data;
     });
@@ -34,7 +52,12 @@ const getAll = async () => {
     itemDetails.value = items.map((item, index) => {
         return new ItemDetail(item, images[index].data);
     });
-}
+
+    localStorage.setItem('itemDetails', JSON.stringify(itemDetails.value));
+    localStorage.setItem('cacheItemTimestamp', Date.now().toString());
+
+    isLoading.value = false;
+};
 
 
 </script>

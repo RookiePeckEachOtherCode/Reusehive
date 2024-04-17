@@ -1,4 +1,4 @@
-const ItemType = [
+const ItemTypeOption = [
   [
     {
       label: "电子数码",
@@ -27,4 +27,4 @@ const ItemType = [
   ],
 ];
 
-export default ItemType;
+export default ItemTypeOption;

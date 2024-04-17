@@ -46,6 +46,7 @@ declare module 'vue' {
     TRadio: typeof import('tdesign-mobile-vue')['Radio']
     TRadioGroup: typeof import('tdesign-mobile-vue')['RadioGroup']
     TRate: typeof import('tdesign-mobile-vue')['Rate']
+    TSkeleton: typeof import('tdesign-mobile-vue')['Skeleton']
     TSlider: typeof import('tdesign-mobile-vue')['Slider']
     TStepper: typeof import('tdesign-mobile-vue')['Stepper']
     TSwiper: typeof import('tdesign-mobile-vue')['Swiper']
