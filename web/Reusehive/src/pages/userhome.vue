@@ -1,11 +1,11 @@
 <template>
   <div class="profile-container" >
-    <div class="profile-header">
+    <div class="profile-header" :style="{ 'background-image': 'url(' + userinfo.back_img + ')' }">
       <div class="profile-info">
-        <el-avatar size="large" src="https://ts1.cn.mm.bing.net/th/id/R-C.18b0ef152141b4f00d4dccd7ad2aace1?rik=yFn3nV90JZHcjw&riu=http%3a%2f%2fpic.uzzf.com%2fup%2f2018-5%2f201805091154525122038.png&ehk=n3MGluxxusEXz9tvXxHiTnSX92Cz7Xgmix9LaEI9%2bDc%3d&risl=&pid=ImgRaw&r=0"></el-avatar>
-        <span class="profile-info-nickname" style="background-color: rgb(0,0,0,0.4)">野兽前辈</span>
+        <el-avatar size="large" :src="userinfo.avatar_img"></el-avatar>
+        <span class="profile-info-nickname" style="background-color: rgb(0,0,0,0.4)">{{userinfo.name}}</span>
         <span class="profile-info-ad  dress" style="background-color: rgb(0,0,0,0.4)">
-                    <Icon name="location-o" /> 东京 涩谷
+                    <Icon name="location-o" /> {{userinfo.academy}}
                 </span>
       </div>
     </div>
@@ -53,6 +53,7 @@
 import router from "../router";
 import {reactive,onMounted} from "vue";
 import {getUserInfoByName} from "../apis/UserApi.ts";
+import {LocalStorage} from "../storage/LocalStorage.ts";
 const userinfo=reactive({
   name:"",
   id:"",
@@ -61,11 +62,22 @@ const userinfo=reactive({
   back_img:"",
   grade:"",
 })
-onMounted(()=>{
-
+onMounted(async ()=>{
+  await  getinfo()
 })
 const goinfo=async ()=>{
   await router.push({name: "updateinfo"})
+}
+const getinfo=async ()=>{
+  //LocalStorage().setToken("114514","lingluo","lingluo")
+  const res=await getUserInfoByName({name:LocalStorage().getusername()})
+  console.log(res)
+  userinfo.name=res.data.name
+  userinfo.id=res.data.id.toString()
+  userinfo.academy=res.data.academy;
+  userinfo.grade=res.data.grade;
+  userinfo.avatar_img=res.data.avatar_img;
+  userinfo.back_img=res.data.avatar_img;
 }
 
 </script>
@@ -94,7 +106,6 @@ const goinfo=async ()=>{
 
     width: 100vw;
     height: 220px;
-    background-image: url("https://ts1.cn.mm.bing.net/th/id/R-C.33d86fa9c27e626bec6e5f194b6a6cc4?rik=azDIozTOJ%2f7QxQ&riu=http%3a%2f%2fwww.deskcar.com%2fdesktop%2ffengjing%2f2014325205802%2f9.jpg&ehk=DVCHelgY3vSZMMlEns9iEYYwg0JPtHEt8DTYTY9nPXM%3d&risl=&pid=ImgRaw&r=0");
     background-size: cover;
 
     display:flex;
@@ -125,7 +136,6 @@ const goinfo=async ()=>{
         margin: 5px 5px 0px 5px;
       }
     }
-
 
   }
 }

@@ -214,7 +214,7 @@ const form = reactive({
 const login = async () => {
   const res = await loginApi({password: form.password, username: form.username})
   if(res.code===1){
-    LocalStorage().setToken("ggbond","114514",form.username);
+    LocalStorage().setToken("ggbond","1145141918",form.username);
     await router.push({name: "main"})
   }
 }

@@ -50,7 +50,7 @@
     <t-form-item label="性别" name="gender">
       <el-radio-group v-model="formData.gender" size="large">
         <el-radio :value="1" size="large">男</el-radio>
-        <el-radio :value="0" size="large">女</el-radio>
+        <el-radio :value="0" size="large" >女</el-radio>
       </el-radio-group>
     </t-form-item>
     <t-form-item label="年级" name="social_info">
@@ -78,14 +78,15 @@
 
   </t-form>
   <div class="button-group">
-    <t-button theme="primary" type="submit" size="large">提交</t-button>
-    <t-button theme="default" variant="base" type="reset" size="large">重置</t-button>
+    <t-button theme="primary" type="submit" size="large" @click="onSubmit">提交</t-button>
+    <t-button theme="default" variant="base" type="reset" size="large" @click="onReset">重置</t-button>
   </div>
 </template>
 <script setup lang="ts">
 import {reactive,ref} from "vue";
 import { BrowseOffIcon } from 'tdesign-icons-vue-next';
 import router from "../router";
+import {UploadUserInfo} from "../apis/UserApi.ts";
 
 const avatar=ref([])
 const back_img=ref([])
@@ -93,7 +94,6 @@ const back_img=ref([])
 const formData=reactive({
   name:"",
   password:"",
-  gender:1,
   grade:"",
   academy:"",
   phone_number:"",
@@ -104,10 +104,17 @@ const formData=reactive({
 })
 const form=ref(null);
 const onReset=()=>{
-
+  formData.grade=""
+  formData.phone_number=""
+  formData.academy=""
+  formData.name=""
+  formData.password=""
+  formData.back_img=""
+  formData.social_info=""
+  formData.avatar_img=""
 }
-const onSubmit=()=>{
-
+const onSubmit= async ()=>{
+await UploadUserInfo({formdata:formData})
 }
 const back=()=>{
   router.push({name:"home"});
@@ -163,6 +170,7 @@ const academy=ref("软件工程")
 const onChangeCascader = (value: string, options: any) => {
   formData.academy = options?.map((item: any) => item.label).join('/');
   visibleCascader.value = false;
+  console.log(value)
 };
 const showCascader = () => {
   visibleCascader.value = true;
