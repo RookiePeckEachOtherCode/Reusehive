@@ -184,13 +184,4 @@ public class UserController {
             return Result.error(msg);
         }
     }
-//
-//    @PostMapping("/user/{id}/upload")
-//    public Result<String> UploadIcon(MultipartFile file, @PathVariable Long id) {
-//        String url = minioUtils.UploadUserIcon(file, id.toString());
-//        userService.uploadUserIcon(url, id);
-//        return Result.ok(url);
-//    }
-//
-//
 }

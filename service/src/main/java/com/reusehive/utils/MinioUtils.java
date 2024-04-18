@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -36,13 +37,18 @@ public class MinioUtils {
 
     }
 
-    public String UploadItemBackImg(MultipartFile file, String item_id) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket("item-back-img").object(item_id)
-                .stream(file.getInputStream(), file.getSize(), -1).contentType("image/png").build();
+    public String UploadItemBackImg(MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        String fileName = file.getOriginalFilename();
+        assert fileName != null;
+
+        String fileCode = UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf('.'));
+
+        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket("item-back-img").object(fileCode)
+                .stream(file.getInputStream(), file.getSize(), -1).contentType("image/png").contentType("image/jpeg").build();
         minioClient.putObject(objectArgs);
 
 
-        return minioConfigProp.getEndpoint() + "/" + MinioConst.BUCKET_ITEM_BACK_IMG + "/" + item_id;
+        return minioConfigProp.getEndpoint() + "/" + MinioConst.BUCKET_ITEM_BACK_IMG + "/" + fileCode;
     }
 
 

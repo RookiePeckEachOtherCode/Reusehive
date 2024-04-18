@@ -9,10 +9,8 @@ import com.reusehive.service.ItemService;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +23,7 @@ public class ItemController {
     @Resource
     private ItemService itemService;
 
+
     /**
      * 新建物品
      */
@@ -33,12 +32,16 @@ public class ItemController {
             String name,
             String description,
             Double prices,
-            String itemType
+            String itemType,
+            @RequestParam MultipartFile[] images
     ) {
-        var uid = StpUtil.getLoginIdAsLong();
+        if (images == null) {
+            return Result.error("图片不能为空");
+        }
+        Long uid = StpUtil.getLoginIdAsLong();
         var item = new Item(null, uid, name, description, prices, ItemStatus.UNDO, itemType);
         try {
-            itemService.newItem(item);
+            itemService.newItem(item, images);
             return Result.ok(item.getId());
         } catch (RuntimeException e) {
             var msg = "新建物品失败: " + e.getMessage();
