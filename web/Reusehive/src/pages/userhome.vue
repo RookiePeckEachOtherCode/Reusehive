@@ -51,14 +51,30 @@
 </template>
 <script setup >
 import router from "../router";
+import {reactive,onMounted} from "vue";
+import {getUserInfoByName} from "../apis/UserApi.ts";
+const userinfo=reactive({
+  name:"",
+  id:"",
+  academy:"",
+  avatar_img:"",
+  back_img:"",
+  grade:"",
+})
+onMounted(()=>{
+
+})
 const goinfo=async ()=>{
-  router.push({name:"updateinfo"})
+  await router.push({name: "updateinfo"})
 }
 
 </script>
 <style lang="scss" scoped>
 .profile-container {
   margin: 0;
+  overflow: auto;
+  height: 92vh;
+  background-color: white;
   .action-group {
     margin-top: 10px;
   }

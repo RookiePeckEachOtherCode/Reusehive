@@ -45,7 +45,7 @@
       </t-input>
     </t-form-item>
     <t-form-item label="电话" name="social_info">
-      <t-input v-model="formData.phone_number" :borderless=true placeholder=""></t-input>
+      <t-input v-model="formData.phone_number" :borderless=true placeholder="默认+86"></t-input>
     </t-form-item>
     <t-form-item label="性别" name="gender">
       <el-radio-group v-model="formData.gender" size="large">
@@ -53,12 +53,15 @@
         <el-radio :value="0" size="large">女</el-radio>
       </el-radio-group>
     </t-form-item>
+    <t-form-item label="年级" name="social_info">
+      <t-input v-model="formData.grade" :borderless=true placeholder="四位整数"></t-input>
+    </t-form-item>
     <t-form-item arrow label="学院" name="academy" content-align="right">
       <t-input
           v-model="formData.academy"
           borderless
           align="right"
-          placeholder="请输入内容"
+          placeholder="请输选择内容"
           @click="showCascader"
       ></t-input>
       <t-cascader
@@ -91,6 +94,7 @@ const formData=reactive({
   name:"",
   password:"",
   gender:1,
+  grade:"",
   academy:"",
   phone_number:"",
   social_info:"",

@@ -31,3 +31,11 @@ export const getUserInfoByUidApi = (data: { id: string }) => {
     url: url,
   });
 };
+export const getUserInfoByName=(data:{name:string})=>{
+    return $http({
+      method:"get",
+      params:data,
+      url:"http://127.0.0.1:4523/m1/4280410-0-default/user/name/1",
+    })
+
+}

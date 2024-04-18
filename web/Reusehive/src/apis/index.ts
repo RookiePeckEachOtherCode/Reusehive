@@ -15,10 +15,10 @@ httpInstance.defaults.transformResponse = [
     },
 ];
 
-export const $http = async (conig: AxiosRequestConfig) => {
+export const $http = async (config: AxiosRequestConfig) => {
     const loadingInstance = ElLoading.service();
     try {
-        const axiosResponse = await httpInstance(conig);
+        const axiosResponse = await httpInstance(config);
         return axiosResponse.data;
     } catch (err) {
         if (err instanceof AxiosError) {

@@ -36,6 +36,11 @@ const router = createRouter({
       component: () => import("../pages/Chat.vue"),
     },
     {
+      path:"/purchasedetail",
+      name:"PurchaseDetail",
+      component:()=>import("../pages/purchase-detail.vue")
+    },
+    {
       path: "/main",
       name: "main",
       component: () => import("../layout/main.vue"),

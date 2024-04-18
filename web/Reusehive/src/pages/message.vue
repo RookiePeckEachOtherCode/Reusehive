@@ -4,7 +4,11 @@
   <t-pull-down-refresh v-model="refreshing" @refresh="loadData" style="min-height: 86vh;background-color: white" >
     <t-list :async-loading="loading" >
       <t-cell v-for="item in List" :key="item.id">
-        <el-avatar src="{{item.avatar_img}}" style="position: absolute;padding: 0;left: 0;margin-left: 10px" @click="gochat(item.name,item.id)"></el-avatar>
+        <el-avatar src="{{item.avatar_img}}" style="position: absolute;
+        padding: 0;
+        left: 0;
+        margin-left: 10px"
+                   @click="gochat(item.name,item.id)"></el-avatar>
         <span class="cell" @click="gochat(item.name,item.id)">{{ item.name }}</span>
       </t-cell>
     </t-list>
@@ -31,8 +35,6 @@ const gochat=(name,id)=>{
   router.push({name:"chat",query:{tousername:name,touserid:id}});
 
 }
-
-
 
 </script>
 <style scoped>

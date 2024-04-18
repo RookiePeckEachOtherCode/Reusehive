@@ -71,8 +71,9 @@ public class PurchaseController {
     /**
      * 获取用户交易列表
      */
-    @GetMapping("/purchase/user/{uid}")
-    public Result<List<PurchaseInfo>> getPurchaseByUserId(@PathVariable Long uid) {
+    @GetMapping("/purchase/user/list")
+    public Result<List<PurchaseInfo>> getPurchaseByUserId() {
+        var uid = StpUtil.getLoginIdAsLong();
         try {
             List<PurchaseInfo> purchaseInfos = purchaseService.GetUserPurchaseList(uid);
             return Result.ok(purchaseInfos);

@@ -31,6 +31,8 @@ declare module 'vue' {
     TCascader: typeof import('tdesign-mobile-vue')['Cascader']
     TCell: typeof import('tdesign-mobile-vue')['Cell']
     TCellGroup: typeof import('tdesign-mobile-vue')['CellGroup']
+    TCollapse: typeof import('tdesign-mobile-vue')['Collapse']
+    TCollapsePanel: typeof import('tdesign-mobile-vue')['CollapsePanel']
     TDateTimePicker: typeof import('tdesign-mobile-vue')['DateTimePicker']
     TDivider: typeof import('tdesign-mobile-vue')['Divider']
     TForm: typeof import('tdesign-mobile-vue')['Form']
