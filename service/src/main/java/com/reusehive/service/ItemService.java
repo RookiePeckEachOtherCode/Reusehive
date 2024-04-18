@@ -2,11 +2,12 @@ package com.reusehive.service;
 
 import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Item;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ItemService {
-    void newItem(Item item);
+    void newItem(Item item, MultipartFile[] images);
 
     ItemDetail getItemById(Long id);
 
@@ -21,4 +22,8 @@ public interface ItemService {
     void updateItemStatus(Long id, long uid, int status);
 
     List<Item> getItemByType(String type);
+
+    List<String> getItemImage(Long id);
+
+    void addItemImage(Long id, List<String> imageUrl);
 }

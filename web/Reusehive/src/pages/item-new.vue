@@ -17,21 +17,20 @@
                     <t-input align="right" placeholder="0.00" suffix="元" v-model="formData.prices" />
                 </t-form-item>
                 <t-form-item labelWidth="5">
-                    <t-cell arrow title="选择类型" :note="itemType.type.join('')" @click="itemType.show = true"
-                        v-model="formData.itemType" />
-
+                    <t-cell arrow title="选择类型" :note="formData.itemType.join(' ')" @click="itemType.show = true" />
                     <t-popup v-model="itemType.show" placement="bottom">
-                        <t-picker v-model="itemType.type" :columns="ItemTypeOption" @confirm="onConfirm"
+                        <t-picker v-model="formData.itemType" :columns="ItemTypeOption" @confirm="onConfirm"
                             @cancel="itemType.show = false" />
                     </t-popup>
                 </t-form-item>
-                <t-form-item label="上传照片" name="photo">
-                    <t-upload class="upload"></t-upload>
+                <p>上传图片</p>
+                <t-form-item name="images" labelWidth="5">
+                    <t-upload multiple :max="15" :autoUpload="false" :beforeUpload="beforeUpload"
+                        :onRemove="onRemove"></t-upload>
                 </t-form-item>
                 <div class="submit">
-                    <t-button class="submit-bt" theme="primary" type="submit">发布</t-button>
+                    <t-button class="submit-bt" theme="primary" @click="onSubmit">发布</t-button>
                 </div>
-
             </t-form>
         </div>
     </div>
@@ -40,17 +39,19 @@
 import { reactive } from "vue";
 import router from '../router';
 import ItemTypeOption from '../const/itemTypeOption';
+import { newItemApi } from "../apis/ItemApi";
 
 const itemType = reactive({
     show: false,
     type: []
 })
 
+
 const formData = reactive({
     name: '',
     description: '',
     prices: '',
-    itemType: '',
+    itemType: [],
 })
 
 const onConfirm = () => {
@@ -60,12 +61,35 @@ const onConfirm = () => {
 const goBack = () => {
     router.back()
 }
-
 const onSubmit = () => {
-    console.log('Dont touch me!!!!!')
-    console.log("It is unfinished")
+    const data = {
+        name: formData.name,
+        description: formData.description,
+        prices: formData.prices,
+        itemType: formData.itemType[0] as String,
+        images: files
+    }
+
+    newItemApi(data).then(res => {
+        if (res.data.code == 1) {
+            console.log('发布成功')
+        } else {
+            console.log('发布失败')
+        }
+        router.push({
+            path: '/main'
+        })
+    })
 }
 
+var files = reactive(Array<any>())
+const beforeUpload = (file: any) => {
+    files.push(file)
+    return true
+}
+const onRemove = (index: number) => {
+    files.splice(index, 1)
+}
 
 </script>
 <style scoped>

@@ -1,43 +1,64 @@
 package com.reusehive.service.impl;
 
-import static com.reusehive.entity.database.table.ItemImageTableDef.ITEM_IMAGE;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.mybatisflex.core.query.QueryChain;
 import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.ItemImage;
+import com.reusehive.entity.database.table.ItemImageTableDef;
 import com.reusehive.entity.database.table.ItemTableDef;
+import com.reusehive.mapper.ItemImageMapper;
 import com.reusehive.mapper.ItemMapper;
 import com.reusehive.service.ItemService;
-
+import com.reusehive.utils.MinioUtils;
+import io.minio.errors.*;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
+    @Resource
+    private ItemImageMapper itemImageMapper;
+    @Resource
+    private MinioUtils minioUtils;
 
     @Override
-    public void newItem(Item item) {
+    public void newItem(Item item, MultipartFile[] images) {
+        var imageUrls = new CopyOnWriteArrayList<String>();
+
+        for (var image : images) {
+            try {
+                imageUrls.add(minioUtils.UploadItemBackImg(image));
+            } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException |
+                     NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
+                     InternalException e) {
+                throw new RuntimeException(e);
+            }
+        }
         itemMapper.insert(item);
+
+        this.addItemImage(item.getId(), imageUrls);
     }
 
     @Override
     public ItemDetail getItemById(Long id) {
-//        return itemMapper.selectOneById(id);
-        var item=itemMapper.selectOneById(id);
-        var images=QueryChain.of(itemImageMapper).select(ITEM_IMAGE.IMAGE_URL)
-                .where(ITEM_IMAGE.ITEM_ID.eq(id))
+        var item = itemMapper.selectOneById(id);
+        var images = QueryChain.of(itemImageMapper).select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
+                .where(ItemImageTableDef.ITEM_IMAGE.ITEM_ID.eq(id))
                 .list()
                 .stream()
                 .map(ItemImage::getImageUrl)
                 .toList();
-        return new ItemDetail(item,images);
+        return new ItemDetail(item, images);
 
     }
 
@@ -54,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
                 .list()
                 .stream()
-                .map(it-> new ItemDetail(it,this.getItemImage(it.getId())))
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
                 .toList();
     }
 
@@ -100,8 +121,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<String> getItemImage(Long id) {
         return QueryChain.of(itemImageMapper)
-                .select(ITEM_IMAGE.IMAGE_URL)
-                .where(ITEM_IMAGE.ITEM_ID.eq(id))
+                .select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
+                .where(ItemImageTableDef.ITEM_IMAGE.ITEM_ID.eq(id))
                 .list()
                 .stream().map(ItemImage::getImageUrl).toList();
     }
