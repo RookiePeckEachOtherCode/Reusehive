@@ -62,7 +62,7 @@ const goToItem = () => {
     margin-top: 5px;
     margin-left: 5px;
     font-weight: bold;
-    max-height: 20vh;
+    max-height: 15vh;
     overflow-y: auto;
 }
 

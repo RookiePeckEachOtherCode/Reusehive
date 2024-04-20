@@ -217,10 +217,16 @@ const login = async () => {
     LocalStorage().setToken("ggbond","1145141918",form.username);
     await router.push({name: "main"})
   }
+  console.log(res)
 }
 
 const register = async () => {
-  const res = await registerApi({password:form.password,username:form.username})
+  const res = await registerApi(
+      {password:form.password,
+        name:form.username,
+        gender:0,academy:"计算机工程",
+        phone_number:"11451419180",
+        grade:"2024"})
   if(res.code===1){
     LocalStorage().setToken("ggbond","114514",form.username);
     await router.push({name: "main"})

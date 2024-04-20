@@ -1,6 +1,6 @@
 <template>
   <t-navbar title="我的订单" :fixed="false" />
-  <t-list style="max-height: 86vh;overflow: auto;background-color: white">
+  <t-list style="max-height: 85vh;overflow: auto;background-color: white">
     <div v-for="info in List" style="margin-top: 15px; margin-bottom: 15px;display: flex" @click="godetail(info.itemId,info.id)">
       <t-image style="width: 72px; height: 72px;" :src="info.imageurl"></t-image>
       <div style="flex: 1; margin-left: 10px;margin-top: 15px" >

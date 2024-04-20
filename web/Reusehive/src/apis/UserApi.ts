@@ -3,16 +3,23 @@ import { $http } from "./index";
 export const loginApi = (data: { password: string; username: string }) => {
   return $http({
     method: "post",
-    url: "http://127.0.0.1:4523/m1/4280410-3922518-default/user/login",
+    url: "http://localhost:8888/user/login",
     params: data,
     headers: {},
   });
 };
 
-export const registerApi = (data: { password: string; username: string }) => {
+export const registerApi = (data: {
+  password: string;
+  name: string;
+  gender:number;
+  academy:string;
+  phone_number:string;
+  grade:string;
+}) => {
   return $http({
     method: "post",
-    url: "http://127.0.0.1:4523/m1/4280410-0-default/user/register",
+    url: "http://localhost:8888/user/register",
     params: data,
   });
 };
@@ -34,8 +41,7 @@ export const getUserInfoByUidApi = (data: { id: string }) => {
 export const getUserInfoByName=(data:{name:string})=>{
     return $http({
       method:"get",
-      params:data,
-      url:"http://127.0.0.1:4523/m1/4280410-0-default/user/name/1",
+      url:"http://127.0.0.1:4523/m1/4280410-0-default/user/name/" +data.name,
     })
 
 }
@@ -54,6 +60,6 @@ export const UploadUserInfo=(data:{
   return $http({
     method:"post",
     params:data,
-    url:"http://127.0.0.1:4523/m1/4280410-0-default/user/update",
+    url:"http://127.0.0.1:8888/user/update",
   })
 }

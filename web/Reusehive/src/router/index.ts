@@ -41,6 +41,11 @@ const router = createRouter({
       component:()=>import("../pages/purchase-detail.vue")
     },
     {
+      path:"/collections",
+      name:"collections",
+      component:()=>import("../pages/Collections.vue")
+    },
+    {
       path: "/main",
       name: "main",
       component: () => import("../layout/main.vue"),

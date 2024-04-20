@@ -71,4 +71,15 @@ CREATE TABLE item_image
 
     INDEX (item_id),
     FOREIGN KEY (item_id) REFERENCES item (id)
-)
+);
+
+create table  collections(
+    id bigint primary key ,
+    item_id bigint,
+    uid bigint,
+
+    index (uid),
+    foreign key (item_id) references item(id),
+    foreign key (uid) references user(id)
+
+);

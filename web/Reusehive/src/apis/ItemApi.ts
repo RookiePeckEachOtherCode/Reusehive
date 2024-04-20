@@ -38,3 +38,31 @@ export const newItemApi = (data: {
     url: "http://127.0.0.1:8888/item/new",
   });
 };
+export const getCollections=(data:{uid:string})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/collection/query",
+    method:"get",
+    params:data
+  })
+}
+export const isCollected=(data:{uid:string,item_id:string})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/collection/collected",
+    method:"get",
+    params:data
+  })
+}
+export const addCollection=(data:{uid:string,item_id:string})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/collection/add",
+    method:"post",
+    params:data
+  })
+}
+export const deleteCollection=(data:{uid:string,item_id:string})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/collection/delete",
+    method:"post",
+    params:data
+  })
+}
