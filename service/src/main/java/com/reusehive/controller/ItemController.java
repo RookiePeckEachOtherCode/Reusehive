@@ -33,12 +33,12 @@ public class ItemController {
             String description,
             Double prices,
             String itemType,
-            Long uid,
             @RequestParam MultipartFile[] images
     ) {
         if (images == null) {
             return Result.error("图片不能为空");
         }
+        var uid = StpUtil.getLoginIdAsLong();
         var item = new Item(null, uid, name, description, prices, ItemStatus.UNDO, itemType);
         try {
             itemService.newItem(item, images);
@@ -204,9 +204,9 @@ public class ItemController {
      */
 
     @PostMapping("/item/collection/add")
-    public Result<None> addCollection(@RequestParam("uid") Long uid,@RequestParam("item_id") Long item_id) {
+    public Result<None> addCollection(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
         try {
-            if(itemService.isCollected(uid, item_id)){
+            if (itemService.isCollected(uid, item_id)) {
                 return Result.error("物品已经收藏");
             }
             itemService.addCollectionItem(uid, item_id);
@@ -222,53 +222,56 @@ public class ItemController {
      * 获得收藏列表
      */
     @GetMapping("/item/collection/query")
-    public Result<List<ItemDetail>> getCollectionItemInfo(@RequestParam("uid") Long uid){
+    public Result<List<ItemDetail>> getCollectionItemInfo(@RequestParam("uid") Long uid) {
         try {
             List<ItemDetail> collectionItems = itemService.getCollectionItems(uid);
             return Result.ok(collectionItems);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             var msg = "获取收藏列表失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
         }
     }
+
     /**
      * 取消收藏
      */
     @PostMapping("/item/collection/delete")
-    public Result<None> deleteCollect(@RequestParam("uid")Long uid,@RequestParam("item_id")Long item_id){
+    public Result<None> deleteCollect(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
         try {
-            itemService.deleteItemFromCollections(uid,item_id);
+            itemService.deleteItemFromCollections(uid, item_id);
             return Result.ok();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             var msg = "删除收藏失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
         }
     }
+
     /**
      * 是否收藏
      */
     @GetMapping("/item/collection/collected")
-    Result<Boolean> isCollected(@RequestParam("uid")Long uid,@RequestParam("item_id")Long item_id){
+    Result<Boolean> isCollected(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
         try {
             Boolean collected = itemService.isCollected(uid, item_id);
             return Result.ok(collected);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "查询收藏状态失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
         }
     }
+
     /**
      * 条件搜索物品
      */
     @GetMapping("/item/search")
-    Result<List<ItemDetail>> SearchItemByCondition(@RequestParam("condition")String condition){
+    Result<List<ItemDetail>> SearchItemByCondition(@RequestParam("condition") String condition) {
         try {
             List<ItemDetail> itemDetails = itemService.searchItemByCondition(condition);
             return Result.ok(itemDetails);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "查询收藏状态失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);

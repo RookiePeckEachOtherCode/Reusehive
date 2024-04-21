@@ -16,6 +16,8 @@ import com.reusehive.service.ItemService;
 import com.reusehive.utils.MinioUtils;
 import io.minio.errors.*;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
+@CacheConfig(cacheNames = "item")
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
@@ -76,6 +79,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#root.methodName")
     public List<ItemDetail> getAllItem() {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
@@ -151,7 +155,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void addCollectionItem(Long uid, Long item_id) {
-        Collection collection=new Collection();
+        Collection collection = new Collection();
         collection.setUid(uid);
         collection.setItemId(item_id);
         collection.setId(null);
