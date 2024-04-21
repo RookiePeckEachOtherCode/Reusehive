@@ -25,8 +25,6 @@ public interface ItemService {
 
     List<String> getItemImage(Long id);
 
-    void addItemImage(Long id, List<String> imageUrl);
-
     List<ItemDetail> getCollectionItems(Long uid);
 
     void addCollectionItem(Long uid, Long item_id);

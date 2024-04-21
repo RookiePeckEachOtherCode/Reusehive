@@ -1,6 +1,7 @@
 package com.reusehive.service.impl;
 
 import com.mybatisflex.core.query.QueryChain;
+import com.reusehive.consts.CacheKey;
 import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.ItemDetail;
 import com.reusehive.entity.database.Collection;
@@ -16,8 +17,9 @@ import com.reusehive.service.ItemService;
 import com.reusehive.utils.MinioUtils;
 import io.minio.errors.*;
 import jakarta.annotation.Resource;
-import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "item")
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
@@ -55,11 +56,12 @@ public class ItemServiceImpl implements ItemService {
         }
         itemMapper.insert(item);
 
-        this.addItemImage(item.getId(), imageUrls);
+
+        itemImageMapper.insertBatch(imageUrls.stream().map(url -> new ItemImage(null, item.getId(), url)).toList());
     }
 
     @Override
-    @Cacheable(key = "#id")
+    @Cacheable(value = CacheKey.ITEM_DETAIL_ID, key = "#id")
     public ItemDetail getItemById(Long id) {
         var item = itemMapper.selectOneById(id);
         var images = QueryChain.of(itemImageMapper).select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
@@ -69,11 +71,10 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemImage::getImageUrl)
                 .toList();
         return new ItemDetail(item, images);
-
     }
 
     @Override
-    @Cacheable(key = "#uid")
+    @Cacheable(value = CacheKey.ITEM_LIST_UID, key = "#uid")
     public List<Item> getItemByUid(Long uid) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.UID.eq(uid))
@@ -81,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Cacheable(key = "#root.methodName")
+    @Cacheable(value = CacheKey.ITEM_LIST_ALL, key = "#root.methodName")
     public List<ItemDetail> getAllItem() {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
@@ -92,6 +93,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#item.id"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+            }
+    )
     public void updateItem(Item item, Long uid) {
         var dbItem = itemMapper.selectOneById(item.getId());
         if (!dbItem.getUid().equals(uid)) {
@@ -105,6 +113,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+            }
+    )
     public void deleteItem(Long id, Long uid) {
         var dbItem = itemMapper.selectOneById(id);
 
@@ -116,6 +131,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+            }
+    )
     public void updateItemStatus(Long id, long uid, int status) {
         var dbItem = itemMapper.selectOneById(id);
         dbItem.setItemStatus(status);
@@ -123,7 +145,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Cacheable(key = "#type")
+    @Cacheable(value = CacheKey.ITEM_TYPE_LIST, key = "#type")
     public List<Item> getItemByType(String type) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
@@ -132,7 +154,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Cacheable(key = "#id")
+    @Cacheable(value = CacheKey.ITEM_IMAGE_LIST_ID, key = "#id")
     public List<String> getItemImage(Long id) {
         return QueryChain.of(itemImageMapper)
                 .select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
@@ -141,13 +163,9 @@ public class ItemServiceImpl implements ItemService {
                 .stream().map(ItemImage::getImageUrl).toList();
     }
 
-    @Override
-    public void addItemImage(Long id, List<String> imageUrl) {
-        itemImageMapper.insertBatch(imageUrl.stream().map(url -> new ItemImage(null, id, url)).toList());
-    }
 
     @Override
-    @Cacheable(key = "#uid")
+    @Cacheable(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
     public List<ItemDetail> getCollectionItems(Long uid) {
         List<Collection> collections = QueryChain.of(collectionMapper)
                 .where(CollectionTableDef.COLLECTION.UID.eq(uid))
@@ -159,6 +177,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
     public void addCollectionItem(Long uid, Long item_id) {
         Collection collection = new Collection();
         collection.setUid(uid);
@@ -168,12 +187,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
     public Boolean isCollected(Long uid, Long item_id) {
         return QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).exists();
 
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid"),
+                    @CacheEvict(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
+            }
+    )
     public void deleteItemFromCollections(Long uid, Long item_id) {
         Collection collection = QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).one();
         collectionMapper.deleteById(collection.getId());
@@ -181,7 +207,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Cacheable(key = "#Condition")
     public List<ItemDetail> searchItemByCondition(String Condition) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition).or(ItemTableDef.ITEM.NAME.like(Condition)))

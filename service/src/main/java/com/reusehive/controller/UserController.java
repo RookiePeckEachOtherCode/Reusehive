@@ -42,7 +42,7 @@ public class UserController {
         var user = new User(null, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
         var userPassword = new UserPassword(null, password);
         try {
-            var uid = userService.register(user, userPassword);
+            var uid = userService.register(user, userPassword).getId();
             return Result.ok(uid);
         } catch (Exception e) {
             var msg = "注册失败: " + e.getMessage();
@@ -58,7 +58,7 @@ public class UserController {
     //返回uid
     public Result<String> login(String name, String password) {
         try {
-            var uid = userService.login(name, password);
+            var uid = userService.login(name, password).getId();
             StpUtil.login(uid);
             SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
             return Result.ok(saTokenInfo.tokenValue);
@@ -93,20 +93,6 @@ public class UserController {
         }
     }
 
-    /**
-     * 获取所有用户信息
-     */
-    @GetMapping("/user/all")
-    public Result<List<User>> getAllUser() {
-        try {
-            var userLIst = userService.getAllUser();
-            return Result.ok(userLIst);
-        } catch (Exception e) {
-            var msg = "获取用户信息失败: " + e.getMessage();
-            log.error(msg);
-            return Result.error(msg);
-        }
-    }
 
     /**
      * 根据用户名获取用户信息
