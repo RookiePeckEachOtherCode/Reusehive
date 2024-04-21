@@ -49,7 +49,6 @@ CREATE TABLE purchase_info
     `lock`      BOOLEAN        NOT NULL COMMENT '交易锁 上锁true  解锁false',
     lock_time   DATETIME       NOT NULL COMMENT '上锁时间',
 
-
     PRIMARY KEY (id, uid, item_id),
     FOREIGN KEY (uid) REFERENCES user (id),
     FOREIGN KEY (item_id) REFERENCES item (id)
@@ -72,4 +71,15 @@ CREATE TABLE item_image
 
     INDEX (item_id),
     FOREIGN KEY (item_id) REFERENCES item (id)
-)
+);
+
+create table  collections(
+    id bigint primary key ,
+    item_id bigint,
+    uid bigint,
+
+    index (uid),
+    foreign key (item_id) references item(id),
+    foreign key (uid) references user(id)
+
+);

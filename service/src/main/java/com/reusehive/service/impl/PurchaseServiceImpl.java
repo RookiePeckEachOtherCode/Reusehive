@@ -30,7 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private ItemMapper itemMapper;
 
     @Override
-    public void CreatePurchase(Long user_id, Long item_id, Double price) {
+    public Long CreatePurchase(Long user_id, Long item_id, Double price) {
         PurchaseInfo purchaseInfo = new PurchaseInfo();
         purchaseInfo.setId(null);
         purchaseInfo.setCreateTime(LocalDateTime.now());
@@ -46,8 +46,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
         Item item = UpdateEntity.of(Item.class, item_id);
-        item.setItemStatus(ItemStatus.TRADING);
+        item.setItemStatus(1);
         itemMapper.update(item);
+
+        PurchaseInfo purchaseInfo1 = QueryChain.of(purchaseMapper).where(PurchaseInfoTableDef.PURCHASE_INFO.ITEM_ID.eq(item_id).and(PurchaseInfoTableDef.PURCHASE_INFO.UID.eq(user_id))).one();
+        return purchaseInfo1.getId();
 
     }
 

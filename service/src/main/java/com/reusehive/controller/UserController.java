@@ -10,7 +10,9 @@ import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@CrossOrigin
 public class UserController {
     @Resource
     private UserService userService;
@@ -143,10 +146,9 @@ public class UserController {
             String phone_number,
             String social_info,
             String avatar_img,
-            String back_img
+            String back_img,
+            @RequestParam("id") Long id
     ) {
-        var id = StpUtil.getLoginIdAsLong();
-
         var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
         var userPassword = new UserPassword(id, password);
 

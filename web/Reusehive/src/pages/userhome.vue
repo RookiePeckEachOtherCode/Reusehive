@@ -1,11 +1,11 @@
 <template>
   <div class="profile-container" >
-    <div class="profile-header">
+    <div class="profile-header" :style="{ 'background-image': 'url(' + userinfo.back_img + ')' }">
       <div class="profile-info">
-        <el-avatar size="large" src="https://ts1.cn.mm.bing.net/th/id/R-C.18b0ef152141b4f00d4dccd7ad2aace1?rik=yFn3nV90JZHcjw&riu=http%3a%2f%2fpic.uzzf.com%2fup%2f2018-5%2f201805091154525122038.png&ehk=n3MGluxxusEXz9tvXxHiTnSX92Cz7Xgmix9LaEI9%2bDc%3d&risl=&pid=ImgRaw&r=0"></el-avatar>
-        <span class="profile-info-nickname" style="background-color: rgb(0,0,0,0.4)">野兽前辈</span>
+        <el-avatar size="large" :src="userinfo.avatar_img"></el-avatar>
+        <span class="profile-info-nickname" style="background-color: rgb(0,0,0,0.4)">{{userinfo.name}}</span>
         <span class="profile-info-ad  dress" style="background-color: rgb(0,0,0,0.4)">
-                    <Icon name="location-o" /> 东京 涩谷
+                    <Icon name="location-o" /> {{userinfo.academy}}
                 </span>
       </div>
     </div>
@@ -17,7 +17,7 @@
           </div>
         </template>
       </t-grid-item>
-      <t-grid-item text="收藏">
+      <t-grid-item text="收藏" @click="GoCollections()">
         <template #image>
           <div class="icon-wrapper">
             <svg t="1713143637009" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14487" width="32" height="32"><path d="M743.424 964.608c-14.336 0-26.624-4.096-38.912-10.24l-188.416-104.448-188.416 104.448c-26.624 14.336-59.392 12.288-86.016-4.096-26.624-18.432-38.912-51.2-34.816-83.968l36.864-221.184v-2.048l-153.6-155.648c-22.528-22.528-30.72-55.296-20.48-86.016s34.816-51.2 65.536-55.296L348.16 311.296l94.208-200.704c14.336-28.672 43.008-47.104 73.728-47.104 32.768 0 59.392 18.432 73.728 47.104l94.208 200.704 210.944 32.768c30.72 4.096 55.296 26.624 65.536 55.296 10.24 30.72 2.048 63.488-20.48 86.016l-153.6 155.648v2.048l36.864 221.184c6.144 32.768-8.192 63.488-34.816 83.968-12.288 10.24-28.672 16.384-45.056 16.384z m-227.328-819.2l-94.208 200.704c-12.288 24.576-34.816 43.008-61.44 47.104L147.456 423.936v4.096l153.6 155.648c18.432 18.432 26.624 47.104 22.528 73.728L286.72 878.592v2.048l188.416-104.448c24.576-14.336 53.248-14.336 77.824 0l188.416 104.448v-2.048l-36.864-221.184c-4.096-26.624 4.096-53.248 22.528-73.728l153.6-155.648v-2.048-2.048l-210.944-32.768c-26.624-4.096-49.152-20.48-61.44-47.104l-92.16-198.656z" fill="#333333" p-id="14488"></path><path d="M516.096 698.368c-67.584 0-122.88-55.296-122.88-122.88 0-22.528 18.432-40.96 40.96-40.96s40.96 18.432 40.96 40.96 18.432 40.96 40.96 40.96 40.96-18.432 40.96-40.96 18.432-40.96 40.96-40.96 40.96 18.432 40.96 40.96c0 67.584-55.296 122.88-122.88 122.88z" fill="#E5BD41" p-id="14489"></path></svg>
@@ -51,14 +51,44 @@
 </template>
 <script setup >
 import router from "../router";
+import {reactive,onMounted} from "vue";
+import {getUserInfoByName} from "../apis/UserApi.ts";
+import {LocalStorage} from "../storage/LocalStorage.ts";
+const userinfo=reactive({
+  name:"",
+  id:"",
+  academy:"",
+  avatar_img:"",
+  back_img:"",
+  grade:"",
+})
+onMounted(async ()=>{
+  await  getinfo()
+})
 const goinfo=async ()=>{
-  router.push({name:"updateinfo"})
+  await router.push({name: "updateinfo"})
 }
-
+const getinfo=async ()=>{
+  //LocalStorage().setToken("114514","lingluo","lingluo")
+  const res=await getUserInfoByName({name:LocalStorage().getusername()})
+  console.log(res)
+  userinfo.name=res.data.name
+  userinfo.id=res.data.id.toString()
+  userinfo.academy=res.data.academy;
+  userinfo.grade=res.data.grade;
+  userinfo.avatar_img=res.data.avatar_img;
+  userinfo.back_img=res.data.avatar_img;
+}
+const GoCollections=()=>{
+  router.push({name:"collections",query:{uid:userinfo.id}})
+}
 </script>
 <style lang="scss" scoped>
 .profile-container {
   margin: 0;
+  overflow: auto;
+  height: 92vh;
+  background-color: white;
   .action-group {
     margin-top: 10px;
   }
@@ -78,7 +108,6 @@ const goinfo=async ()=>{
 
     width: 100vw;
     height: 220px;
-    background-image: url("https://ts1.cn.mm.bing.net/th/id/R-C.33d86fa9c27e626bec6e5f194b6a6cc4?rik=azDIozTOJ%2f7QxQ&riu=http%3a%2f%2fwww.deskcar.com%2fdesktop%2ffengjing%2f2014325205802%2f9.jpg&ehk=DVCHelgY3vSZMMlEns9iEYYwg0JPtHEt8DTYTY9nPXM%3d&risl=&pid=ImgRaw&r=0");
     background-size: cover;
 
     display:flex;
@@ -109,7 +138,6 @@ const goinfo=async ()=>{
         margin: 5px 5px 0px 5px;
       }
     }
-
 
   }
 }

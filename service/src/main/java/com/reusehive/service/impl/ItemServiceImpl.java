@@ -3,10 +3,13 @@ package com.reusehive.service.impl;
 import com.mybatisflex.core.query.QueryChain;
 import com.reusehive.consts.ItemStatus;
 import com.reusehive.entity.ItemDetail;
+import com.reusehive.entity.database.Collection;
 import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.ItemImage;
+import com.reusehive.entity.database.table.CollectionTableDef;
 import com.reusehive.entity.database.table.ItemImageTableDef;
 import com.reusehive.entity.database.table.ItemTableDef;
+import com.reusehive.mapper.CollectionMapper;
 import com.reusehive.mapper.ItemImageMapper;
 import com.reusehive.mapper.ItemMapper;
 import com.reusehive.service.ItemService;
@@ -21,6 +24,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -30,6 +34,8 @@ public class ItemServiceImpl implements ItemService {
     private ItemImageMapper itemImageMapper;
     @Resource
     private MinioUtils minioUtils;
+    @Resource
+    private CollectionMapper collectionMapper;
 
     @Override
     public void newItem(Item item, MultipartFile[] images) {
@@ -130,5 +136,48 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void addItemImage(Long id, List<String> imageUrl) {
         itemImageMapper.insertBatch(imageUrl.stream().map(url -> new ItemImage(null, id, url)).toList());
+    }
+
+    @Override
+    public List<ItemDetail> getCollectionItems(Long uid) {
+        List<Collection> collections = QueryChain.of(collectionMapper)
+                .where(CollectionTableDef.COLLECTION.UID.eq(uid))
+                .list();
+
+        return collections.stream()
+                .map(collection -> getItemById(collection.getItemId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addCollectionItem(Long uid, Long item_id) {
+        Collection collection=new Collection();
+        collection.setUid(uid);
+        collection.setItemId(item_id);
+        collection.setId(null);
+        collectionMapper.insert(collection);
+    }
+
+    @Override
+    public Boolean isCollected(Long uid, Long item_id) {
+        return QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).exists();
+
+    }
+
+    @Override
+    public void deleteItemFromCollections(Long uid, Long item_id) {
+        Collection collection = QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).one();
+        collectionMapper.deleteById(collection.getId());
+
+    }
+
+    @Override
+    public List<ItemDetail> searchItemByCondition(String Condition) {
+        return QueryChain.of(itemMapper)
+                .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition).or(ItemTableDef.ITEM.NAME.like(Condition)))
+                .list()
+                .stream()
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
+                .toList();
     }
 }

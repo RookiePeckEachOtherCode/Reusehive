@@ -8,11 +8,14 @@ import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@CrossOrigin
 public class SaTokenConfiguration implements WebMvcConfigurer {
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -50,7 +53,6 @@ public class SaTokenConfiguration implements WebMvcConfigurer {
                     .back();
         });
     }
-
 }
 
 

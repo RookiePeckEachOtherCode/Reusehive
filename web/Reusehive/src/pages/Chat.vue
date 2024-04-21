@@ -67,7 +67,7 @@ const List=ref([]);
 const text=ref(null);
 let socket;
 onMounted(async ()=>{
-  LocalStorage().setToken("114514","lingluo","lingluo")
+  //LocalStorage().setToken("114514","lingluo","lingluo")
 
   touserinfo.name = route.query.tousername;
   touserinfo.id=route.query.touserid;
