@@ -227,7 +227,6 @@
 import {loginApi, registerApi} from "../apis/UserApi.ts";
 import {reactive} from "vue";
 import router from "../router";
-import {LocalStorage} from "../storage/LocalStorage.ts";
 
 
 const form = reactive({

@@ -11,12 +11,13 @@ import com.reusehive.entity.database.table.UserTableDef;
 import com.reusehive.mapper.MessageMapper;
 import com.reusehive.mapper.UserMapper;
 import com.reusehive.mapper.UserPasswordMapper;
-import com.reusehive.service.ChatService;
 import com.reusehive.service.ItemService;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.PasswordUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,16 +27,16 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
+    @Resource
+    MessageMapper messageMapper;
     @Resource
     private UserPasswordMapper userPasswordMapper;
     @Resource
     private UserMapper userMapper;
     @Resource
     private ItemService itemService;
-
-    @Resource
-    MessageMapper messageMapper;
 
     @Override
     public Long register(User user, UserPassword userPassword) {
@@ -75,11 +76,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "info_id", key = "#id")
     public User getUserById(Long id) {
         return userMapper.selectOneById(id);
     }
 
     @Override
+    @Cacheable(cacheNames = "info_name", key = "#name")
     public User getUserByName(String name) {
         return QueryChain.of(userMapper).where(UserTableDef.USER.NAME.eq(name)).one();
     }
@@ -101,6 +104,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Cacheable(cacheNames = "user_item_info", key = "#id")
     public UserItemsInfo getUserItemsInfo(Long id) {
         var user = this.getUserById(id);
         var items = itemService.getItemByUid(id);
@@ -117,6 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "user_chat_info", key = "#uid")
     public List<User> getUserChatInfo(Long uid) {
         List<User> userList = new ArrayList<>();
         User user = getUserById(uid);

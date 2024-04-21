@@ -2,7 +2,6 @@ package com.reusehive.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.reusehive.config.SaTokenConfiguration;
 import com.reusehive.entity.None;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
@@ -10,14 +9,8 @@ import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,12 +19,9 @@ import java.util.List;
  */
 @RestController
 @Slf4j
-@CrossOrigin
 public class UserController {
     @Resource
     private UserService userService;
-    @Autowired
-    private SaTokenConfiguration saTokenConfiguration;
 
     /**
      * 用户注册
