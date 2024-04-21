@@ -16,6 +16,8 @@ import com.reusehive.service.ItemService;
 import com.reusehive.utils.MinioUtils;
 import io.minio.errors.*;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
+@CacheConfig(cacheNames = "item")
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemMapper itemMapper;
@@ -56,6 +59,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#id")
     public ItemDetail getItemById(Long id) {
         var item = itemMapper.selectOneById(id);
         var images = QueryChain.of(itemImageMapper).select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
@@ -69,6 +73,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#uid")
     public List<Item> getItemByUid(Long uid) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.UID.eq(uid))
@@ -76,6 +81,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#root.methodName")
     public List<ItemDetail> getAllItem() {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
@@ -117,6 +123,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#type")
     public List<Item> getItemByType(String type) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
@@ -125,6 +132,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#id")
     public List<String> getItemImage(Long id) {
         return QueryChain.of(itemImageMapper)
                 .select(ItemImageTableDef.ITEM_IMAGE.IMAGE_URL)
@@ -139,6 +147,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#uid")
     public List<ItemDetail> getCollectionItems(Long uid) {
         List<Collection> collections = QueryChain.of(collectionMapper)
                 .where(CollectionTableDef.COLLECTION.UID.eq(uid))
@@ -151,7 +160,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void addCollectionItem(Long uid, Long item_id) {
-        Collection collection=new Collection();
+        Collection collection = new Collection();
         collection.setUid(uid);
         collection.setItemId(item_id);
         collection.setId(null);
@@ -172,6 +181,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(key = "#Condition")
     public List<ItemDetail> searchItemByCondition(String Condition) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition).or(ItemTableDef.ITEM.NAME.like(Condition)))

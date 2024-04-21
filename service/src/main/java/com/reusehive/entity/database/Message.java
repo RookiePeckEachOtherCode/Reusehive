@@ -8,15 +8,15 @@ import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table("message")
-public class Message {
+public class Message implements Serializable {
     @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
     private Long id;
 
@@ -28,7 +28,6 @@ public class Message {
 
     @Column("createTime")
     private LocalDateTime createTime;
-
 
 
 }
