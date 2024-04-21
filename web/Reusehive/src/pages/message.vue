@@ -1,6 +1,6 @@
 <template>
   <t-navbar title="消息记录" :fixed="false"></t-navbar>
-  <div style="max-height: 85vh;overflow: auto">
+  <div style="max-height: 86vh;overflow: auto">
   <t-pull-down-refresh v-model="refreshing" @refresh="loadData" style="min-height: 86vh;background-color: white" >
     <t-list :async-loading="loading" >
       <t-cell v-for="item in List" :key="item.id">

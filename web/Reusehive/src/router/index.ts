@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-
+import {verifylogin} from "../apis/UserApi.ts";
 const router = createRouter({
   end: undefined,
   history: createWebHistory(),
@@ -77,4 +77,12 @@ const router = createRouter({
       },
       ]
 });
+// router.beforeEach(async (to, from, next) => {
+//     const res= await verifylogin();
+//     if (res.data === false) {
+//         router.push("/login")
+//     } else {
+//         next()
+//     }
+// })
 export default router;
