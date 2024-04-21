@@ -170,4 +170,14 @@ public class ItemServiceImpl implements ItemService {
         collectionMapper.deleteById(collection.getId());
 
     }
+
+    @Override
+    public List<ItemDetail> searchItemByCondition(String Condition) {
+        return QueryChain.of(itemMapper)
+                .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition).or(ItemTableDef.ITEM.NAME.like(Condition)))
+                .list()
+                .stream()
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
+                .toList();
+    }
 }

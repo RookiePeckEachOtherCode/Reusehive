@@ -260,4 +260,18 @@ public class ItemController {
             return Result.error(msg);
         }
     }
+    /**
+     * 条件搜索物品
+     */
+    @GetMapping("/item/search")
+    Result<List<ItemDetail>> SearchItemByCondition(@RequestParam("condition")String condition){
+        try {
+            List<ItemDetail> itemDetails = itemService.searchItemByCondition(condition);
+            return Result.ok(itemDetails);
+        }catch (Exception e){
+            var msg = "查询收藏状态失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
 }

@@ -66,3 +66,11 @@ export const deleteCollection=(data:{uid:string,item_id:string})=>{
     params:data
   })
 }
+
+export const SerachItem=(data:{condition:string})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/search",
+    method:"get",
+    params:data
+  })
+}

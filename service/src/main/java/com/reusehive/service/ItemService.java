@@ -29,9 +29,11 @@ public interface ItemService {
 
     List<ItemDetail> getCollectionItems(Long uid);
 
-    void addCollectionItem(Long uid,Long item_id);
+    void addCollectionItem(Long uid, Long item_id);
 
-    Boolean isCollected(Long uid,Long item_id);
+    Boolean isCollected(Long uid, Long item_id);
 
-    void deleteItemFromCollections(Long uid,Long item_id);
+    void deleteItemFromCollections(Long uid, Long item_id);
+
+    List<ItemDetail> searchItemByCondition(String condition);
 }

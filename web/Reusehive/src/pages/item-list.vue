@@ -2,10 +2,10 @@
   <div style="display: grid;background-color: white">
     <div class="example-search">
       <t-search
-          v-model="searchV"
+          v-model="searchCondition"
           placeholder=" 搜索"
-          @submit="onSubmit"
-          @action-click="onSubmit"
+          @submit="onSearch"
+          @action-click="onSearch"
       ></t-search>
     </div>
 
@@ -56,6 +56,7 @@ import { onMounted, ref } from 'vue';
 import itemCard from '../component/itemCard.vue'
 import Item from "../model/item.ts";
 import { getAllItemsApi } from "../apis/ItemApi.ts";
+import {SerachItem} from "../apis/ItemApi.ts";
 const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
 const swiperList = [
   `${imageCdn}/swiper1.png`,
@@ -71,7 +72,7 @@ const handleClick = (value: number) => {
 };
 
 let items = ref(new Array<Item>());
-const searchV=ref("")
+const searchCondition=ref("")
 
 
 onMounted(async () => {
@@ -109,8 +110,12 @@ const getAll = async () => {
     isLoading.value = false;
 };
 
-const onSubmit=()=>{
-  console.log("sub")
+const onSearch=async ()=>{
+  isLoading.value=true
+  items.value=await SerachItem({condition:searchCondition.value}).then(res=>{
+    return res.data
+  })
+  isLoading.value = false;
 }
 
 </script>
@@ -122,7 +127,7 @@ const onSubmit=()=>{
     justify-content: space-around;
     overflow: auto;
     background-color: white;
-  max-height: 44vh;
+    height: 44vh;
 }
 .example-search {
   margin-top: 8px;
