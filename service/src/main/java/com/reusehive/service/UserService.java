@@ -8,21 +8,17 @@ import java.util.List;
 
 public interface UserService {
 
-    Long register(User user, UserPassword userPassword);
+    User register(User user, UserPassword userPassword);
 
-    Long login(String name, String password);
+    User login(String name, String password);
 
     User getUserById(Long id);
 
     User getUserByName(String name);
 
-    List<User> getAllUser();
-
     void updateUser(User user, UserPassword userPassword);
 
     UserItemsInfo getUserItemsInfo(Long id);
-
-    void uploadUserIcon(String url, Long id);
 
     List<User> getUserChatInfo(Long uid);
 

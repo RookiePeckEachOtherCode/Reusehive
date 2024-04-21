@@ -1,7 +1,7 @@
 package com.reusehive.service.impl;
 
 import com.mybatisflex.core.query.QueryChain;
-import com.mybatisflex.core.util.UpdateEntity;
+import com.reusehive.consts.CacheKey;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.Message;
 import com.reusehive.entity.database.User;
@@ -16,8 +16,10 @@ import com.reusehive.service.UserService;
 import com.reusehive.utils.PasswordUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ import java.util.Set;
 
 @Service
 @Slf4j
-@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
     @Resource
     MessageMapper messageMapper;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private ItemService itemService;
 
     @Override
-    public Long register(User user, UserPassword userPassword) {
+    public User register(User user, UserPassword userPassword) {
         var dbUser = this.getUserByName(user.getName());
         if (dbUser != null) {
             throw new RuntimeException("用户名已存在");
@@ -53,11 +54,17 @@ public class UserServiceImpl implements UserService {
         userPassword.setPassword(hashPassword);
 
         userPasswordMapper.insert(userPassword);
-        return user.getId();
+        return user;
     }
 
     @Override
-    public Long login(String name, String password) {
+    @Caching(
+            put = {
+                    @CachePut(cacheNames = CacheKey.USER_NAME, key = "#name"),
+                    @CachePut(cacheNames = CacheKey.USER_ID, key = "#result.id")
+            }
+    )
+    public User login(String name, String password) {
         var user = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
                 .where(UserTableDef.USER.NAME.eq(name))
                 .one();
@@ -72,27 +79,29 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("密码错误");
         }
 
-        return user.getId();
+        return user;
     }
 
     @Override
-    @Cacheable(cacheNames = "info_id", key = "#id")
+    @Cacheable(cacheNames = CacheKey.USER_ID, key = "#id")
     public User getUserById(Long id) {
         return userMapper.selectOneById(id);
     }
 
     @Override
-    @Cacheable(cacheNames = "info_name", key = "#name")
+    @Cacheable(cacheNames = CacheKey.USER_NAME, key = "#name")
     public User getUserByName(String name) {
         return QueryChain.of(userMapper).where(UserTableDef.USER.NAME.eq(name)).one();
     }
 
-    @Override
-    public List<User> getAllUser() {
-        return userMapper.selectAll();
-    }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = CacheKey.USER_NAME, key = "#user.name"),
+                    @CacheEvict(cacheNames = CacheKey.USER_ID, key = "#user.id"),
+            }
+    )
     public void updateUser(User user, UserPassword userPassword) {
         userMapper.update(user);
 
@@ -104,7 +113,6 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Cacheable(cacheNames = "user_item_info", key = "#id")
     public UserItemsInfo getUserItemsInfo(Long id) {
         var user = this.getUserById(id);
         var items = itemService.getItemByUid(id);
@@ -112,16 +120,8 @@ public class UserServiceImpl implements UserService {
         return new UserItemsInfo(user, items);
     }
 
-    @Override
-    public void uploadUserIcon(String url, Long id) {
-        User user = UpdateEntity.of(User.class, id);
-        user.setAvatar_img(null);
-        user.setAvatar_img(url);
-        userMapper.update(user);
-    }
 
     @Override
-    @Cacheable(cacheNames = "user_chat_info", key = "#uid")
     public List<User> getUserChatInfo(Long uid) {
         List<User> userList = new ArrayList<>();
         User user = getUserById(uid);
