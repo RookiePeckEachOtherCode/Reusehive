@@ -1,6 +1,8 @@
 package com.reusehive.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.reusehive.config.SaTokenConfiguration;
 import com.reusehive.entity.None;
 import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
@@ -10,7 +12,12 @@ import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -23,6 +30,8 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
+    @Autowired
+    private SaTokenConfiguration saTokenConfiguration;
 
     /**
      * 用户注册
@@ -57,11 +66,12 @@ public class UserController {
      */
     @PostMapping("/user/login")
     //返回uid
-    public Result<Long> login(String name, String password) {
+    public Result<String> login(String name, String password) {
         try {
             var uid = userService.login(name, password);
             StpUtil.login(uid);
-            return Result.ok(uid);
+            SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
+            return Result.ok(saTokenInfo.tokenValue);
         } catch (RuntimeException e) {
             var msg = "登陆失败: " + e.getMessage();
             log.error(msg);
