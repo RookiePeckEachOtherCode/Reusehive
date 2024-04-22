@@ -111,3 +111,11 @@ export const verifylogin = () => {
         //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
     })
 }
+
+export const getUserItemList=(data:{id:string})=>{
+    return $http({
+        method:"get",
+        //url:"http://127.0.0.1:8888/item/user/"+data.id
+        url:"http://127.0.0.1:4523/m1/4280410-0-default/item/user/"+data.id
+        })
+}

@@ -11,7 +11,7 @@ public interface ItemService {
 
     ItemDetail getItemById(Long id);
 
-    List<Item> getItemByUid(Long uid);
+    List<ItemDetail> getItemByUid(Long uid);
 
     List<ItemDetail> getAllItem();
 

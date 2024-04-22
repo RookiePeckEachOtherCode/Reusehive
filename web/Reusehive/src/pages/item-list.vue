@@ -21,7 +21,7 @@
 
     <div>
       <t-grid :column="3" class="grid-demo" style="--td-grid-item-image-bg-color:transparent  ">
-        <t-grid-item style="background-color: transparent" text="出售物品">
+        <t-grid-item style="background-color: transparent" text="上架物品" @click="gosell">
           <template #image>
             <div class="icon-wrapper">
               <svg class="icon" height="32" p-id="4286" style="background-color: transparent"
@@ -86,6 +86,7 @@ import {onMounted, ref} from 'vue';
 import itemCard from '../component/itemCard.vue'
 import Item from "../model/item.ts";
 import {getAllItemsApi, SerachItem} from "../apis/ItemApi.ts";
+import router from "../router";
 
 const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
 const swiperList = [
@@ -124,6 +125,9 @@ const onSearch = async () => {
     return res.data
   })
   isLoading.value = false;
+}
+const gosell=async () =>{
+   await router.push({name:"itme-new"})
 }
 
 </script>

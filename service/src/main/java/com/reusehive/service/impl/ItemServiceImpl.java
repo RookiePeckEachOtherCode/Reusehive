@@ -75,10 +75,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Cacheable(value = CacheKey.ITEM_LIST_UID, key = "#uid")
-    public List<Item> getItemByUid(Long uid) {
+    public List<ItemDetail> getItemByUid(Long uid) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.UID.eq(uid))
-                .list();
+                .list()
+                .stream()
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
+                .toList();
     }
 
     @Override
