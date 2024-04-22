@@ -1,5 +1,5 @@
 <template>
-  <t-navbar :fixed="false" left-arrow title="修改信息" @left-click="back"/>
+  <t-navbar :fixed="false" left-arrow title="注册" @left-click="back"/>
   <t-form
       ref="form"
       :data="formData"
@@ -13,47 +13,41 @@
 
     <div class="UploadImg">
       <t-form-item label="头像" name="avatar" style="display:flex;">
-        <t-upload
-            v-model="avatar"
-            :max="1"
-            :multiple="false"
-            :size-limit="{ size: 3000000, unit: 'B' }"
-            accept="image/png"
-            action="//service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-        >
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar">
+          <template #addContent>
+            <div class="add-content">
+              <t-image
+                  alt=""
+                  v-bind:src="originAvatar"
+              />
+            </div>
+          </template>
         </t-upload>
       </t-form-item>
       <t-form-item label="背景">
-        <t-upload
-            v-model="back_img"
-            :max="1"
-            :multiple="false"
-            :size-limit="{ size: 3000000, unit: 'B' }"
-            accept="image/png"
-            action="//service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-        >
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1" :onRemove="onRemoveBackImg">
+          <template #addContent>
+            <div class="add-content">
+              <t-image
+                  alt=""
+                  v-bind:src="originBackImg"
+              />
+            </div>
+          </template>
         </t-upload>
       </t-form-item>
     </div>
     <t-form-item label="用户名" name="name">
       <t-input v-model="formData.name" :borderless=false placeholder="请输入内容"></t-input>
     </t-form-item>
-    <t-form-item label="密码" name="password">
-      <t-input v-model="formData.password" :borderless=false :clearable="false" placeholder="请输入内容"
-               type="password">
-        <template #suffixIcon>
-          <BrowseOffIcon/>
-        </template>
-      </t-input>
-    </t-form-item>
     <t-form-item label="电话" name="social_info">
       <t-input v-model="formData.phone_number" :borderless=true placeholder="默认+86"></t-input>
     </t-form-item>
     <t-form-item label="性别" name="gender">
-      <el-radio-group v-model="formData.gender" size="large">
-        <el-radio :value="1" size="large">男</el-radio>
-        <el-radio :value="0" size="large">女</el-radio>
-      </el-radio-group>
+      <t-radio-group v-model="formData.gender" borderless class="box">
+        <t-radio :block="false" label="男" value="1"/>
+        <t-radio :block="false" label="女" value="0"/>
+      </t-radio-group>
     </t-form-item>
     <t-form-item label="年级" name="social_info">
       <t-input v-model="formData.grade" :borderless=true placeholder="四位整数"></t-input>
@@ -79,43 +73,80 @@
 
   </t-form>
   <div class="button-group">
-    <t-button size="large" theme="primary" type="submit" @click="onSubmit">提交</t-button>
-    <t-button size="large" theme="default" type="reset" variant="base" @click="onReset">重置</t-button>
+    <t-button id="left-button" size="large" theme="primary" type="submit" @click="onSubmit">更新</t-button>
+    <t-button size="large" theme="default" type="reset" variant="base" @click="onReset">恢复</t-button>
   </div>
 </template>
 <script lang="ts" setup>
-import {reactive, ref} from "vue";
-import {BrowseOffIcon} from 'tdesign-icons-vue-next';
+import {onMounted, reactive, ref} from "vue";
 import router from "../router";
-import {UploadUserInfo} from "../apis/UserApi.ts";
+import {getCurrentUserInfo, UploadUserInfo} from "../apis/UserApi.ts";
 import {areaList} from "../const/area-list.ts";
 import {notify_err} from "../utils/notify.ts";
+import user from "../model/user.ts";
 
-const avatar = ref([])
-const back_img = ref([])
+onMounted(() => {
+  getCurrentUserInfo().then(res => {
+    if (res.data == null) {
+      notify_err("请先登录")
+      return
+    }
+
+    if (res.code == 1) {
+      originData.value = res.data
+      originAvatar.value = res.data.avatar_img
+      originBackImg.value = res.data.back_img
+      onReset()
+    } else {
+      notify_err(res.msg)
+    }
+  }).catch(err => {
+    notify_err(err)
+  })
+})
+
+const originData = ref<user>()
+const originAvatar = ref('')
+const originBackImg = ref('')
+const avatar = reactive(Array<any>());
+const back_img = reactive(Array<any>());
+
+const beforeUploadAvatar = (file: any) => {
+  avatar.push(file)
+  return true
+}
+const onRemoveAvatar = (index: number) => {
+  avatar.splice(index, 1)
+}
+
+const beforeUploadBackImg = (file: any) => {
+  back_img.push(file)
+  return true
+}
+const onRemoveBackImg = (index: number) => {
+  back_img.splice(index, 1)
+}
 
 const formData = reactive({
   name: "",
-  password: "",
+  gender: "",
   grade: "",
   academy: "",
   phone_number: "",
   social_info: "",
   avatar_img: "",
   back_img: "",
-  gender: "",
 })
+
 const form = ref(null);
 const onReset = () => {
-  formData.grade = ""
-  formData.phone_number = ""
-  formData.academy = ""
-  formData.name = ""
-  formData.password = ""
-  formData.back_img = ""
-  formData.social_info = ""
-  formData.avatar_img = ""
-  formData.gender = ""
+  formData.grade = originData.value!.grade.toString()
+  formData.phone_number = originData.value!.phone_number.toString()
+  formData.academy = originData.value!.academy.toString()
+  formData.name = originData.value!.name.toString()
+  formData.social_info = originData.value!.social_info.toString()
+  formData.gender = originData.value!.gender.toString()
+  console.log(formData)
 }
 const onSubmit = async () => {
   await UploadUserInfo(formData).then(res => {
@@ -142,7 +173,6 @@ const onChangeCascader = (value: string, options: any) => {
 const showCascader = () => {
   visibleCascader.value = true;
 };
-
 </script>
 
 <style scoped>
@@ -159,6 +189,8 @@ const showCascader = () => {
     height: 32px;
     flex: 1;
 
+    width: 20%;
+
     &:not(:last-child) {
       flex: 1;
       margin-right: 16px;
@@ -166,5 +198,8 @@ const showCascader = () => {
   }
 }
 
-
+#left-button {
+  background-color: #529b2e;
+  --td-button-primary-border-color: #529b2e;
+}
 </style>

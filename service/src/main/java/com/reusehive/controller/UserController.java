@@ -7,10 +7,12 @@ import com.reusehive.entity.UserItemsInfo;
 import com.reusehive.entity.database.User;
 import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
+import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.Result;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +25,8 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserService userService;
+    @Resource
+    private MinioUtils minioUtils;
 
     /**
      * 用户注册
@@ -37,12 +41,15 @@ public class UserController {
             String academy,
             String phone_number,
             String social_info,
-            String avatar_img,
-            String back_img
+            MultipartFile avatar_img,
+            MultipartFile back_img
     ) {
-        var user = new User(null, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
-        var userPassword = new UserPassword(null, password);
         try {
+            var avatar_img_url = minioUtils.UploadUserIcon(avatar_img);
+            var back_img_url = minioUtils.UploadUserBackImg(back_img);
+
+            var user = new User(null, name, gender, grade, academy, phone_number, social_info, avatar_img_url, back_img_url);
+            var userPassword = new UserPassword(null, password);
             var uid = userService.register(user, userPassword).getId();
             StpUtil.login(uid);
             SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
@@ -100,6 +107,22 @@ public class UserController {
         }
     }
 
+    /**
+     * 获取当前用户信息
+     */
+    @GetMapping("/me")
+    public Result<User> getUserMe() {
+        try {
+            var uid = StpUtil.getLoginIdAsLong();
+            var user = userService.getUserById(uid);
+            return Result.ok(user);
+        } catch (Exception e) {
+            var msg = "获取用户信息失败: " + e.getMessage();
+            log.error(msg);
+            return Result.error(msg);
+        }
+    }
+
 
     /**
      * 根据用户名获取用户信息
@@ -123,21 +146,28 @@ public class UserController {
     @PostMapping("/user/update")
     public Result<None> updateUser(
             String name,
-            String password,
             String gender,
             String grade,
             String academy,
             String phone_number,
             String social_info,
-            String avatar_img,
-            String back_img,
-            @RequestParam("id") Long id
+            @RequestPart(required = false) MultipartFile avatar_img,
+            @RequestPart(required = false) MultipartFile back_img
     ) {
-        var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img, back_img);
-        var userPassword = new UserPassword(id, password);
-
         try {
-            userService.updateUser(user, userPassword);
+            String avatar_img_url = null;
+            String back_img_url = null;
+            if (avatar_img != null) {
+                avatar_img_url = minioUtils.UploadUserIcon(avatar_img);
+            }
+            if (back_img != null) {
+                back_img_url = minioUtils.UploadUserBackImg(back_img);
+            }
+
+            var id = StpUtil.getLoginIdAsLong();
+            var user = new User(id, name, gender, grade, academy, phone_number, social_info, avatar_img_url, back_img_url);
+
+            userService.updateUser(user);
             return Result.ok();
         } catch (Exception e) {
             var msg = "修改用户信息失败: " + e.getMessage();

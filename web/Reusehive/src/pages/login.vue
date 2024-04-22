@@ -55,7 +55,7 @@ const login = async () => {
     if (res.code == 1) {
       localStorage.setItem("token", res.data)
       LocalStorage().setToken(res.data, '14514', form.username)
-      router.push({name: "main"})
+      router.push({name: "item-list"})
     } else {
       notify_err(res.msg)
     }

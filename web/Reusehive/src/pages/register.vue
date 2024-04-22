@@ -35,10 +35,10 @@
       <t-input v-model="formData.phone_number" :borderless=true placeholder="默认+86"></t-input>
     </t-form-item>
     <t-form-item label="性别" name="gender">
-      <el-radio-group v-model="formData.gender" size="large">
-        <el-radio :value="1" size="large">男</el-radio>
-        <el-radio :value="0" size="large">女</el-radio>
-      </el-radio-group>
+      <t-radio-group v-model="formData.gender" borderless class="box">
+        <t-radio :block="false" label="男" value="1"/>
+        <t-radio :block="false" label="女" value="0"/>
+      </t-radio-group>
     </t-form-item>
     <t-form-item label="年级" name="social_info">
       <t-input v-model="formData.grade" :borderless=true placeholder="四位整数"></t-input>
