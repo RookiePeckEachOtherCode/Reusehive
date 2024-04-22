@@ -46,6 +46,11 @@ const router = createRouter({
       component:()=>import("../pages/Collections.vue")
     },
       {
+       path:"/lostfind",
+       name:"lostfind",
+       component:()=>import("../pages/lostfind.vue")
+      },
+      {
        path:"/myitems",
        name:"myitems",
        component:()=>import("../pages/myitems.vue")

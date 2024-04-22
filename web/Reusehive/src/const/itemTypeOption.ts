@@ -21,6 +21,18 @@ const ItemTypeOption = [
       value: "生活用品",
     },
     {
+      label: "失物招领",
+      value: "失物招领 ",
+    },
+    {
+      label: "网络虚拟",
+      value: "网络虚拟"
+    },
+    {
+      label: "失物悬赏",
+      value: "失物悬赏",
+    },
+    {
       label: "其他",
       value: "其他",
     },

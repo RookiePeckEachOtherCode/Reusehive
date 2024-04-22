@@ -38,6 +38,7 @@ declare module 'vue' {
     TCollapsePanel: typeof import('tdesign-mobile-vue')['CollapsePanel']
     TDateTimePicker: typeof import('tdesign-mobile-vue')['DateTimePicker']
     TDivider: typeof import('tdesign-mobile-vue')['Divider']
+    TDrawer: typeof import('tdesign-mobile-vue')['Drawer']
     TForm: typeof import('tdesign-mobile-vue')['Form']
     TFormItem: typeof import('tdesign-mobile-vue')['FormItem']
     TGrid: typeof import('tdesign-mobile-vue')['Grid']

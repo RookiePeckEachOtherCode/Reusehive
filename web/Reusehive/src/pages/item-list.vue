@@ -21,7 +21,7 @@
 
     <div>
       <t-grid :column="3" class="grid-demo" style="--td-grid-item-image-bg-color:transparent  ">
-        <t-grid-item style="background-color: transparent" text="出售物品" @click="gosell">
+        <t-grid-item style="background-color: transparent" text="上架物品" @click="gosell">
           <template #image>
             <div class="icon-wrapper">
               <svg class="icon" height="32" p-id="4286" style="background-color: transparent"

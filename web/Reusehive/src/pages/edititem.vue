@@ -26,8 +26,7 @@
       </t-form-item>
       <t-form-item label="类型">
         <t-input
-            v-model="form.type" :borderless=false placeholder="选择类型"
-            @click="showCascader"></t-input>
+            v-model="form.type" :borderless=false placeholder="选择类型" @click="showCascader"></t-input>
         <t-cascader
             v-model:visible="visibleCascader"
             :options="ItemTypeOption[0]"
@@ -98,6 +97,9 @@ const onChangeCascader = (value: string, options: any) => {
   form.type = options?.map((item: any) => item.label).join('/');
   visibleCascader.value = false;
   console.log(value)
+  if(form.type==='失物招领'){
+    console.log(114514)
+  }
 };
 const type = ref("其他")
 

@@ -14,14 +14,19 @@
                     <t-textarea class="des" autosize v-model="formData.description"></t-textarea>
                 </t-form-item>
                 <t-form-item name="prices" label="价格">
-                    <t-input align="right" placeholder="0.00" suffix="元" v-model="formData.prices" />
+                    <t-input :disabled="disablepirce" align="right" placeholder="0.00" suffix="元" v-model="formData.prices" />
                 </t-form-item>
-                <t-form-item labelWidth="5">
-                    <t-cell arrow title="选择类型" :note="formData.itemType.join(' ')" @click="itemType.show = true" />
-                    <t-popup v-model="itemType.show" placement="bottom">
-                        <t-picker v-model="formData.itemType" :columns="ItemTypeOption" @confirm="onConfirm"
-                            @cancel="itemType.show = false" />
-                    </t-popup>
+                <t-form-item labelWidth="5" label="物品类型">
+                  <t-input
+                      v-model="formData.itemType" :borderless=false placeholder="选择类型"
+                      @click="showCascader"></t-input>
+                  <t-cascader
+                      v-model:visible="visibleCascader"
+                      :options="ItemTypeOption[0]"
+                      :ref="type"
+                      title="选择物品类型"
+                      @change="onChangeCascader"
+                  />
                 </t-form-item>
                 <p>上传图片</p>
                 <t-form-item name="images" labelWidth="5">
@@ -36,37 +41,44 @@
     </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive,ref } from "vue";
 import router from '../router';
 import ItemTypeOption from '../const/itemTypeOption';
 import { newItemApi } from "../apis/ItemApi";
 
-const itemType = reactive({
-    show: false,
-    type: []
-})
-
+const disablepirce=ref(false)
 
 const formData = reactive({
     name: '',
     description: '',
     prices: '',
-    itemType: [],
+    itemType:'',
 })
 
-const onConfirm = () => {
-    itemType.show = false;
-}
-
+const visibleCascader = ref(false)
+const type = ref("其他")
+const showCascader = () => {
+  visibleCascader.value = true;
+};
+const onChangeCascader = (value: string, options: any) => {
+  formData.itemType = options?.map((item: any) => item.label).join('/');
+  visibleCascader.value = false;
+  console.log(value)
+  if(formData.itemType==='失物招领'){
+    formData.prices="0";
+    disablepirce.value=true
+  }else disablepirce.value=false;
+};
 const goBack = () => {
     router.back()
 }
 const onSubmit = () => {
+
     const data = {
         name: formData.name,
         description: formData.description,
         prices: formData.prices,
-        itemType: formData.itemType[0] as String,
+        itemType: formData.itemType,
         images: files
     }
 
