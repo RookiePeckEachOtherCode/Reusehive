@@ -26,23 +26,23 @@
           </t-input>
         </div>
       </div>
-      <div class="login-forget" style="font-size: 16px">
-        <span>忘记密码？</span>
+      <div class="buttons">
+        <el-button block color="#529b2e" size="large" style="margin-left: 30px" type="primary" @click="login">登录
+        </el-button>
+        <el-button block color="#d1edc4" size="large" style="color: #0f0f0f;margin-left: 50px"
+                   @click="goToRegister">注册
+        </el-button>
       </div>
-      <el-button block color="#529b2e" size="large" style="margin-left: 30px" type="primary" @click="login">登录
-      </el-button>
-      <el-button block color="#d1edc4" size="large" style="color: #0f0f0f;margin-left: 50px"
-                 @click="register">注册
-      </el-button>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import {loginApi, registerApi} from "../apis/UserApi.ts";
+import {loginApi} from "../apis/UserApi.ts";
 import {reactive} from "vue";
 import router from "../router";
 import {LocalStorage} from "../storage/LocalStorage.ts";
 import {LockOnIcon, UserCircleIcon} from "tdesign-icons-vue-next"
+import {notify_err} from "../utils/notify.ts";
 
 
 const form = reactive({
@@ -51,32 +51,21 @@ const form = reactive({
 });
 
 const login = async () => {
-
-  await loginApi({password: form.password, username: form.username}).then(res => {
+  await loginApi({password: form.password, name: form.username}).then(res => {
     if (res.code == 1) {
       localStorage.setItem("token", res.data)
       LocalStorage().setToken(res.data, '14514', form.username)
       router.push({name: "main"})
+    } else {
+      notify_err(res.msg)
     }
+  }).catch(err => {
+    notify_err(err)
   })
 }
 
-const register = async () => {
-  const res = await registerApi({
-    password: form.password,
-    name: form.username,
-    gender: 0,
-    grade: 2077,
-    academy: "计算机",
-    phone_number: "null",
-    social_info: "null",
-    avatar_img: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-    back_img: "https://pic3.zhimg.com/v2-289ee4a9294859f66831465efe6aca5a_r.jpg",
-
-  })
-  localStorage.setItem("token", res.data)
-  LocalStorage().setToken(res.data, '14514', form.username)
-  if (res.code === 1) router.push({name: "main"})
+const goToRegister = () => {
+  router.push({name: "register"})
 }
 
 </script>
@@ -113,13 +102,10 @@ const register = async () => {
     margin-bottom: 20px;
   }
 
-  .login-forget {
-    margin-top: 30px;
-    text-align: right;
-    font-size: 11px;
-    margin-left: 30px;
-    color: #1989fa !important;
-    margin-bottom: 20px;
+  .buttons {
+    margin-top: 10vh;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 }
 

@@ -60,6 +60,10 @@ public class UserController {
     @PostMapping("/user/login")
     //返回uid
     public Result<String> login(String name, String password) {
+        System.out.println("username: " + name);
+        System.out.println("password: " + password);
+
+
         try {
             var uid = userService.login(name, password).getId();
             StpUtil.login(uid);
@@ -172,8 +176,9 @@ public class UserController {
             return Result.error(msg);
         }
     }
+
     @GetMapping("/user/verify")
-    public  Result<Boolean> VerifyToken(){
+    public Result<Boolean> VerifyToken() {
         return Result.ok(StpUtil.isLogin());
     }
 }

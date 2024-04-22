@@ -1,5 +1,5 @@
 <template>
-  <t-navbar :fixed="false" left-arrow title="修改信息" @left-click="back"/>
+  <t-navbar :fixed="false" left-arrow title="注册" @left-click="back"/>
   <t-form
       ref="form"
       :data="formData"
@@ -13,26 +13,11 @@
 
     <div class="UploadImg">
       <t-form-item label="头像" name="avatar" style="display:flex;">
-        <t-upload
-            v-model="avatar"
-            :max="1"
-            :multiple="false"
-            :size-limit="{ size: 3000000, unit: 'B' }"
-            accept="image/png"
-            action="//service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-        >
-        </t-upload>
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"></t-upload>
       </t-form-item>
       <t-form-item label="背景">
-        <t-upload
-            v-model="back_img"
-            :max="1"
-            :multiple="false"
-            :size-limit="{ size: 3000000, unit: 'B' }"
-            accept="image/png"
-            action="//service-bv448zsw-1257786608.gz.apigw.tencentcs.com/api/upload-demo"
-        >
-        </t-upload>
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1"
+                  :onRemove="onRemoveBackImg"></t-upload>
       </t-form-item>
     </div>
     <t-form-item label="用户名" name="name">
@@ -79,7 +64,7 @@
 
   </t-form>
   <div class="button-group">
-    <t-button size="large" theme="primary" type="submit" @click="onSubmit">提交</t-button>
+    <t-button id="left-button" size="large" theme="primary" type="submit" @click="onSubmit">提交</t-button>
     <t-button size="large" theme="default" type="reset" variant="base" @click="onReset">重置</t-button>
   </div>
 </template>
@@ -87,12 +72,29 @@
 import {reactive, ref} from "vue";
 import {BrowseOffIcon} from 'tdesign-icons-vue-next';
 import router from "../router";
-import {UploadUserInfo} from "../apis/UserApi.ts";
+import {registerApi} from "../apis/UserApi.ts";
 import {areaList} from "../const/area-list.ts";
 import {notify_err} from "../utils/notify.ts";
 
-const avatar = ref([])
-const back_img = ref([])
+const avatar = reactive(Array<any>());
+const back_img = reactive(Array<any>());
+
+const beforeUploadAvatar = (file: any) => {
+  avatar.push(file)
+  return true
+}
+const onRemoveAvatar = (index: number) => {
+  avatar.splice(index, 1)
+}
+
+const beforeUploadBackImg = (file: any) => {
+  back_img.push(file)
+  return true
+}
+const onRemoveBackImg = (index: number) => {
+  back_img.splice(index, 1)
+}
+
 
 const formData = reactive({
   name: "",
@@ -118,9 +120,12 @@ const onReset = () => {
   formData.gender = ""
 }
 const onSubmit = async () => {
-  await UploadUserInfo(formData).then(res => {
+  formData.avatar_img = avatar[0]
+  formData.back_img = back_img[0]
+
+  await registerApi(formData).then(res => {
     if (res.code == 1) {
-      router.push({name: "home"});
+      router.push({name: "login"});
     } else {
       notify_err(res.msg)
     }
@@ -129,7 +134,7 @@ const onSubmit = async () => {
   })
 }
 const back = () => {
-  router.push({name: "home"});
+  router.back();
 }
 const options = areaList;
 const visibleCascader = ref(false)
@@ -159,11 +164,18 @@ const showCascader = () => {
     height: 32px;
     flex: 1;
 
+    width: 20%;
+
     &:not(:last-child) {
       flex: 1;
       margin-right: 16px;
     }
   }
+}
+
+#left-button {
+  background-color: #529b2e;
+  --td-button-primary-border-color: #529b2e;
 }
 
 

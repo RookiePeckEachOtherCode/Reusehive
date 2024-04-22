@@ -1,6 +1,6 @@
 import {$http} from "./index";
 
-export const loginApi = (data: { password: string; username: string }) => {
+export const loginApi = (data: { password: string; name: string }) => {
 
     return $http({
         method: "post",
@@ -12,22 +12,34 @@ export const loginApi = (data: { password: string; username: string }) => {
 };
 
 export const registerApi = (data: {
-    password: string,
     name: string,
-    gender:0,
-    grade:2077,
-    academy:"计算机",
-    phone_number:"null",
-    social_info:"null",
-    avatar_img:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-    back_img:"https://pic3.zhimg.com/v2-289ee4a9294859f66831465efe6aca5a_r.jpg",
+    password: string,
+    grade: string,
+    academy: string,
+    phone_number: string,
+    social_info: string,
+    avatar_img: any,
+    back_img: any,
+    gender: string,
 }) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("password", data.password);
+    formData.append("grade", data.grade);
+    formData.append("academy", data.academy);
+    formData.append("phone_number", data.phone_number);
+    formData.append("social_info", data.social_info);
+    formData.append("avatar_img", data.avatar_img.raw);
+    formData.append("back_img", data.back_img.raw);
+    formData.append("gender", data.gender);
+
+
     return $http({
         method: "post",
         url: "http://127.0.0.1:8888/user/register",
-        params: data,
-    });
-};
+        data: formData
+    })
+}
 
 export const userChatInfoApi = () => {
     return $http({
@@ -43,30 +55,29 @@ export const getUserInfoByUidApi = (data: { id: string }) => {
         url: url,
     });
 };
-export const getUserInfoByName=(data:{name:string})=>{
+export const getUserInfoByName = (data: { name: string }) => {
     return $http({
-      method:"get",
-      url:"http://127.0.0.1:8888/user/name/" +data.name,
+        method: "get",
+        url: "http://127.0.0.1:8888/user/name/" + data.name,
     })
 
 }
-export const UploadUserInfo=(data:{
-  formdata:{
-    name:string,
-    password:string,
-    grade:string,
-    academy:string,
-    phone_number:string,
-    social_info:string,
-    avatar_img:string,
-    back_img:string,
-  }
-})=>{
-  return $http({
-    method:"post",
-    params:data,
-    url:"http://127.0.0.1:8888/user/update",
-  })
+export const UploadUserInfo = (data: {
+    name: string,
+    password: string,
+    grade: string,
+    academy: string,
+    phone_number: string,
+    social_info: string,
+    avatar_img: string,
+    back_img: string,
+    gender: string,
+}) => {
+    return $http({
+        method: "post",
+        params: data,
+        url: "http://127.0.0.1:8888/user/update",
+    })
 }
 export const getAllUserInfoApi = () => {
     return $http({
@@ -74,10 +85,10 @@ export const getAllUserInfoApi = () => {
         url: "http://127.0.0.1:8888/user/all",
     })
 }
-export const verifylogin=()=>{
+export const verifylogin = () => {
     return $http({
-        method:"get",
-        url:"http://127.0.0.1:8888/user/verify",
+        method: "get",
+        url: "http://127.0.0.1:8888/user/verify",
         //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
     })
 }
