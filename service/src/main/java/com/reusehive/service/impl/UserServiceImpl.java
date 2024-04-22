@@ -58,12 +58,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(
-            put = {
-                    @CachePut(cacheNames = CacheKey.USER_NAME, key = "#name"),
-                    @CachePut(cacheNames = CacheKey.USER_ID, key = "#result.id")
-            }
-    )
+//    @Caching(
+//            put = {
+//                    @CachePut(cacheNames = CacheKey.USER_NAME, key = "#name"),
+//                    @CachePut(cacheNames = CacheKey.USER_ID, key = "#result.id")
+//            }
+//    )
     public User login(String name, String password) {
         var user = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
                 .where(UserTableDef.USER.NAME.eq(name))

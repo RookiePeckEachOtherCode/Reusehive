@@ -4,7 +4,7 @@ import JSONbig from 'json-bigint';
 import {ElLoading, ElMessage} from "element-plus";
 
 export const httpInstance = axios.create();
-
+httpInstance.defaults.baseURL="/api/"
 httpInstance.defaults.transformResponse = [
     function (data) {
         try {

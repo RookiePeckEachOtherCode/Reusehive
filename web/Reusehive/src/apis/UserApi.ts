@@ -5,7 +5,7 @@ export const loginApi = (data: { password: string; username: string }) => {
     return $http({
         method: "post",
         // url: "http://127.0.0.1:4523/m1/4280410-3922518-default/user/login",
-        url: "http://127.0.0.1:8888/user/login",
+        url: "/user/login",
         params: data,
         headers: {},
     });
@@ -67,7 +67,7 @@ export const getAllUserInfoApi = () => {
 export const verifylogin=()=>{
     return $http({
         method:"get",
-        //url:"http://127.0.0.1:8888/user/verify",
-        url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
+        url:"http://127.0.0.1:8888/user/verify",
+        //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
     })
 }

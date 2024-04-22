@@ -19,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@CrossOrigin
 public class UserController {
     @Resource
     private UserService userService;
@@ -167,5 +168,9 @@ public class UserController {
             log.error(msg);
             return Result.error(msg);
         }
+    }
+    @GetMapping("/user/verify")
+    public  Result<Boolean> VerifyToken(){
+        return Result.ok(StpUtil.isLogin());
     }
 }

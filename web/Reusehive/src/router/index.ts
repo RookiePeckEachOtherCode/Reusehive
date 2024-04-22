@@ -80,7 +80,7 @@ const router = createRouter({
 // router.beforeEach(async (to, from, next) => {
 //     const res= await verifylogin();
 //     if (res.data === false) {
-//         router.push("/login")
+//        next("/login")
 //     } else {
 //         next()
 //     }
