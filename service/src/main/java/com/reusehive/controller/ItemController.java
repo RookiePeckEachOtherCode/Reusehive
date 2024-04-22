@@ -69,7 +69,7 @@ public class ItemController {
      * 根据uid获取用户所有物品信息
      */
     @GetMapping("/item/user/{uid}")
-    public Result<List<Item>> getItemByUid(@PathVariable Long uid) {
+    public Result<List<ItemDetail>> getItemByUid(@PathVariable Long uid) {
         try {
             var items = itemService.getItemByUid(uid);
             return Result.ok(items);

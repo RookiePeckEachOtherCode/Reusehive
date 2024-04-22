@@ -46,6 +46,16 @@ const router = createRouter({
       component:()=>import("../pages/Collections.vue")
     },
       {
+       path:"/myitems",
+       name:"myitems",
+       component:()=>import("../pages/myitems.vue")
+      },
+      {
+          path:"/edititems",
+          name:"edititems",
+          component:()=>import("../pages/edititem.vue")
+      },
+      {
           path: "/main",
           name: "main",
           component: () => import("../layout/main.vue"),

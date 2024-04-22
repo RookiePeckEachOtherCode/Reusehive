@@ -74,3 +74,17 @@ export const SerachItem=(data:{condition:string})=>{
     params:data
   })
 }
+
+export const UpdateItemInfo=(data:{
+  id:string,
+  name:string,
+  description:string,
+  prices:number,
+  type:string
+})=>{
+  return $http({
+    url:"http://127.0.0.1:4523/m1/4280410-0-default/item/update",
+    method:"post",
+    params:data
+  })
+}
