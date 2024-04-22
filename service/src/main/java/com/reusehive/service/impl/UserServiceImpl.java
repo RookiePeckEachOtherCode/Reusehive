@@ -13,15 +13,21 @@ import com.reusehive.mapper.UserMapper;
 import com.reusehive.mapper.UserPasswordMapper;
 import com.reusehive.service.ItemService;
 import com.reusehive.service.UserService;
+import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.PasswordUtils;
+import com.reusehive.utils.UrlUtils;
+import io.minio.errors.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private ItemService itemService;
+    @Autowired
+    private MinioUtils minioUtils;
 
     @Override
     public User register(User user, UserPassword userPassword) {
@@ -58,12 +66,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Caching(
-//            put = {
-//                    @CachePut(cacheNames = CacheKey.USER_NAME, key = "#name"),
-//                    @CachePut(cacheNames = CacheKey.USER_ID, key = "#result.id")
-//            }
-//    )
     public User login(String name, String password) {
         var user = QueryChain.of(userMapper).select(UserTableDef.USER.ID)
                 .where(UserTableDef.USER.NAME.eq(name))
@@ -102,13 +104,24 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(cacheNames = CacheKey.USER_ID, key = "#user.id"),
             }
     )
-    public void updateUser(User user, UserPassword userPassword) {
+    public void updateUser(User user) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        var dbUser = userMapper.selectOneById(user.getId());
+        UrlUtils.getFileNameFromUrl(dbUser.getAvatar_img());
+
+        if (user.getAvatar_img() == null) {
+            user.setAvatar_img(dbUser.getAvatar_img());
+        } else {
+            minioUtils.DeleteUserIcon(UrlUtils.getFileNameFromUrl(dbUser.getAvatar_img()));
+        }
+
+        if (user.getBack_img() == null) {
+            user.setBack_img(dbUser.getBack_img());
+        } else {
+            minioUtils.DeleteUserBackImg(UrlUtils.getFileNameFromUrl(dbUser.getBack_img()));
+        }
+
+
         userMapper.update(user);
-
-        var hashPassword = PasswordUtils.encrypt(userPassword.getPassword());
-        userPassword.setPassword(hashPassword);
-
-        userPasswordMapper.update(userPassword);
     }
 
 

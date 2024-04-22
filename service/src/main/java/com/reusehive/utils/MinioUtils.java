@@ -5,6 +5,7 @@ import com.reusehive.consts.MinioConst;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import jakarta.annotation.Resource;
@@ -28,36 +29,47 @@ public class MinioUtils {
     /* upload方法拿的url是永久访问链接，前提是要开启bucket的永久开放权限 */
 
 
-    public String UploadUserIcon(MultipartFile file, String user_id) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket(MinioConst.BUCKET_USER_ICON_IMG).object(user_id)
-                .stream(file.getInputStream(), file.getSize(), -1).contentType("image/png").build();
-        minioClient.putObject(objectArgs);
-
-        return minioConfigProp.getEndpoint() + "/" + MinioConst.BUCKET_USER_ICON_IMG + "/" + user_id;
-
+    public String UploadUserIcon(MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        return UploadImg(file, MinioConst.BUCKET_USER_ICON_IMG);
     }
 
     public String UploadItemBackImg(MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        return UploadImg(file, MinioConst.BUCKET_ITEM_BACK_IMG);
+    }
+
+
+    public String UploadUserBackImg(MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        return UploadImg(file, MinioConst.BUCKET_USER_BACK_IMG);
+    }
+
+    public void DeleteUserIcon(String fileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        DeleteImg(fileName, MinioConst.BUCKET_USER_ICON_IMG);
+    }
+
+    public void DeleteUserBackImg(String fileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        DeleteImg(fileName, MinioConst.BUCKET_USER_BACK_IMG);
+    }
+
+    private String UploadImg(MultipartFile file, String bucket) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         String fileName = file.getOriginalFilename();
         assert fileName != null;
 
-        String fileCode = UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf('.'));
+        String fileCode = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf('.'));
 
-        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket("item-back-img").object(fileCode)
+        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket(bucket).object(fileCode)
                 .stream(file.getInputStream(), file.getSize(), -1).contentType("image/png").contentType("image/jpeg").build();
         minioClient.putObject(objectArgs);
 
 
-        return minioConfigProp.getEndpoint() + "/" + MinioConst.BUCKET_ITEM_BACK_IMG + "/" + fileCode;
+        return minioConfigProp.getEndpoint() + "/" + bucket + "/" + fileCode;
+    }
+
+    private void DeleteImg(String fileName, String bucket) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        var args = RemoveObjectArgs.builder().bucket(bucket).object(fileName).build();
+        minioClient.removeObject(args);
     }
 
 
-    public String UploadUserBackImg(MultipartFile file, String user_id) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        PutObjectArgs objectArgs = PutObjectArgs.builder().bucket("user-back-img").object(user_id)
-                .stream(file.getInputStream(), file.getSize(), -1).contentType("image/png").build();
-        minioClient.putObject(objectArgs);
-        return minioConfigProp.getEndpoint() + "/" + MinioConst.BUCKET_USER_BACK_IMG + "/" + user_id;
-    }
 
     /* preview方法拿的url是临时访问链接 */
 
