@@ -227,6 +227,7 @@
 import {loginApi, registerApi} from "../apis/UserApi.ts";
 import {reactive} from "vue";
 import router from "../router";
+import {LocalStorage} from "../storage/LocalStorage.ts";
 
 
 const form = reactive({
@@ -239,14 +240,28 @@ const login = async () => {
   await loginApi({password: form.password, username: form.username}).then(res => {
     if (res.code == 1) {
       localStorage.setItem("token", res.data)
+      LocalStorage().setToken(res.data,'14514',form.username)
       router.push({name: "main"})
     }
   })
 }
 
 const register = async () => {
-  const res = await registerApi({password: form.password, username: form.username})
-  if (res.code === 1) await router.push({name: "main"})
+  const res = await registerApi({
+    password: form.password,
+    name: form.username,
+    gender:0,
+    grade:2077,
+    academy:"计算机",
+    phone_number:"null",
+    social_info:"null",
+    avatar_img:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+    back_img:"https://pic3.zhimg.com/v2-289ee4a9294859f66831465efe6aca5a_r.jpg",
+
+  })
+  localStorage.setItem("token", res.data)
+  LocalStorage().setToken(res.data,'14514',form.username)
+  if (res.code === 1)  router.push({name: "main"})
 }
 
 </script>

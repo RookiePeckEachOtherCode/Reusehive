@@ -69,7 +69,6 @@ const goinfo=async ()=>{
   await router.push({name: "updateinfo"})
 }
 const getinfo=async ()=>{
-  //LocalStorage().setToken("114514","lingluo","lingluo")
   const res=await getUserInfoByName({name:LocalStorage().getusername()})
   console.log(res)
   userinfo.name=res.data.name

@@ -28,8 +28,8 @@ public class UserController {
      * 用户注册
      */
     @PostMapping("/user/register")
-    //返回uid
-    public Result<Long> register(
+    //返回token
+    public Result<String> register(
             String name,
             String password,
             String gender,
@@ -44,7 +44,9 @@ public class UserController {
         var userPassword = new UserPassword(null, password);
         try {
             var uid = userService.register(user, userPassword).getId();
-            return Result.ok(uid);
+            StpUtil.login(uid);
+            SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
+            return Result.ok(saTokenInfo.tokenValue);
         } catch (Exception e) {
             var msg = "注册失败: " + e.getMessage();
             log.error(msg);
@@ -101,6 +103,7 @@ public class UserController {
     @GetMapping("/user/name/{name}")
     public Result<User> getUserByName(@PathVariable String name) {
         try {
+            System.out.println(name);
             var user = userService.getUserByName(name);
             return Result.ok(user);
         } catch (Exception e) {

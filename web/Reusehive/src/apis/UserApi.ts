@@ -11,7 +11,17 @@ export const loginApi = (data: { password: string; username: string }) => {
     });
 };
 
-export const registerApi = (data: { password: string; username: string }) => {
+export const registerApi = (data: {
+    password: string,
+    name: string,
+    gender:0,
+    grade:2077,
+    academy:"计算机",
+    phone_number:"null",
+    social_info:"null",
+    avatar_img:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+    back_img:"https://pic3.zhimg.com/v2-289ee4a9294859f66831465efe6aca5a_r.jpg",
+}) => {
     return $http({
         method: "post",
         url: "http://127.0.0.1:8888/user/register",
