@@ -7,7 +7,7 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/src/npm-project"
+    directory: "/web/Reusehive"
     schedule:
       interval: "daily"
   
