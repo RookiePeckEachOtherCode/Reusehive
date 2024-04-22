@@ -4,7 +4,7 @@ import JSONbig from 'json-bigint';
 import {ElLoading, ElMessage} from "element-plus";
 
 export const httpInstance = axios.create();
-httpInstance.defaults.baseURL="/api/"
+//httpInstance.defaults.baseURL="/api/"
 httpInstance.defaults.transformResponse = [
     function (data) {
         try {
@@ -28,7 +28,7 @@ httpInstance.interceptors.request.use(config => {
 
 export const $http = async (config: AxiosRequestConfig) => {
     const loadingInstance = ElLoading.service();
-    httpInstance.defaults.withCredentials = true;
+    //httpInstance.defaults.withCredentials = true;
     try {
         const axiosResponse = await httpInstance(config);
         return axiosResponse.data;

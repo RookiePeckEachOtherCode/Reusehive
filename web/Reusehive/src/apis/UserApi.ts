@@ -5,7 +5,7 @@ export const loginApi = (data: { password: string; username: string }) => {
     return $http({
         method: "post",
         // url: "http://127.0.0.1:4523/m1/4280410-3922518-default/user/login",
-        url: "/user/login",
+        url: "http://127.0.0.1:8888/user/login",
         params: data,
         headers: {},
     });
@@ -14,7 +14,7 @@ export const loginApi = (data: { password: string; username: string }) => {
 export const registerApi = (data: { password: string; username: string }) => {
     return $http({
         method: "post",
-        url: "http://127.0.0.1:4523/m1/4280410-0-default/user/register",
+        url: "http://127.0.0.1:8888/user/register",
         params: data,
     });
 };
@@ -22,12 +22,12 @@ export const registerApi = (data: { password: string; username: string }) => {
 export const userChatInfoApi = () => {
     return $http({
         method: "get",
-        url: "http://127.0.0.1:4523/m1/4280410-0-default/user/chatsinfo",
+        url: "http://127.0.0.1:8888/user/chatsinfo",
     });
 };
 
 export const getUserInfoByUidApi = (data: { id: string }) => {
-    const url = "http://127.0.0.1:4523/m1/4280410-0-default/user/" + data.id;
+    const url = "http://127.0.0.1:8888/user/" + data.id;
     return $http({
         method: "get",
         url: url,
@@ -36,7 +36,7 @@ export const getUserInfoByUidApi = (data: { id: string }) => {
 export const getUserInfoByName=(data:{name:string})=>{
     return $http({
       method:"get",
-      url:"http://127.0.0.1:4523/m1/4280410-0-default/user/name/" +data.name,
+      url:"http://127.0.0.1:8888/user/name/" +data.name,
     })
 
 }
