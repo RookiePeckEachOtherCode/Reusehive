@@ -1,5 +1,5 @@
 <template>
-  <div style="display: grid;background-color: white;height: 92vh;overflow: scroll">
+  <div style="display: grid;background-color: white;max-height: 92vh;overflow: scroll">
     <div class="example-search">
       <t-search
           v-model="searchCondition"

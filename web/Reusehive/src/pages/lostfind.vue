@@ -2,28 +2,26 @@
   <t-navbar :fixed="false" title="失物招领处" left-arrow @left-click="exit" />
   <t-drawer v-model:visible="visible" :items="baseSidebar" @item-click="itemClick"></t-drawer>
   <t-button style="margin-top: 15px" block variant="outline" size="large" theme="primary" @click="visible = true">{{theme}}</t-button>
-  <t-list style="max-height: 75vh;overflow: auto;background-color: white">
-    <div v-for="info in List" style="margin-top: 15px; margin-bottom: 15px;display: flex" >
-      <t-cell>
+  <t-image style="position: absolute;margin-top: 9vh" src="https://iconfont.alicdn.com/p/illus_3d/file/APvXVsw5Zuzi/f7795047-fe70-4f93-8516-e47884d9dc0c.png?image_process=resize,l_1000">
 
-        <t-image style="width: 72px; height: 72px;" :src="info.images[0]" @click="GoItemDetail(info.item.id.toString())"></t-image>
-        <div style="flex: 1; margin-left: 10px;margin-top: 15px" @click="GoItemDetail(info.item.id.toString())" >
-          <el-text style="font-size: 18px;" >{{info.item.name}}</el-text>
-          <div style="font-size: 12px;margin-top: 12px">
-            {{info.item.itemType}}
-          </div>
-
-        </div>
-      </t-cell>
-      <t-divider />
-    </div>
+  </t-image>
+  <t-list  style="max-height: 80vh;overflow: auto;background-color: white">
+    <t-cell v-for="info in List" :key="info.item.id"
+            class="list-item"
+            style="display: flex"
+            :title="info.item.name"
+            @click="GoItemDetail(info.item.id.toString())"
+            :image="info.images[0]"
+            :description="info.item.itemType"
+    >
+    </t-cell>
 
   </t-list>
 
 </template>
 <script setup lang="ts">
 import router from "../router";
-import {ref,onMounted} from "vue";
+import {ref,onMounted,h} from "vue";
 import {SerachItem} from "../apis/ItemApi.ts";
 import {DrawerItem} from "tdesign-mobile-vue/es/drawer";
 import {getUserInfoByName} from "../apis/UserApi.ts";
@@ -35,6 +33,7 @@ onMounted(async ()=>{
    await onSerach("失物招领")
     const res=await getUserInfoByName({name:LocalStorage().getusername()})
   uid.value=res.data.id.toString()
+
 })
 const onSerach= async (condition:string)=>{
   const res=await SerachItem({condition:condition})
@@ -68,5 +67,12 @@ const exit=()=>{
 }
 </script>
 <style scoped>
+.list-item:nth-child(even) {
+  background-color: rgba(192, 187, 181, 0.33); /* 灰色背景 */
+}
 
+/* 选择奇数行 */
+.list-item:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.36); /* 白色背景 */
+}
 </style>
