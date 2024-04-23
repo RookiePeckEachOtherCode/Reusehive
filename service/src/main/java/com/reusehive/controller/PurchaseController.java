@@ -1,5 +1,6 @@
 package com.reusehive.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.reusehive.entity.None;
 import com.reusehive.entity.database.PurchaseInfo;
 import com.reusehive.service.impl.PurchaseServiceImpl;
@@ -70,8 +71,9 @@ public class PurchaseController {
      * 获取用户交易列表
      */
     @GetMapping("/purchase/user/list")
-    public Result<List<PurchaseInfo>> getPurchaseByUserId(@RequestParam("id") Long uid) {
+    public Result<List<PurchaseInfo>> getPurchaseByUserId() {
         try {
+            var uid = StpUtil.getLoginIdAsLong();
             List<PurchaseInfo> purchaseInfos = purchaseService.GetUserPurchaseList(uid);
             return Result.ok(purchaseInfos);
         } catch (Exception e) {
