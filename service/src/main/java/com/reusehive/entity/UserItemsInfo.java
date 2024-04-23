@@ -1,6 +1,5 @@
 package com.reusehive.entity;
 
-import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;

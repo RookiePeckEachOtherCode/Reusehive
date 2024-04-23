@@ -13,32 +13,23 @@
 
     <div class="UploadImg">
       <t-form-item label="头像" name="avatar" style="display:flex;">
-        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar">
-          <template #addContent>
-            <div class="add-content">
-              <t-image
-                  alt=""
-                  v-bind:src="originAvatar"
-              />
-            </div>
-          </template>
-        </t-upload>
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"></t-upload>
       </t-form-item>
       <t-form-item label="背景">
-        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1" :onRemove="onRemoveBackImg">
-          <template #addContent>
-            <div class="add-content">
-              <t-image
-                  alt=""
-                  v-bind:src="originBackImg"
-              />
-            </div>
-          </template>
-        </t-upload>
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1"
+                  :onRemove="onRemoveBackImg"></t-upload>
       </t-form-item>
     </div>
     <t-form-item label="用户名" name="name">
       <t-input v-model="formData.name" :borderless=false placeholder="请输入内容"></t-input>
+    </t-form-item>
+    <t-form-item label="密码" name="password">
+      <t-input v-model="formData.password" :borderless=false :clearable="false" placeholder="请输入内容"
+               type="password">
+        <template #suffixIcon>
+          <BrowseOffIcon/>
+        </template>
+      </t-input>
     </t-form-item>
     <t-form-item label="电话" name="social_info">
       <t-input v-model="formData.phone_number" :borderless=true placeholder="默认+86"></t-input>
@@ -73,41 +64,18 @@
 
   </t-form>
   <div class="button-group">
-    <t-button id="left-button" size="large" theme="primary" type="submit" @click="onSubmit">更新</t-button>
-    <t-button size="large" theme="default" type="reset" variant="base" @click="onReset">恢复</t-button>
+    <t-button id="left-button" size="large" theme="primary" type="submit" @click="onSubmit">提交</t-button>
+    <t-button size="large" theme="default" type="reset" variant="base" @click="onReset">重置</t-button>
   </div>
 </template>
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
+import {BrowseOffIcon} from 'tdesign-icons-vue-next';
 import router from "../router";
-import {getCurrentUserInfo, UploadUserInfo} from "../apis/UserApi.ts";
+import {registerApi} from "../apis/UserApi.ts";
 import {areaList} from "../const/area-list.ts";
 import {notify_err} from "../utils/notify.ts";
-import user from "../model/user.ts";
 
-onMounted(() => {
-  getCurrentUserInfo().then(res => {
-    if (res.data == null) {
-      notify_err("请先登录")
-      return
-    }
-
-    if (res.code == 1) {
-      originData.value = res.data
-      originAvatar.value = res.data.avatar_img
-      originBackImg.value = res.data.back_img
-      onReset()
-    } else {
-      notify_err(res.msg)
-    }
-  }).catch(err => {
-    notify_err(err)
-  })
-})
-
-const originData = ref<user>()
-const originAvatar = ref('')
-const originBackImg = ref('')
 const avatar = reactive(Array<any>());
 const back_img = reactive(Array<any>());
 
@@ -127,31 +95,37 @@ const onRemoveBackImg = (index: number) => {
   back_img.splice(index, 1)
 }
 
+
 const formData = reactive({
   name: "",
-  gender: "",
+  password: "",
   grade: "",
   academy: "",
   phone_number: "",
   social_info: "",
   avatar_img: "",
   back_img: "",
+  gender: "",
 })
-
 const form = ref(null);
 const onReset = () => {
-  formData.grade = originData.value!.grade.toString()
-  formData.phone_number = originData.value!.phone_number.toString()
-  formData.academy = originData.value!.academy.toString()
-  formData.name = originData.value!.name.toString()
-  formData.social_info = originData.value!.social_info.toString()
-  formData.gender = originData.value!.gender.toString()
-  console.log(formData)
+  formData.grade = ""
+  formData.phone_number = ""
+  formData.academy = ""
+  formData.name = ""
+  formData.password = ""
+  formData.back_img = ""
+  formData.social_info = ""
+  formData.avatar_img = ""
+  formData.gender = ""
 }
 const onSubmit = async () => {
-  await UploadUserInfo(formData).then(res => {
+  formData.avatar_img = avatar[0]
+  formData.back_img = back_img[0]
+
+  await registerApi(formData).then(res => {
     if (res.code == 1) {
-      router.push({name: "home"});
+      router.push({name: "login"});
     } else {
       notify_err(res.msg)
     }
@@ -160,7 +134,7 @@ const onSubmit = async () => {
   })
 }
 const back = () => {
-  router.push({name: "home"});
+  router.back();
 }
 const options = areaList;
 const visibleCascader = ref(false)
@@ -173,6 +147,7 @@ const onChangeCascader = (value: string, options: any) => {
 const showCascader = () => {
   visibleCascader.value = true;
 };
+
 </script>
 
 <style scoped>
@@ -202,4 +177,6 @@ const showCascader = () => {
   background-color: #529b2e;
   --td-button-primary-border-color: #529b2e;
 }
+
+
 </style>

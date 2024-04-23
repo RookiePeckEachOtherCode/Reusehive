@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-import {verifylogin} from "../apis/UserApi.ts";
+
 const router = createRouter({
   end: undefined,
   history: createWebHistory(),
@@ -14,6 +14,12 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: () => import("../pages/login.vue"),
+    },
+    {
+       path: "/register",
+       name: "register",
+       component: () => import("../pages/register.vue")
+
     },
     {
       path: "/item",
@@ -67,30 +73,30 @@ const router = createRouter({
           children: [
 
 
-              {
-                  path: "message",
-                  name: "message",
-                  component: () => import("../pages/message.vue"),
-              },
-              {
-                  path: "item-list",
-                  name: "item-list",
-                  component: () => import("../pages/item-list.vue"),
-              },
+                {
+                    path: "message",
+                    name: "message",
+                    component: () => import("../pages/message.vue"),
+                },
+                {
+                    path: "item-list",
+                    name: "item-list",
+                    component: () => import("../pages/item-list.vue"),
+                },
 
-              {
-                  path: "purchase",
-                  name: "purchase",
-                  component: () => import("../pages/purchase.vue"),
-              },
-              {
-                  path: "home",
-                  name: "home",
-                  component: () => import("../pages/userhome.vue"),
-              },
-          ],
-      },
-      ]
+                {
+                    path: "purchase",
+                    name: "purchase",
+                    component: () => import("../pages/purchase.vue"),
+                },
+                {
+                    path: "home",
+                    name: "home",
+                    component: () => import("../pages/userhome.vue"),
+                },
+            ],
+        },
+    ]
 });
 // router.beforeEach(async (to, from, next) => {
 //     const res= await verifylogin();
