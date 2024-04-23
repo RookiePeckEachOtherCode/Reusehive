@@ -72,6 +72,11 @@ const router = createRouter({
             component: () => import("../pages/item-edit.vue")
         },
         {
+            path: "/setting",
+            name: "setting",
+            component: () => import("../pages/setting.vue")
+        },
+        {
             path: "/main",
             name: "main",
             component: () => import("../layout/main.vue"),

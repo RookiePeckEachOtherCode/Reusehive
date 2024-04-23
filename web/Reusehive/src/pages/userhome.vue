@@ -315,7 +315,7 @@
     </t-grid>
     <t-cell-group bordered style="background-color: rgba(115,222,98,0.68) ">
       <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="个人信息" @click="goinfo"/>
-      <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="设置">
+      <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="设置" @click="goToSetting">
       </t-cell>
       <t-cell arrow hover note="关于软件" style="background-color: rgba(255,255,255,0.4) " title="其他"/>
 
@@ -356,6 +356,9 @@ const GoCollections = () => {
 }
 const gosell = async () => {
   await router.push({name: "myitems"});
+}
+const goToSetting = () => {
+  router.push({name: "setting"})
 }
 </script>
 <style lang="scss" scoped>
