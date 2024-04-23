@@ -1,6 +1,5 @@
 <template>
   <div class="profile-container">
-
     <div :style="{ 'background-image': 'url(' + userinfo.back_img + ')' }" class="profile-header">
       <div class="profile-info">
         <el-avatar :src="userinfo.avatar_img" size="large"></el-avatar>

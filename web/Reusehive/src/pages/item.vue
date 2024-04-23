@@ -36,8 +36,8 @@
         <t-button :icon="chatIcon" class="chat-icon" theme="primary" @click="gochat">
           聊一聊
         </t-button>
-        <t-button class="star-icon" theme="primary" @click="UseColletion()">
-          <div v-if="collected">
+        <t-button class="star-icon" theme="primary" @click="UseCollection()">
+          <div v-if="collected_computed">
             <img alt="" src="../assets/true_collected.svg"/>
           </div>
           <div v-else>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import {h, onMounted, ref} from 'vue';
+import {computed, h, onMounted, ref} from 'vue';
 import router from '../router';
 import User from '../model/user';
 import {ChatIcon} from 'tdesign-icons-vue-next';
@@ -102,23 +102,25 @@ const buy = async () => {
 }
 
 const collected = ref(false)
+
+const collected_computed = computed(() => {
+  return collected.value
+})
+
+
 const CheckCollected = async () => {
-  await isCollected({item_id: item.value.item.id.toString(), uid: user.value.id.toString()}).then(res => {
+  await isCollected({item_id: item.value.item.id.toString()}).then(res => {
     collected.value = res.data;
   })
 }
-const UseColletion = async () => {
+const UseCollection = async () => {
   if (collected.value) {
-    await deleteCollection({item_id: item.value.item.id.toString(), uid: user.value.id.toString()}).then(res => {
-      if (res.data == 1) {
-        collected.value = false
-      }
+    await deleteCollection({item_id: item.value.item.id.toString()}).then(res => {
+      collected.value = false
     })
   } else {
-    await addCollection({item_id: item.value.item.id.toString(), uid: user.value.id.toString()}).then(res => {
-      if (res.data == 1) {
-        collected.value = true
-      }
+    await addCollection({item_id: item.value.item.id.toString()}).then(res => {
+      collected.value = true
     })
   }
 }

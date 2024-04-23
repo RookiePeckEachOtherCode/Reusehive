@@ -25,7 +25,6 @@ CREATE TABLE item
 (
     id          BIGINT,
     uid         BIGINT,
-    back_img    VARCHAR(255),
 
     PRIMARY KEY (id, uid),
 

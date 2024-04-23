@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class Collection {
     @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
     private Long id;
-    @Column("item_id")
-    private Long itemId;
     @Column("uid")
     private Long uid;
+    @Column("item_id")
+    private Long itemId;
 }

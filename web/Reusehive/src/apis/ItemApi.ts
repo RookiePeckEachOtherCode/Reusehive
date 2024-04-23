@@ -39,15 +39,14 @@ export const newItemApi = (data: {
         url: "http://127.0.0.1:8888/item/new",
     });
 };
-export const getCollections = (data: { uid: string }) => {
+export const getCollections = () => {
     return $http({
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/collection/query",
         url: "http://127.0.0.1:8888/item/collection/query",
         method: "get",
-        params: data
     })
 }
-export const isCollected = (data: { uid: string, item_id: string }) => {
+export const isCollected = (data: { item_id: string }) => {
     return $http({
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/collection/collected",
         url: "http://127.0.0.1:8888/item/collection/collected",
@@ -55,7 +54,7 @@ export const isCollected = (data: { uid: string, item_id: string }) => {
         params: data
     })
 }
-export const addCollection = (data: { uid: string, item_id: string }) => {
+export const addCollection = (data: { item_id: string }) => {
     return $http({
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/collection/add",
         url: "http://127.0.0.1:8888/item/collection/add",
@@ -63,7 +62,7 @@ export const addCollection = (data: { uid: string, item_id: string }) => {
         params: data
     })
 }
-export const deleteCollection = (data: { uid: string, item_id: string }) => {
+export const deleteCollection = (data: { item_id: string }) => {
     return $http({
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/collection/delete",
         url: "http://127.0.0.1:8888/item/collection/delete",

@@ -200,17 +200,18 @@ public class ItemController {
     }
 
     /**
-     * 添加物品到收藏
+     * 当前用户添加物品到收藏
      */
 
     @PostMapping("/item/collection/add")
-    public Result<None> addCollection(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
+    public Result<Boolean> addCollection(@RequestParam("item_id") Long item_id) {
         try {
+            var uid = StpUtil.getLoginIdAsLong();
             if (itemService.isCollected(uid, item_id)) {
                 return Result.error("物品已经收藏");
             }
-            itemService.addCollectionItem(uid, item_id);
-            return Result.ok();
+            var bool = itemService.addCollectionItem(uid, item_id);
+            return Result.ok(bool);
         } catch (RuntimeException e) {
             var msg = "添加收藏失败: " + e.getMessage();
             log.error(msg);
@@ -219,12 +220,14 @@ public class ItemController {
     }
 
     /**
-     * 获得收藏列表
+     * 获得当前用户的收藏列表
      */
     @GetMapping("/item/collection/query")
-    public Result<List<ItemDetail>> getCollectionItemInfo(@RequestParam("uid") Long uid) {
+    public Result<List<ItemDetail>> getCollectionItemInfo() {
         try {
+            var uid = StpUtil.getLoginIdAsLong();
             List<ItemDetail> collectionItems = itemService.getCollectionItems(uid);
+            System.out.println(collectionItems);
             return Result.ok(collectionItems);
         } catch (RuntimeException e) {
             var msg = "获取收藏列表失败: " + e.getMessage();
@@ -234,13 +237,14 @@ public class ItemController {
     }
 
     /**
-     * 取消收藏
+     * 当前用户取消收藏
      */
     @PostMapping("/item/collection/delete")
-    public Result<None> deleteCollect(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
+    public Result<Boolean> deleteCollect(@RequestParam("item_id") Long item_id) {
         try {
-            itemService.deleteItemFromCollections(uid, item_id);
-            return Result.ok();
+            var uid = StpUtil.getLoginIdAsLong();
+            var bool = itemService.deleteItemFromCollections(uid, item_id);
+            return Result.ok(bool);
         } catch (RuntimeException e) {
             var msg = "删除收藏失败: " + e.getMessage();
             log.error(msg);
@@ -249,11 +253,12 @@ public class ItemController {
     }
 
     /**
-     * 是否收藏
+     * 当前用户是否收藏
      */
     @GetMapping("/item/collection/collected")
-    Result<Boolean> isCollected(@RequestParam("uid") Long uid, @RequestParam("item_id") Long item_id) {
+    Result<Boolean> isCollected(@RequestParam("item_id") Long item_id) {
         try {
+            var uid = StpUtil.getLoginIdAsLong();
             Boolean collected = itemService.isCollected(uid, item_id);
             return Result.ok(collected);
         } catch (Exception e) {

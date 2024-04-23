@@ -1,76 +1,81 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 const router = createRouter({
-  end: undefined,
-  history: createWebHistory(),
-  sensitive: undefined,
-  strict: undefined,
-  routes: [
-    {
-      path: "/*",
-      redirect: "/login",
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: () => import("../pages/login.vue"),
-    },
-    {
-       path: "/register",
-       name: "register",
-       component: () => import("../pages/register.vue")
+    end: undefined,
+    history: createWebHistory(),
+    sensitive: undefined,
+    strict: undefined,
+    routes: [
+        {
+            path: "/*",
+            redirect: "/login",
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: () => import("../pages/login.vue"),
+        },
+        {
+            path: "/register",
+            name: "register",
+            component: () => import("../pages/register.vue")
 
-    },
-    {
-      path: "/item",
-      name: "item",
-      component: () => import("../pages/item.vue"),
-    },
-    {
-      path: "/item/new",
-      name: "itme-new",
-      component: () => import("../pages/item-new.vue"),
-    },
-    {
-      path: "/updateinfo",
-      name: "updateinfo",
-      component: () => import("../pages/updateinfo.vue"),
-    },
-    {
-      path: "/chat",
-      name: "chat",
-      component: () => import("../pages/Chat.vue"),
-    },
-    {
-      path:"/purchasedetail",
-      name:"PurchaseDetail",
-      component:()=>import("../pages/purchase-detail.vue")
-    },
-    {
-      path:"/collections",
-      name:"collections",
-      component:()=>import("../pages/Collections.vue")
-    },
-      {
-       path:"/lostfind",
-       name:"lostfind",
-       component:()=>import("../pages/lostfind.vue")
-      },
-      {
-       path:"/myitems",
-       name:"myitems",
-       component:()=>import("../pages/myitems.vue")
-      },
-      {
-          path:"/edititems",
-          name:"edititems",
-          component:()=>import("../pages/edititem.vue")
-      },
-      {
-          path: "/main",
-          name: "main",
-          component: () => import("../layout/main.vue"),
-          children: [
+        },
+        {
+            path: "/item",
+            name: "item",
+            component: () => import("../pages/item.vue"),
+        },
+        {
+            path: "/item/new",
+            name: "itme-new",
+            component: () => import("../pages/item-new.vue"),
+        },
+        {
+            path: "/updateinfo",
+            name: "updateinfo",
+            component: () => import("../pages/updateinfo.vue"),
+        },
+        {
+            path: "/chat",
+            name: "chat",
+            component: () => import("../pages/Chat.vue"),
+        },
+        {
+            path: "/purchasedetail",
+            name: "PurchaseDetail",
+            component: () => import("../pages/purchase-detail.vue")
+        },
+        {
+            path: "/collections",
+            name: "collections",
+            component: () => import("../pages/Collections.vue")
+        },
+        {
+            path: "/lostfind",
+            name: "lostfind",
+            component: () => import("../pages/lostfind.vue")
+        },
+        {
+            path: "/myitems",
+            name: "myitems",
+            component: () => import("../pages/myitems.vue")
+        },
+        {
+            path: "/edititems",
+            name: "edititems",
+            component: () => import("../pages/edititem.vue")
+        },
+        {
+            path: "/item-edit",
+            name: "item-edit",
+            component: () => import("../pages/item-edit.vue")
+        },
+        {
+            path: "/main",
+            name: "main",
+            component: () => import("../layout/main.vue"),
+            children: [
 
 
                 {
