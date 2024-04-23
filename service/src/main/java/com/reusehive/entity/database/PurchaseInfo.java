@@ -26,6 +26,9 @@ public class PurchaseInfo implements Serializable {
     @Column("item_id")
     private Long itemId;
 
+    @Column("item_uid")
+    private Long itemUid;
+
     private LocalDateTime createTime;
 
     private double prices;

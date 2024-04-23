@@ -77,6 +77,11 @@ const router = createRouter({
             component: () => import("../pages/setting.vue")
         },
         {
+            path: "/user-info",
+            name: "user-info",
+            component: () => import("../pages/user-info.vue")
+        },
+        {
             path: "/main",
             name: "main",
             component: () => import("../layout/main.vue"),

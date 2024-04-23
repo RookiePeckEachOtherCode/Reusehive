@@ -43,12 +43,13 @@ CREATE TABLE purchase_info
     id          BIGINT,
     uid         BIGINT,
     item_id     BIGINT,
+    item_uid    BIGINT,
     create_time DATETIME       NOT NULL,
     prices      DECIMAL(10, 2) NOT NULL COMMENT '交易成功的价格',
     `lock`      BOOLEAN        NOT NULL COMMENT '交易锁 上锁true  解锁false',
     lock_time   DATETIME       NOT NULL COMMENT '上锁时间',
 
-    PRIMARY KEY (id, uid, item_id),
+    PRIMARY KEY (id, uid, item_id, item_uid),
     FOREIGN KEY (uid) REFERENCES user (id),
     FOREIGN KEY (item_id) REFERENCES item (id)
 );

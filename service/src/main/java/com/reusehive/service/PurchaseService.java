@@ -5,7 +5,7 @@ import com.reusehive.entity.database.PurchaseInfo;
 import java.util.List;
 
 public interface PurchaseService {
-    Long CreatePurchase(Long user_id,Long item_id,Double price);
+    Long CreatePurchase(Long uid, Long itemId, Long itemUid, Double price);
 
     void PurchaseComplete(Long purchase_id);
 

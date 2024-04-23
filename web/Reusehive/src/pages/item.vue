@@ -4,7 +4,7 @@
       <t-navbar :fixed="false" left-arrow @left-click="goBack"/>
     </div>
     <div class="user-info">
-      <div class="avatar-container" @click="">
+      <div class="avatar-container" @click="goToInfo">
         <t-avatar class="avatar" v-bind:image="user.avatar_img"></t-avatar>
       </div>
       <div class="info-container">
@@ -61,7 +61,6 @@ import {addCollection, deleteCollection, getItemByItemIdApi, isCollected} from '
 import {getUserInfoByUidApi} from '../apis/UserApi';
 import ItemDetail from '../model/itemDetail.ts';
 import {CreatePurchase} from "../apis/PurchaseApi.ts";
-import {LocalStorage} from "../storage/LocalStorage.ts";
 
 const chatIcon = () => h(ChatIcon, {size: '24px'})
 // const starIcon = () => h(StarIcon, { size: '24px' })
@@ -92,8 +91,8 @@ const gochat = () => {
 const buy = async () => {
   const res = await CreatePurchase({
     item_id: item.value.item.id.toString(),
-    pirce: item.value.item.prices,
-    id: LocalStorage().getUserId()
+    item_uid: item.value.item.uid.toString(),
+    price: item.value.item.prices,
   })
   await router.push({
     name: "PurchaseDetail",
@@ -115,14 +114,18 @@ const CheckCollected = async () => {
 }
 const UseCollection = async () => {
   if (collected.value) {
-    await deleteCollection({item_id: item.value.item.id.toString()}).then(res => {
+    await deleteCollection({item_id: item.value.item.id.toString()}).then(_ => {
       collected.value = false
     })
   } else {
-    await addCollection({item_id: item.value.item.id.toString()}).then(res => {
+    await addCollection({item_id: item.value.item.id.toString()}).then(_ => {
       collected.value = true
     })
   }
+}
+
+const goToInfo = () => {
+  router.push({name: "user-info", query: {id: user.value.id.toString()}});
 }
 </script>
 

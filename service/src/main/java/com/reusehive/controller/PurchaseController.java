@@ -25,15 +25,15 @@ public class PurchaseController {
      * 建立交易
      */
     @PostMapping("/purchase/new")
-    public Result<Long> newPurchase(@RequestParam("item_id") Long ItemId, @RequestParam("price") Double price, @RequestParam("id") Long uid) {
+    public Result<Long> newPurchase(@RequestParam("item_id") Long ItemId, @RequestParam("item_uid") Long itemUid, @RequestParam("price") Double price) {
         try {
-            Long id = purchaseService.CreatePurchase(uid, ItemId, price);
+            var uid = StpUtil.getLoginIdAsLong();
+            Long id = purchaseService.CreatePurchase(uid, ItemId, itemUid, price);
             return Result.ok(id);
         } catch (Exception e) {
             var msg = "建立交易失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
-
         }
     }
 

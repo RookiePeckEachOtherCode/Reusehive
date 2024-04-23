@@ -13,6 +13,8 @@ public interface ItemService {
 
     List<ItemDetail> getItemByUid(Long uid);
 
+    List<ItemDetail> getItemByUidWithUNDO(Long uid);
+
     List<ItemDetail> getAllItem();
 
     void updateItem(Item item, Long uid);
@@ -34,4 +36,8 @@ public interface ItemService {
     Boolean deleteItemFromCollections(Long uid, Long item_id);
 
     List<ItemDetail> searchItemByCondition(String condition);
+
+    void setItemStatus(Long item_id, int status);
+
+    Item getSingleItemById(Long id);
 }

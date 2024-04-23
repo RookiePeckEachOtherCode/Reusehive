@@ -14,7 +14,7 @@ export const GetpurchaseInfoByPid = (data: { id: string }) => {
         url: "http://127.0.0.1:8888/purchase/" + data.id,
     })
 }
-export const CreatePurchase = (data: { item_id: string, pirce: number, id: string | null }) => {
+export const CreatePurchase = (data: { item_id: string, item_uid: string, price: number }) => {
     return $http({
         method: "post",
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/purchase/new",
