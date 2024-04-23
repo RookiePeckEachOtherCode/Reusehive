@@ -11,6 +11,7 @@
 
     <div style="padding: 0 16px">
       <t-swiper :autoplay="true" :navigation="{ type: 'dots' }"
+                :interval="3000"
                 style="max-height: 25vh;max-width: 80vw;margin-left: 25px"
                 @click="handleClick">
         <t-swiper-item v-for="(item, index) in swiperList" :key="index" style="height: 192px">
