@@ -141,8 +141,16 @@ public class UserServiceImpl implements UserService {
         List<Message> messages = QueryChain.of(messageMapper)
                 .where(MessageTableDef.MESSAGE.FROMUSERNAME.eq(user.getName()))
                 .list();
+        List<Message> messages1 = QueryChain.of(messageMapper).where(MessageTableDef.MESSAGE.TOUSERNAME.eq(user.getName())).list();
         Set<String> tousernameSet = new HashSet<>();
         for (Message message : messages) {
+            User user1 = getUserByName(message.getTousername());
+            if (!tousernameSet.contains(message.getTousername())) {
+                userList.add(user1);
+                tousernameSet.add(message.getTousername());
+            }
+        }
+        for (Message message : messages1) {
             User user1 = getUserByName(message.getTousername());
             if (!tousernameSet.contains(message.getTousername())) {
                 userList.add(user1);
