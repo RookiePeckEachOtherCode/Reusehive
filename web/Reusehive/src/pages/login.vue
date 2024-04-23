@@ -270,7 +270,7 @@ const register = async () => {
   .login-header {
     width: 100vw;
     height: 220px;
-    background: #6aeb62;
+    background: #67C23A;
     display: flex;
     align-items: center;
     justify-content: center;

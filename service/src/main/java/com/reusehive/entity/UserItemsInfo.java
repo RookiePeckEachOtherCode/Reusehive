@@ -15,5 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class UserItemsInfo implements Serializable {
     private User user;
-    private List<Item> items;
+    private List<ItemDetail> items;
 }
