@@ -21,7 +21,7 @@
     "vant": "^4.8.11",
     "vue": "^3.4.23",
     "vue-native-websocket": "^2.0.15",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": ">=2.0.0-beta.13",
