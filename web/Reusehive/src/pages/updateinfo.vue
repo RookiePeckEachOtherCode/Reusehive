@@ -1,5 +1,5 @@
 <template>
-  <t-navbar :fixed="false" left-arrow title="注册" @left-click="back"/>
+  <t-navbar :fixed="false" left-arrow title="更新个人信息" @left-click="back"/>
   <t-form
       ref="form"
       :data="formData"
