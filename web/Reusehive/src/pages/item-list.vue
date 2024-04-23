@@ -1,5 +1,5 @@
 <template>
-  <div style="display: grid;background-color: white">
+  <div style="display: grid;background-color: white;height: 92vh;overflow: scroll">
     <div class="example-search">
       <t-search
           v-model="searchCondition"
@@ -144,9 +144,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  overflow: auto;
   background-color: white;
-  height: 44vh;
 }
 
 .example-search {
