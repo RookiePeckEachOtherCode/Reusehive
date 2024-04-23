@@ -1,5 +1,5 @@
 <template>
-  <div style="display: grid;background-color: white">
+  <div style="display: grid;background-color: white;height: 92vh;overflow: scroll">
     <div class="example-search">
       <t-search
           v-model="searchCondition"
@@ -11,6 +11,7 @@
 
     <div style="padding: 0 16px">
       <t-swiper :autoplay="true" :navigation="{ type: 'dots' }"
+                :interval="3000"
                 style="max-height: 25vh;max-width: 80vw;margin-left: 25px"
                 @click="handleClick">
         <t-swiper-item v-for="(item, index) in swiperList  " :key="index" style="height: 192px">
@@ -158,9 +159,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  overflow: auto;
   background-color: white;
-  height: 44vh;
 }
 
 .example-search {
