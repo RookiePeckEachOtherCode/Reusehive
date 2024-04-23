@@ -86,6 +86,18 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemDetail> getItemByUidWithUNDO(Long uid) {
+        return QueryChain.of(itemMapper)
+                .where(ItemTableDef.ITEM.UID.eq(uid))
+                .where(ItemTableDef.ITEM.ITEM_TYPE.eq(ItemStatus.UNDO))
+                .list()
+                .stream()
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
+                .toList();
+
+    }
+
+    @Override
     @Cacheable(value = CacheKey.ITEM_LIST_ALL, key = "#root.methodName")
     public List<ItemDetail> getAllItem() {
         return QueryChain.of(itemMapper)
@@ -218,5 +230,23 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
                 .toList();
+    }
+
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#item_id"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+            }
+    )
+    public void setItemStatus(Long item_id, int status) {
+        Item item = QueryChain.of(itemMapper).where(ItemTableDef.ITEM.ID.eq(item_id)).one();
+        item.setItemStatus(status);
+        itemMapper.update(item);
+    }
+
+    @Override
+    public Item getSingleItemById(Long id) {
+        return QueryChain.of(itemMapper).where(ItemTableDef.ITEM.ID.eq(id)).one();
     }
 }

@@ -179,7 +179,7 @@ public class UserController {
     /**
      * 获取用户信息及其物品列表
      */
-    @GetMapping("/user/{id}/items")
+    @GetMapping("/user-items/{id}")
     public Result<UserItemsInfo> getUserItemsInfo(@PathVariable Long id) {
         try {
             var userItemInfo = userService.getUserItemsInfo(id);

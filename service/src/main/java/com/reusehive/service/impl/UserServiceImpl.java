@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserItemsInfo getUserItemsInfo(Long id) {
         var user = this.getUserById(id);
-        var items = itemService.getItemByUid(id);
+        var items = itemService.getItemByUidWithUNDO(id);
 
         return new UserItemsInfo(user, items);
     }

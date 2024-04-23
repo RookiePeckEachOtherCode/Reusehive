@@ -30,6 +30,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TAvatar: typeof import('tdesign-mobile-vue')['Avatar']
     TAvatr: typeof import('tdesign-mobile-vue')['Avatr']
+    TBackTop: typeof import('tdesign-mobile-vue')['BackTop']
     TBadge: typeof import('tdesign-mobile-vue')['Badge']
     TButton: typeof import('tdesign-mobile-vue')['Button']
     TCascader: typeof import('tdesign-mobile-vue')['Cascader']
