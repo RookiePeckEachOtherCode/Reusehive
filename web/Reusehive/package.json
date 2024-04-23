@@ -19,7 +19,7 @@
     "sass": "^1.75.0",
     "tdesign-mobile-vue": "^1.2.0",
     "vant": "^4.8.11",
-    "vue": "^3.4.23",
+    "vue": "^3.4.24",
     "vue-native-websocket": "^2.0.15",
     "vue-router": "^4.3.2"
   },
