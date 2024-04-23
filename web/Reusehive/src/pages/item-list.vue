@@ -10,7 +10,7 @@
     </div>
 
     <div style="padding: 0 16px">
-      <t-swiper :autoplay="false" :navigation="{ type: 'dots' }"
+      <t-swiper :autoplay="true" :navigation="{ type: 'dots' }"
                 style="max-height: 25vh;max-width: 80vw;margin-left: 25px"
                 @click="handleClick">
         <t-swiper-item v-for="(item, index) in swiperList" :key="index" style="height: 192px">
@@ -49,7 +49,7 @@
             </div>
           </template>
         </t-grid-item>
-        <t-grid-item text="失物招领">
+        <t-grid-item text="失物招领" @click="golostfind">
           <template #image>
             <div class="icon-wrapper">
               <svg class="icon" height="48" p-id="9843" t="1713516445314"
@@ -90,10 +90,10 @@ import router from "../router";
 
 const imageCdn = 'https://tdesign.gtimg.com/mobile/demos';
 const swiperList = [
-  `${imageCdn}/swiper1.png`,
-  `${imageCdn}/swiper2.png`,
-  `${imageCdn}/swiper1.png`,
-  `${imageCdn}/swiper2.png`,
+  `https://img.zcool.cn/community/0135225961fec4a8012193a3560c18.jpg@1280w_1l_2o_100sh.jpg`,
+  `https://img.zcool.cn/community/01f2fc58fd8930a8012160f7f3020b.jpg@1280w_1l_2o_100sh.jpg`,
+  `https://ts1.cn.mm.bing.net/th/id/R-C.733e8cf61bae35a69261bdc6caeff287?rik=7ZqFnScf4NTDrA&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fphotoblog%2f1204%2f14%2fc7%2f11251650_11251650_1334409274390.jpg&ehk=m81LJV2hEpWzJuRODh8j8BI29ykyyOlw0tYL9UfaxJ4%3d&risl=&pid=ImgRaw&r=0`,
+  `https://ts1.cn.mm.bing.net/th/id/R-C.57d21ffe1af8c1a3300b1a4a6c4af3ec?rik=LtkdWdHtOAc4BA&riu=http%3a%2f%2fimg01.tooopen.com%2fDowns%2fimages%2f2010%2f4%2f20%2fsy_20100420165448321050.jpg&ehk=0rjOAKfOiV3QtCpNwMcy%2beQOHGBevKkGlKrzDTOM34o%3d&risl=&pid=ImgRaw&r=0`,
   `${imageCdn}/swiper1.png`,
 ];
 
@@ -129,10 +129,17 @@ const onSearch = async () => {
 const gosell=async () =>{
    await router.push({name:"itme-new"})
 }
-
+const golostfind=async ()=>{
+  await  router.push({name:"lostfind"})
+}
 </script>
 
 <style scoped>
+img {
+  display: block;
+  width: 100%;
+  height: 192px;
+}
 .item-list-container {
   display: flex;
   flex-wrap: wrap;
