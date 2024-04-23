@@ -30,6 +30,8 @@ export const registerApi = (data: {
     formData.append("phone_number", data.phone_number);
     formData.append("social_info", data.social_info);
     formData.append("gender", data.gender);
+    formData.append("avatar_img", data.avatar_img.raw);
+    formData.append("back_img", data.back_img.raw);
 
 
     return $http({
@@ -112,10 +114,10 @@ export const verifylogin = () => {
     })
 }
 
-export const getUserItemList=(data:{id:string})=>{
+export const getUserItemList = (data: { id: string }) => {
     return $http({
-        method:"get",
-        //url:"http://127.0.0.1:8888/item/user/"+data.id
-        url:"http://127.0.0.1:4523/m1/4280410-0-default/item/user/"+data.id
-        })
+        method: "get",
+        url: "http://127.0.0.1:8888/item/user/" + data.id
+        // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/user/" + data.id
+    })
 }

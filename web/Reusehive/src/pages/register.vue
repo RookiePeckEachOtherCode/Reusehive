@@ -13,11 +13,15 @@
 
     <div class="UploadImg">
       <t-form-item label="头像" name="avatar" style="display:flex;">
-        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"></t-upload>
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"
+                  :size-limit="{ size: 5, unit: 'MB' }"
+        ></t-upload>
       </t-form-item>
       <t-form-item label="背景">
         <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1"
-                  :onRemove="onRemoveBackImg"></t-upload>
+                  :onRemove="onRemoveBackImg"
+                  :size-limit="{ size: 5, unit: 'MB' }"
+        ></t-upload>
       </t-form-item>
     </div>
     <t-form-item label="用户名" name="name">
@@ -61,7 +65,6 @@
     <t-form-item label="签名" name="social_info">
       <t-input v-model="formData.social_info" :borderless=true placeholder=""></t-input>
     </t-form-item>
-
   </t-form>
   <div class="button-group">
     <t-button id="left-button" size="large" theme="primary" type="submit" @click="onSubmit">提交</t-button>

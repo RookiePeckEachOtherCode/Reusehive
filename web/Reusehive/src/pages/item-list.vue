@@ -13,7 +13,7 @@
       <t-swiper :autoplay="true" :navigation="{ type: 'dots' }"
                 style="max-height: 25vh;max-width: 80vw;margin-left: 25px"
                 @click="handleClick">
-        <t-swiper-item v-for="(item, index) in swiperList" :key="index" style="height: 192px">
+        <t-swiper-item v-for="(item, index) in swiperList  " :key="index" style="height: 192px">
           <img :src="item" class="img"/>
         </t-swiper-item>
       </t-swiper>
@@ -73,7 +73,7 @@
       </t-grid>
     </div>
     <div class="item-list-container">
-      <div v-for="item in items" class="item-list">
+      <div v-for="item in itemDetails" class="item-list">
         <itemCard :images="item.images" :item="item.item"></itemCard>
       </div>
     </div>
@@ -84,9 +84,10 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue';
 import itemCard from '../component/itemCard.vue'
-import Item from "../model/item.ts";
+import ItemDetail from "../model/itemDetail.ts";
 import {getAllItemsApi, SerachItem} from "../apis/ItemApi.ts";
 import router from "../router";
+import {notify_err} from "../utils/notify.ts";
 
 
 const swiperList = [
@@ -98,11 +99,12 @@ const swiperList = [
 ];
 
 
+let itemDetails = ref(new Array<ItemDetail>());
+
 const handleClick = (value: number) => {
   console.log('click: ', value);
 };
 
-let items = ref(new Array<Item>());
 const searchCondition = ref("")
 
 
@@ -114,20 +116,32 @@ let isLoading = ref(false);
 
 const getAll = async () => {
   await getAllItemsApi().then(res => {
-    console.log(res.data);
-    items.value = res.data;
+    if (res.code == 1) {
+      itemDetails.value = res.data;
+    } else {
+      notify_err("获取item list失败" + res.msg)
+    }
+  }).catch(err => {
+    notify_err(err)
   })
 };
 
 const onSearch = async () => {
   isLoading.value = true
-  items.value = await SerachItem({condition: searchCondition.value}).then(res => {
-    return res.data
+  itemDetails.value = await SerachItem({condition: searchCondition.value}).then(res => {
+    // return res.data
+    if (res.code == 1) {
+      return res.data;
+    } else {
+      notify_err(res.msg)
+    }
+  }).catch(err => {
+    notify_err(err)
   })
   isLoading.value = false;
 }
-const gosell=async () =>{
-   await router.push({name:"itme-new"})
+const gosell = async () => {
+  await router.push({name: "itme-new"})
 }
 const golostfind=async ()=>{
   await  router.push({name:"lostfind"})

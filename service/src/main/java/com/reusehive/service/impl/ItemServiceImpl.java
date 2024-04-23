@@ -18,6 +18,7 @@ import com.reusehive.utils.MinioUtils;
 import io.minio.errors.*;
 import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -42,6 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private CollectionMapper collectionMapper;
 
     @Override
+    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
     public void newItem(Item item, MultipartFile[] images) {
         var imageUrls = new CopyOnWriteArrayList<String>();
 
@@ -173,40 +174,40 @@ public class ItemServiceImpl implements ItemService {
         List<Collection> collections = QueryChain.of(collectionMapper)
                 .where(CollectionTableDef.COLLECTION.UID.eq(uid))
                 .list();
+        System.out.println(collections);
 
         return collections.stream()
                 .map(collection -> getItemById(collection.getItemId()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
-    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
-    public void addCollectionItem(Long uid, Long item_id) {
-        Collection collection = new Collection();
-        collection.setUid(uid);
-        collection.setItemId(item_id);
-        collection.setId(null);
+    @CachePut(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
+    public Boolean addCollectionItem(Long uid, Long item_id) {
+        Collection collection = new Collection(null, uid, item_id);
         collectionMapper.insert(collection);
+        return true;
     }
 
     @Override
     @Cacheable(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
     public Boolean isCollected(Long uid, Long item_id) {
         return QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).exists();
-
     }
 
     @Override
     @Caching(
             evict = {
                     @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
+            },
+            put = {
+                    @CachePut(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
             }
     )
-    public void deleteItemFromCollections(Long uid, Long item_id) {
+    public Boolean deleteItemFromCollections(Long uid, Long item_id) {
         Collection collection = QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).one();
         collectionMapper.deleteById(collection.getId());
-
+        return false;
     }
 
     @Override

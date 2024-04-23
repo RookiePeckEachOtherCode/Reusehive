@@ -48,8 +48,7 @@
 <script setup>
 import router from "../router";
 import {onMounted, reactive} from "vue";
-import {getUserInfoByName} from "../apis/UserApi.ts";
-import {LocalStorage} from "../storage/LocalStorage.ts";
+import {getCurrentUserInfo} from '../apis/UserApi.ts'
 
 const userinfo = reactive({
   name: "",
@@ -66,20 +65,20 @@ const goinfo = () => {
   router.push({name: "updateinfo"})
 }
 const getinfo = async () => {
-  const res = await getUserInfoByName({name: LocalStorage().getusername()})
-  console.log(res)
-  userinfo.name=res.data.name
-  userinfo.id=res.data.id.toString()
-  userinfo.academy=res.data.academy;
-  userinfo.grade=res.data.grade;
-  userinfo.avatar_img=res.data.avatar_img;
-  userinfo.back_img=res.data.back_img;
+  await getCurrentUserInfo().then(res => {
+    userinfo.name = res.data.name
+    userinfo.id = res.data.id.toString()
+    userinfo.academy = res.data.academy;
+    userinfo.grade = res.data.grade;
+    userinfo.avatar_img = res.data.avatar_img;
+    userinfo.back_img = res.data.back_img;
+  })
 }
 const GoCollections = () => {
   router.push({name: "collections", query: {uid: userinfo.id}})
 }
-const gosell=async ()=>{
-  await router.push({name:"myitems"});
+const gosell = async () => {
+  await router.push({name: "myitems"});
 }
 </script>
 <style lang="scss" scoped>

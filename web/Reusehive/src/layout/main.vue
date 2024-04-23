@@ -3,11 +3,11 @@
   <div class="app-container">
     <div v-if="showNavBar" class="app-header">
     </div>
-    <keep-alive>
-      <div class="app-body">
+    <div class="app-body">
+      <keep-alive>
         <RouterView :key="$route.fullPath"></RouterView>
-      </div>
-    </keep-alive>
+      </keep-alive>
+    </div>
   </div>
   <div class="app-footer">
     <Tabs>

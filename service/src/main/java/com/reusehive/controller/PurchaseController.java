@@ -1,8 +1,6 @@
 package com.reusehive.controller;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.reusehive.entity.None;
-import com.reusehive.entity.UserPurchaseInfo;
 import com.reusehive.entity.database.PurchaseInfo;
 import com.reusehive.service.impl.PurchaseServiceImpl;
 import com.reusehive.utils.Result;
@@ -21,15 +19,16 @@ public class PurchaseController {
 
     @Resource
     PurchaseServiceImpl purchaseService;
+
     /**
      * 建立交易
      */
     @PostMapping("/purchase/new")
-    public Result<Long> newPurchase( @RequestParam("item_id") Long ItemId,@RequestParam("price") Double price,@RequestParam("id") Long uid ){
+    public Result<Long> newPurchase(@RequestParam("item_id") Long ItemId, @RequestParam("price") Double price, @RequestParam("id") Long uid) {
         try {
             Long id = purchaseService.CreatePurchase(uid, ItemId, price);
             return Result.ok(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "建立交易失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -45,7 +44,7 @@ public class PurchaseController {
         try {
             purchaseService.PurchaseComplete(purchase_id);
             return Result.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "确认交易失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -56,11 +55,11 @@ public class PurchaseController {
      * 取消交易
      */
     @PostMapping("/purchase/cancel")
-    public Result<None> cancelPurchase(@RequestParam("purchase_id") Long purchase_id){
+    public Result<None> cancelPurchase(@RequestParam("purchase_id") Long purchase_id) {
         try {
             purchaseService.CanclePurchase(purchase_id);
             return Result.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "取消交易失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -71,11 +70,11 @@ public class PurchaseController {
      * 获取用户交易列表
      */
     @GetMapping("/purchase/user/list")
-    public Result<List<PurchaseInfo>> getPurchaseByUserId(@RequestParam("id")Long uid) {
+    public Result<List<PurchaseInfo>> getPurchaseByUserId(@RequestParam("id") Long uid) {
         try {
             List<PurchaseInfo> purchaseInfos = purchaseService.GetUserPurchaseList(uid);
             return Result.ok(purchaseInfos);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "获取交易列表失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -91,7 +90,7 @@ public class PurchaseController {
         try {
             PurchaseInfo purchaseInfo = purchaseService.GetPurchaseInfoById(purchase_id);
             return Result.ok(purchaseInfo);
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "获取交易信息失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
@@ -99,15 +98,15 @@ public class PurchaseController {
     }
 
     /**
-     *下架物品
+     * 下架物品
      */
 
     @PostMapping("/purchase/remove")
-    public Result<None> removeItem(@RequestParam("item_id") Long item_id){
+    public Result<None> removeItem(@RequestParam("item_id") Long item_id) {
         try {
             purchaseService.RemoveItem(item_id);
             return Result.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             var msg = "下架物品失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);
