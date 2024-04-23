@@ -22,7 +22,7 @@ public class ChatServiceImpl implements ChatService {
     private MessageMapper messageMapper;
 
     @Override
-    @Cacheable(key = "#username+'_'+#tousername")
+    //@Cacheable(key = "#username+'_'+#tousername")
     public List<Message> getMessageList(String username, String tousername) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(MessageTableDef.MESSAGE.ALL_COLUMNS)
