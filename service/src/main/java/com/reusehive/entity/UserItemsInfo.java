@@ -1,6 +1,5 @@
 package com.reusehive.entity;
 
-import com.reusehive.entity.database.Item;
 import com.reusehive.entity.database.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,5 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 public class UserItemsInfo implements Serializable {
     private User user;
-    private List<Item> items;
+    private List<ItemDetail> items;
 }

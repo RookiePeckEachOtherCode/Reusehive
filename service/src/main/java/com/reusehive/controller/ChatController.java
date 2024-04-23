@@ -58,6 +58,7 @@ public class ChatController {
 
             try {
                 List<Message> messageList = chatService.getMessageList(username, tousername);
+                System.out.println(messageList);
                 messageList.sort(new MessageComparator());
                 for (Message i : messageList) {
                     session.getBasicRemote().sendText(JSON.toJSONString(i));
