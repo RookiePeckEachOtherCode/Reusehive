@@ -13,7 +13,9 @@
 
     <div class="UploadImg">
       <t-form-item label="头像" name="avatar" style="display:flex;">
-        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar">
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"
+                  :size-limit="{ size: 5, unit: 'MB' }"
+        >
           <template #addContent>
             <div class="add-content">
               <t-image
@@ -25,7 +27,9 @@
         </t-upload>
       </t-form-item>
       <t-form-item label="背景">
-        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1" :onRemove="onRemoveBackImg">
+        <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1" :onRemove="onRemoveBackImg"
+                  :size-limit="{ size: 5, unit: 'MB' }"
+        >
           <template #addContent>
             <div class="add-content">
               <t-image

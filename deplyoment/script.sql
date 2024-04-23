@@ -65,21 +65,22 @@ CREATE TABLE message
 
 CREATE TABLE item_image
 (
-    id      BIGINT PRIMARY KEY,
-    item_id BIGINT,
+    id        BIGINT PRIMARY KEY,
+    item_id   BIGINT,
     image_url VARCHAR(255),
 
     INDEX (item_id),
     FOREIGN KEY (item_id) REFERENCES item (id)
 );
 
-create table  collections(
-    id bigint primary key ,
+create table collections
+(
+    id      bigint primary key,
     item_id bigint,
-    uid bigint,
+    uid     bigint,
 
-    index (uid),
-    foreign key (item_id) references item(id),
-    foreign key (uid) references user(id)
+    index (item_id, uid),
+    foreign key (item_id) references item (id),
+    foreign key (uid) references user (id)
 
 );

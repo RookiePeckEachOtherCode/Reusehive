@@ -168,7 +168,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    @Cacheable(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
+//    @Cacheable(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
     public List<ItemDetail> getCollectionItems(Long uid) {
         List<Collection> collections = QueryChain.of(collectionMapper)
                 .where(CollectionTableDef.COLLECTION.UID.eq(uid))
@@ -180,33 +180,28 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
+//    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid")
     public void addCollectionItem(Long uid, Long item_id) {
-        Collection collection = new Collection();
-        collection.setUid(uid);
-        collection.setItemId(item_id);
-        collection.setId(null);
+        Collection collection = new Collection(null, uid, item_id);
         collectionMapper.insert(collection);
     }
 
     @Override
-    @Cacheable(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
+//    @Cacheable(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
     public Boolean isCollected(Long uid, Long item_id) {
-        return QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).exists();
-
+        return QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).one() != null;
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
-            }
-    )
+//    @Caching(
+//            evict = {
+//                    @CacheEvict(value = CacheKey.COLLECTION_LIST_UID, key = "#uid"),
+//                    @CacheEvict(value = CacheKey.USER_COLLECTION_ITEM_IS, key = "#uid + '-' + #item_id")
+//            }
+//    )
     public void deleteItemFromCollections(Long uid, Long item_id) {
         Collection collection = QueryChain.of(collectionMapper).where(CollectionTableDef.COLLECTION.UID.eq(uid).and(CollectionTableDef.COLLECTION.ITEM_ID.eq(item_id))).one();
         collectionMapper.deleteById(collection.getId());
-
     }
 
     @Override
