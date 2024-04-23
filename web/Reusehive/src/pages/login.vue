@@ -74,6 +74,7 @@ const goToRegister = () => {
   .login-header {
     width: 100vw;
     height: 220px;
+
     background: #95d475;
     display: flex;
     align-items: center;

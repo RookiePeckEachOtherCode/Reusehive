@@ -42,7 +42,7 @@ export const registerApi = (data: {
 export const userChatInfoApi = () => {
     return $http({
         method: "get",
-        url: "http://127.0.0.1:8888/user/chatsinfo",
+        url: "http://127.0.0.1:4523/m1/4280410-0-default/user/chatsinfo",
     });
 };
 

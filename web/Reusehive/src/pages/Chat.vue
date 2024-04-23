@@ -72,16 +72,21 @@ onMounted(async ()=>{
   touserinfo.name = route.query.tousername;
   touserinfo.id=route.query.touserid;
   const res=await getUserInfoByName({name:touserinfo.name});
-
+  touserinfo.avatar=res.data.avatar_img
 
   const info=await  getUserInfoByName({name:LocalStorage().getusername()})
-  userinfo.id=info.data.id;
+  userinfo.id=info.data.id.toString();
   userinfo.avatar=info.data.avatar_img;
   userinfo.name=info.data.name;
 
   url=url+userinfo.name+"/"+touserinfo.name;
+
   await init();
 })
+onUnmounted(()=>{
+  socket.close();
+})
+
 const init=async ()=>{
   socket = new WebSocket(url);
   socket.onopen = function () {
@@ -99,13 +104,13 @@ const init=async ()=>{
     console.log("websocket error,please check back side");
   }
 }
-const send=()=>{
+const send=async ()=>{
   if(text.value===null){
     ElMessage.error("不能发送空字符");
     return
   }
-  socket.send(text.value);
-  List.value.push({
+  await socket.send(text.value);
+   List.value.push({
     content:text.value,
     fromusername:userinfo.name,
     tousername:touserinfo.name,
