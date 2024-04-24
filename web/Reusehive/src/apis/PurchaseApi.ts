@@ -23,3 +23,17 @@ export const CreatePurchase = (data: { item_id: string, item_uid: string, price:
     })
 
 }
+export const EndPurchase = (data: { purchase_id: string }) => {
+    return $http({
+        method: "post",
+        url: "http://127.0.0.1:8888/purchase/end",
+        params: data
+    })
+}
+export const CancelPurchase = (data: { purchase_id: string }) => {
+    return $http({
+        method: "post",
+        url: "http://127.0.0.1:8888/purchase/cancel",
+        params: data
+    })
+}
