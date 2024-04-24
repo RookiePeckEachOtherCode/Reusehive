@@ -61,7 +61,7 @@ public class MinioUtils {
         minioClient.putObject(objectArgs);
 
 
-        return minioConfigProp.getEndpoint() + "/" + bucket + "/" + fileCode;
+        return minioConfigProp.getImgHost() + "/" + bucket + "/" + fileCode;
     }
 
     private void DeleteImg(String fileName, String bucket) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {

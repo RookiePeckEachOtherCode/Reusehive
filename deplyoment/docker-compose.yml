@@ -26,6 +26,33 @@ services:
       MINIO_ROOT_PASSWORD: 1145141918
     command: server --console-address ':9001' /data
     privileged: true
+  service:
+    image: beriholic/reusehive:0.1.0
+    ports:
+      - "8888:8888"
+    environment:
+      - SERVER_PORT=8888
+      - MYSQL_HOST=database
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=reusehive
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=123456
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=123456
+      - REDIS_DATABASE=0
+      - MINIO_HOST=http://oss:9000
+      - MINIO_ACCESS_KEY=^1145141919810
+      - MINIO_SECRET_KEY=^1145141919810
+      - IMG_HOST=http://xxxxxx:xxx
+    depends_on:
+      - database
+      - cache
+      - oss
+    links:
+      - database
+      - cache
+      - oss
 
 
 
