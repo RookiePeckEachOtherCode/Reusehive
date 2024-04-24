@@ -1,11 +1,13 @@
 import type {AxiosRequestConfig} from 'axios';
 import axios, {AxiosError} from "axios";
 import JSONbig from 'json-bigint';
-import {ElLoading, ElMessage} from "element-plus";
+import {ElLoading} from "element-plus";
 import {Toast} from "tdesign-mobile-vue";
+import {LocalStorage} from "../storage/LocalStorage.ts";
 
 export const httpInstance = axios.create();
-//httpInstance.defaults.baseURL="/api/"
+httpInstance.defaults.baseURL = LocalStorage().gethost() ?? "";
+
 httpInstance.defaults.transformResponse = [
     function (data) {
         try {
@@ -32,7 +34,7 @@ export const $http = async (config: AxiosRequestConfig) => {
     //httpInstance.defaults.withCredentials = true;
     try {
         const axiosResponse = await httpInstance(config);
-        if(axiosResponse.data.code!==1){
+        if (axiosResponse.data.code !== 1) {
             Toast(axiosResponse.data.msg)
         }
 

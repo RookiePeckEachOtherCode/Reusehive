@@ -1,13 +1,10 @@
 import {$http} from "./index";
-import {LocalStorage} from "../storage/LocalStorage.ts";
 
 export const loginApi = (data: { password: string; name: string }) => {
-    const host=LocalStorage().gethost()
     return $http({
-
         method: "post",
         // url: "http://127.0.0.1:4523/m1/4280410-3922518-default/user/login",
-        url: host+"/user/login",
+        url: "/user/login",
         params: data,
         headers: {},
     });
@@ -34,45 +31,41 @@ export const registerApi = (data: {
     formData.append("gender", data.gender);
     formData.append("avatar_img", data.avatar_img.raw);
     formData.append("back_img", data.back_img.raw);
-    const host=LocalStorage().gethost()
+
 
     return $http({
         method: "post",
-        url: host+"/user/register",
+        url: "/user/register",
         data: formData
     })
 }
 
 export const userChatInfoApi = () => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/user/chatsinfo",
-        url: host+"/user/chatsinfo"
+        url: "/user/chatsinfo"
     });
 };
 
 export const getUserInfoByUidApi = (data: { id: string }) => {
-    const host=LocalStorage().gethost()
-    const url = host+"/user/" + data.id;
+    const url = "/user/" + data.id;
     return $http({
         method: "get",
         url: url,
     });
 };
 export const getUserInfoByName = (data: { name: string }) => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/user/name/" + data.name,
+        url: "/user/name/" + data.name,
     })
 
 }
 export const getCurrentUserInfo = () => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/me"
+        url: "/me"
     })
 }
 export const UploadUserInfo = (data: {
@@ -100,43 +93,39 @@ export const UploadUserInfo = (data: {
     if (data.back_img != null) {
         formData.append("back_img", data.back_img.raw);
     }
-    const host=LocalStorage().gethost()
+
     return $http({
         method: "post",
-        url: host+"/user/update",
+        url: "/user/update",
         data: formData
     })
 }
 export const getAllUserInfoApi = () => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/user/all",
+        url: "/user/all",
     })
 }
 export const verifylogin = () => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/user/verify",
+        url: "/user/verify",
         //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
     })
 }
 
 export const getUserItemList = (data: { id: string }) => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/item/user/" + data.id
+        url: "/item/user/" + data.id
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/user/" + data.id
     })
 }
 
 export const getUserItemInfo = (data: { id: string }) => {
-    const host=LocalStorage().gethost()
     return $http({
         method: "get",
-        url: host+"/user-items/" + data.id
+        url: "/user-items/" + data.id
         // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/user/" + data.id
     })
 }

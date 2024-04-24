@@ -23,7 +23,7 @@ public class SaTokenConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/register")
-                .excludePathPatterns("/chat/lingluo/1")
+                .excludePathPatterns("/setting")
         ;
 
 /*

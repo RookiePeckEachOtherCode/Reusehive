@@ -1,4 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
+import Main from "../layout/main.vue";
+import ItemList from "../pages/item-list.vue";
+import Userhome from "../pages/userhome.vue";
 
 const router = createRouter({
     end: undefined,
@@ -6,10 +9,6 @@ const router = createRouter({
     sensitive: undefined,
     strict: undefined,
     routes: [
-        {
-            path: "/*",
-            redirect: "/login",
-        },
         {
             path: "/login",
             name: "login",
@@ -80,10 +79,8 @@ const router = createRouter({
             path: "/main",
             name: "main",
             redirect: "/main/item-list",
-            component: () => import("../layout/main.vue"),
+            component: () => Main,
             children: [
-
-
                 {
                     path: "message",
                     name: "message",
@@ -92,7 +89,7 @@ const router = createRouter({
                 {
                     path: "item-list",
                     name: "item-list",
-                    component: () => import("../pages/item-list.vue"),
+                    component: () => ItemList
                 },
 
                 {
@@ -103,7 +100,7 @@ const router = createRouter({
                 {
                     path: "home",
                     name: "home",
-                    component: () => import("../pages/userhome.vue"),
+                    component: () => Userhome
                 },
             ],
         },
@@ -111,7 +108,7 @@ const router = createRouter({
 });
 export default router;
 
-const whiteList = ['/login', '/register']
+const whiteList = ['/login', '/register', '/setting']
 
 router.beforeEach((to, _from, next) => {
         if (localStorage.getItem('token') == null) {
