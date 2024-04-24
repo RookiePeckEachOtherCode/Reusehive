@@ -8,6 +8,8 @@ public class CacheKey {
 
     //根据id获取item_detail
     public static final String ITEM_DETAIL_ID = "item_detail_id";
+    //根据uid获取item_list(undo)
+    public static final String ITEM_LIST_UNDO_UID = "item_list_undo_uid";
     //根据uid获取item_list
     public static final String ITEM_LIST_UID = "item_list_uid";
     //获取所有item
@@ -21,5 +23,6 @@ public class CacheKey {
     public static final String COLLECTION_LIST_UID = "collection_list_uid";
     //用户是否收藏
     public static final String USER_COLLECTION_ITEM_IS = "user_collection_item_is";
+
 
 }

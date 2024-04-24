@@ -1,6 +1,7 @@
 package com.reusehive.service.impl;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.util.UpdateEntity;
 import com.reusehive.consts.ItemStatus;
@@ -52,7 +53,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public void PurchaseComplete(Long purchase_id) {
+        var uid = StpUtil.getLoginIdAsLong();
         PurchaseInfo purchaseInfo = GetPurchaseInfoById(purchase_id);
+
+        if (!(purchaseInfo.getUid().equals(uid) || purchaseInfo.getItemUid().equals(uid))) {
+            throw new RuntimeException("无权确认交易");
+        }
+
 
         var itemId = itemService.getSingleItemById(purchaseInfo.getItemId()).getId();
         itemService.setItemStatus(itemId, ItemStatus.DONE);
@@ -84,7 +91,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public void CanclePurchase(Long purchase_id) {
+        var currentUid = StpUtil.getLoginIdAsLong();
         PurchaseInfo purchaseInfo = GetPurchaseInfoById(purchase_id);
+
+        if (!(purchaseInfo.getUid().equals(currentUid) || purchaseInfo.getItemUid().equals(currentUid))) {
+            throw new RuntimeException("无权取消交易");
+        }
+
         var itemId = purchaseInfo.getItemId();
         itemService.setItemStatus(itemId, ItemStatus.UNDO);
         purchaseMapper.deleteById(purchase_id);

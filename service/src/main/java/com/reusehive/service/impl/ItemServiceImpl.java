@@ -86,6 +86,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
     public List<ItemDetail> getItemByUidWithUNDO(Long uid) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.UID.eq(uid))
@@ -113,7 +114,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#item.id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void updateItem(Item item, Long uid) {
@@ -133,7 +135,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void deleteItem(Long id, Long uid) {
@@ -151,7 +154,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void updateItemStatus(Long id, long uid, int status) {
@@ -225,7 +229,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDetail> searchItemByCondition(String Condition) {
         return QueryChain.of(itemMapper)
-                .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition).or(ItemTableDef.ITEM.NAME.like(Condition)))
+                .where(ItemTableDef.ITEM.ITEM_TYPE.like(Condition)
+                        .or(ItemTableDef.ITEM.NAME.like(Condition))
+                        .or(ItemTableDef.ITEM.DESCRIPTION.like(Condition))
+                ).where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
                 .list()
                 .stream()
                 .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
@@ -236,7 +243,9 @@ public class ItemServiceImpl implements ItemService {
     @Caching(
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#item_id"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#item_id"),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#item_id")
             }
     )
     public void setItemStatus(Long item_id, int status) {

@@ -207,6 +207,9 @@ public class UserController {
         }
     }
 
+    /**
+     * 验证token
+     */
     @GetMapping("/user/verify")
     public Result<Boolean> VerifyToken() {
         return Result.ok(StpUtil.isLogin());
