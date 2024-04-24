@@ -108,12 +108,19 @@ const router = createRouter({
         },
     ]
 });
-// router.beforeEach(async (to, from, next) => {
-//     const res= await verifylogin();
-//     if (res.data === false) {
-//        next("/login")
-//     } else {
-//         next()
-//     }
-// })
 export default router;
+
+const whiteList = ['/login', '/register']
+
+router.beforeEach((to, _from, next) => {
+        if (localStorage.getItem('token') == null) {
+            if (whiteList.indexOf(to.path) !== -1) {
+                next()
+            } else {
+                next({path: '/login'})
+            }
+        } else {
+            next()
+        }
+    }
+)
