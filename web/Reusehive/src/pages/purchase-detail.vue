@@ -100,6 +100,7 @@ import {CancelPurchase, EndPurchase, GetpurchaseInfoByPid} from "../apis/Purchas
 import {getItemByItemIdApi} from "../apis/ItemApi.ts";
 import {useRoute} from "vue-router";
 import router from "../router/index.ts";
+import {Toast} from "tdesign-mobile-vue";
 
 const route = useRoute();
 const Pinfo = reactive({
@@ -157,6 +158,7 @@ const getIinfo = async () => {
   const itemid = route.query.itemid;
   let res
   if (typeof itemid === 'string') res = await getItemByItemIdApi({id: itemid})
+  if(res.code!==1)Toast(res.msg)
   Iinfo.id = res.data.item.id.toString();
   Iinfo.uid = res.data.item.uid.toString();
   Iinfo.name = res.data.item.name;
@@ -167,6 +169,7 @@ const getIinfo = async () => {
 }
 const getSoler = async () => {
   const res = await getUserInfoByUidApi({id: Iinfo.uid});
+  if(res.code!==1)Toast(res.msg)
   solder.id = Iinfo.uid;
   solder.name = res.data.name;
   solder.avatar_img = res.data.avatar_img;
@@ -176,6 +179,7 @@ const getSoler = async () => {
 
 const getBuyer = async () => {
   const res = await getUserInfoByUidApi({id: Pinfo.uid})
+  if(res.code!==1)Toast(res.msg)
   buyer.name = res.data.name;
   buyer.id = res.data.id.toString();
   buyer.phone_number = res.data.phone_number;

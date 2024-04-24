@@ -7,7 +7,7 @@
   margin-top: 25vh;
   margin-left: 13vw;
 " src="https://zh.minecraft.wiki/images/Bee_Artwork.png?dfcc9"></t-image>
-  <div style="max-height: 86vh;overflow: auto">
+  <div style="max-height: 84vh;overflow: auto">
   <t-pull-down-refresh v-model="refreshing" @refresh="loadData" style="min-height: 86vh;background-color: white" >
     <t-list :async-loading="loading" >
       <t-cell v-for="item in List" :key="item.id"
@@ -32,6 +32,7 @@ import {userChatInfoApi} from "../apis/UserApi.ts";
 import {onMounted, ref,h} from "vue";
 import router from "../router";
 import { ChevronRightIcon } from 'tdesign-icons-vue-next';
+import {Toast} from "tdesign-mobile-vue";
 const chevronRightIcon = () => h(ChevronRightIcon);
 const loading = ref('');
 const refreshing = ref(false);
@@ -41,6 +42,7 @@ onMounted(async ()=>{
 })
 const loadData=async ()=>{
   const res=await userChatInfoApi();
+  if(res.code!==1)Toast(res.msg)
   List.value=res.data;
   return true;
 }

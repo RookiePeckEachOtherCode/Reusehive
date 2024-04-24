@@ -89,7 +89,7 @@ const onSubmit = () => {
             console.log('发布失败')
         }
         router.push({
-            path: '/main'
+            path: '/main/item-list'
         })
     })
 }

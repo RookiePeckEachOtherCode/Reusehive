@@ -326,6 +326,7 @@
 import router from "../router";
 import {onMounted, reactive} from "vue";
 import {getCurrentUserInfo} from '../apis/UserApi.ts'
+import {Toast} from "tdesign-mobile-vue";
 
 const userinfo = reactive({
   name: "",
@@ -343,6 +344,7 @@ const goinfo = () => {
 }
 const getinfo = async () => {
   await getCurrentUserInfo().then(res => {
+    if(res.code!==1)Toast(res.msg)
     userinfo.name = res.data.name
     userinfo.id = res.data.id.toString()
     userinfo.academy = res.data.academy;

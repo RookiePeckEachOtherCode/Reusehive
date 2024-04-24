@@ -2,6 +2,7 @@ import type {AxiosRequestConfig} from 'axios';
 import axios, {AxiosError} from "axios";
 import JSONbig from 'json-bigint';
 import {ElLoading, ElMessage} from "element-plus";
+import {Toast} from "tdesign-mobile-vue";
 
 export const httpInstance = axios.create();
 //httpInstance.defaults.baseURL="/api/"
@@ -31,11 +32,15 @@ export const $http = async (config: AxiosRequestConfig) => {
     //httpInstance.defaults.withCredentials = true;
     try {
         const axiosResponse = await httpInstance(config);
+        if(axiosResponse.data.code!==1){
+            Toast(axiosResponse.data.msg)
+        }
+
         return axiosResponse.data;
     } catch (err) {
         if (err instanceof AxiosError) {
             console.log(err);
-            ElMessage.error("请求异常")
+            Toast("服务器内部错误,请检查表单是否填满")
         }
     } finally {
         loadingInstance.close();

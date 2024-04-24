@@ -26,6 +26,7 @@ import {SerachItem} from "../apis/ItemApi.ts";
 import {DrawerItem} from "tdesign-mobile-vue/es/drawer";
 import {getUserInfoByName} from "../apis/UserApi.ts";
 import {LocalStorage} from "../storage/LocalStorage.ts";
+import {Toast} from "tdesign-mobile-vue";
 const List=ref([])
 const theme=ref("切换到失物悬赏列表")
 const uid=ref("")
@@ -37,7 +38,10 @@ onMounted(async ()=>{
 })
 const onSerach= async (condition:string)=>{
   const res=await SerachItem({condition:condition})
-  List.value=res.data;
+  if(res?.code===1)List.value=res.data;
+  else{
+    Toast(res?.msg)
+  }
 }
 const baseSidebar = ref([
   {

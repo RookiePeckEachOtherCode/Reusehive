@@ -4,7 +4,7 @@
       <t-image :src="fimage" :style="{ width: '20vh', height: '25vh' }" fit=" cover" shape="round"></t-image>
     </div>
     <div class="item-desc">
-      {{ item!.description }}
+      {{ item!.name }}
     </div>
     <div class="price">
       <span class="symbol">¥</span>

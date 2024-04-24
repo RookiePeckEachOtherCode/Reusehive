@@ -61,6 +61,7 @@ import {addCollection, deleteCollection, getItemByItemIdApi, isCollected} from '
 import {getUserInfoByUidApi} from '../apis/UserApi';
 import ItemDetail from '../model/itemDetail.ts';
 import {CreatePurchase} from "../apis/PurchaseApi.ts";
+import { Toast } from 'tdesign-mobile-vue';
 
 const chatIcon = () => h(ChatIcon, {size: '24px'})
 // const starIcon = () => h(StarIcon, { size: '24px' })
@@ -78,6 +79,9 @@ onMounted(async () => {
       res => user.value = res.data
   )
   await CheckCollected()
+
+  // console.log(item.value)
+  // console.log(user.value)
 })
 
 const item = ref<ItemDetail>(new ItemDetail());
@@ -94,10 +98,13 @@ const buy = async () => {
     item_uid: item.value.item.uid.toString(),
     price: item.value.item.prices,
   })
-  await router.push({
+  if(res?.data)await router.push({
     name: "PurchaseDetail",
     query: {purchaseid: res.data.toString(), itemid: item.value.item.id.toString()}
   })
+  else{
+    Toast(res.msg)
+  }
 }
 
 const collected = ref(false)
@@ -113,6 +120,7 @@ const CheckCollected = async () => {
   })
 }
 const UseCollection = async () => {
+  
   if (collected.value) {
     await deleteCollection({item_id: item.value.item.id.toString()}).then(_ => {
       collected.value = false

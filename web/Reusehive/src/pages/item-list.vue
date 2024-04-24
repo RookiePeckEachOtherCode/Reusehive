@@ -132,6 +132,7 @@ const onSearch = async () => {
   itemDetails.value = await SerachItem({condition: searchCondition.value}).then(res => {
     // return res.data
     if (res.code == 1) {
+      itemDetails.value=[]
       return res.data;
     } else {
       notify_err(res.msg)

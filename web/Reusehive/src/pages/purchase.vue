@@ -31,6 +31,7 @@ import {GetpurchaseList} from "../apis/PurchaseApi.ts";
 import {onMounted, ref} from "vue";
 import {getItemByItemIdApi} from "../apis/ItemApi.ts";
 import router from "../router/index.ts";
+import {Toast} from "tdesign-mobile-vue";
 
 const List = ref([]);
 
@@ -40,6 +41,7 @@ onMounted(async () => {
 })
 const refresh = async () => {
   const res = await GetpurchaseList();
+  if(res.code!==1)Toast(res.msg)
   List.value = []
   console.log(res)
   if (res.data !== null) for (const info of res.data) {

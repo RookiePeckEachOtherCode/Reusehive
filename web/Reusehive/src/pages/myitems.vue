@@ -30,6 +30,7 @@ import {getUserInfoByName, getUserItemList} from "../apis/UserApi.ts";
 import {onMounted, reactive, ref} from "vue";
 import {LocalStorage} from "../storage/LocalStorage.ts";
 import router from "../router/index.ts";
+import {Toast} from "tdesign-mobile-vue";
 
 const userinfo = reactive({
   id: "",
@@ -39,8 +40,10 @@ const List = ref([])
 onMounted(async () => {
   userinfo.name = LocalStorage().getusername()
   let res = await getUserInfoByName({name: LocalStorage().getusername()})
+  if(res.code!==1)Toast(res.msg)
   userinfo.id = res.data.id.toString()
   res = await getUserItemList({id: userinfo.id})
+  if(res.code!==1)Toast(res.msg)
   List.value = res.data
 
 })
