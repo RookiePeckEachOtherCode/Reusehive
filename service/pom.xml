@@ -10,8 +10,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.reusehive</groupId>
-    <artifactId>service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>reusehive</artifactId>
+    <version>0.1.0</version>
 
     <dependencies>
         <dependency>

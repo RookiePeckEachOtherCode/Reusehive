@@ -14,6 +14,11 @@
       "name": "minio.accessKey",
       "type": "java.lang.String",
       "description": "Description for minio.accessKey."
+    },
+    {
+      "name": "minio.imgHost",
+      "type": "java.lang.String",
+      "description": "Description for minio.imgHost."
     }
   ]
 }
