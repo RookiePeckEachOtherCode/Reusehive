@@ -8,7 +8,7 @@
     <ul style="list-style-type: none">
     <li v-for="mes in List"  style="margin-top: 20px; list-style-type: none;margin-left: -30px">
       <div v-if="mes.tousername===userinfo.name" style="display: flex;">
-        <el-avatar :src="touserinfo.avatar" :size="50" style="" ></el-avatar>
+        <el-avatar :src="touserinfo.avatar" :size="50" style=""  @click="gouserinfo(touserinfo.id)"></el-avatar>
         <el-text  style="
         word-break: break-all;
         word-wrap: break-word;
@@ -22,7 +22,7 @@
 " >{{mes.content}}</el-text>
       </div>
       <div v-if="mes.tousername===touserinfo.name" style="display: flex; flex-direction: row-reverse;margin-top: 20px" >
-        <el-avatar :src="userinfo.avatar" :size="50" style="margin-right: 10px"></el-avatar>
+        <el-avatar :src="userinfo.avatar" :size="50" style="margin-right: 10px" @click="gouserinfo(touserinfo.id)"></el-avatar>
         <el-text style="font-size: 16px;
         margin-right: 10px;
         background-color:rgba(234,226,69,0.67);
@@ -119,6 +119,9 @@ const send=async ()=>{
 }
 const exit=()=>{
   router.push({name:"message"})
+}
+const gouserinfo=(id)=>{
+  router.push({name:"user-info",query:{id:id}})
 }
 </script>
 <style scoped></style>
