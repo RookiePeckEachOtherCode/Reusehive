@@ -86,6 +86,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
     public List<ItemDetail> getItemByUidWithUNDO(Long uid) {
         return QueryChain.of(itemMapper)
                 .where(ItemTableDef.ITEM.UID.eq(uid))
@@ -113,7 +114,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#item.id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void updateItem(Item item, Long uid) {
@@ -133,7 +135,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void deleteItem(Long id, Long uid) {
@@ -151,7 +154,8 @@ public class ItemServiceImpl implements ItemService {
             evict = {
                     @CacheEvict(value = CacheKey.ITEM_DETAIL_ID, key = "#id"),
                     @CacheEvict(value = CacheKey.ITEM_LIST_UID, key = "#uid"),
-                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UNDO_UID, key = "#uid")
             }
     )
     public void updateItemStatus(Long id, long uid, int status) {

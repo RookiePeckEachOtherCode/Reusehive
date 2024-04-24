@@ -62,11 +62,6 @@ const router = createRouter({
             component: () => import("../pages/myitems.vue")
         },
         {
-            path: "/edititems",
-            name: "edititems",
-            component: () => import("../pages/edititem.vue")
-        },
-        {
             path: "/item-edit",
             name: "item-edit",
             component: () => import("../pages/item-edit.vue")
