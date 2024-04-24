@@ -6,6 +6,9 @@ export const LocalStorage=defineStore("main-store",()=>{
         localStorage.setItem("user_id", userId);
         localStorage.setItem("username",username)
     };
+    const setHost=(host:string)=>{
+        localStorage.setItem("host",host);
+    }
     const CheckToken = () => {
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("user_id");
@@ -29,6 +32,9 @@ export const LocalStorage=defineStore("main-store",()=>{
     const getusername=()=>{
         return localStorage.getItem("username");
     }
+    const gethost=()=>{
+        return localStorage.getItem("host");
+    }
     return {
         setToken,
         CheckToken,
@@ -36,6 +42,8 @@ export const LocalStorage=defineStore("main-store",()=>{
         getUserId,
         getToken,
         getusername,
+        setHost,
+        gethost,
     };
 
 });

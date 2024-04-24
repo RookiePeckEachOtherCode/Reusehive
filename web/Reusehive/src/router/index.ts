@@ -79,6 +79,7 @@ const router = createRouter({
         {
             path: "/main",
             name: "main",
+            redirect: "/main/item-list",
             component: () => import("../layout/main.vue"),
             children: [
 
