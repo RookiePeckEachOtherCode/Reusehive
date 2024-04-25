@@ -354,13 +354,13 @@ const getinfo = async () => {
   })
 }
 const GoCollections = () => {
-  router.push({name: "collections", query: {uid: userinfo.id}})
+  router.replace({name: "collections", query: {uid: userinfo.id}})
 }
 const gosell = async () => {
-  await router.push({name: "myitems"});
+  await router.replace({name: "myitems"});
 }
 const goToSetting = () => {
-  router.push({name: "setting"})
+  router.replace({name: "setting"})
 }
 </script>
 <style lang="scss" scoped>

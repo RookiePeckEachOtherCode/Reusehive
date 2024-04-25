@@ -47,7 +47,7 @@ const loadData=async ()=>{
   return true;
 }
 const gochat=(name,id)=>{
-  router.push({name:"chat",query:{tousername:name,touserid:id}});
+  router.replace({name:"chat",query:{tousername:name,touserid:id}});
 
 }
 

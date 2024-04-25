@@ -48,14 +48,14 @@ onMounted(async () => {
 
 })
 const GoItemDetail = (tid) => {
-  router.push({name: "item", query: {uid: userinfo.id, tid: tid}})
+  router.replace({name: "item", query: {uid: userinfo.id, tid: tid}})
 }
 const exit = () => {
   router.back();
 }
 const goedit = (tid) => {
   // router.push({name:"edititems",query:{tid:tid}})
-  router.push({name: "item-edit", query: {tid: tid}})
+  router.replace({name: "item-edit", query: {tid: tid}})
 }
 </script>
 

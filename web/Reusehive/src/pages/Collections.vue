@@ -36,7 +36,7 @@ const getList = async () => {
 }
 const GoItemDetail = (tid) => {
   const uid = route.query.uid
-  router.push({name: "item", query: {uid: uid, tid: tid}})
+  router.replace({name: "item", query: {uid: uid, tid: tid}})
 }
 const exit = () => {
   router.back();

@@ -128,7 +128,7 @@ const onSubmit = async () => {
 
   await registerApi(formData).then(res => {
     if (res.code == 1) {
-      router.push({name: "login"});
+      router.replace({name: "login"});
     } else {
       notify_err(res.msg)
     }

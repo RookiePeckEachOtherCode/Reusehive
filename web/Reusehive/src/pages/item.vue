@@ -90,7 +90,7 @@ const goBack = () => {
   router.back();
 }
 const gochat = () => {
-  router.push({name: "chat", query: {tousername: user.value.name.toString(), touserid: user.value.id.toString()}});
+  router.replace({name: "chat", query: {tousername: user.value.name.toString(), touserid: user.value.id.toString()}});
 }
 const buy = async () => {
   const res = await CreatePurchase({
@@ -133,7 +133,7 @@ const UseCollection = async () => {
 }
 
 const goToInfo = () => {
-  router.push({name: "user-info", query: {id: user.value.id.toString()}});
+  router.replace({name: "user-info", query: {id: user.value.id.toString()}});
 }
 </script>
 

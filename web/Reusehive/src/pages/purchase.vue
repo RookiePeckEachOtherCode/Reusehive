@@ -64,7 +64,7 @@ const refresh = async () => {
 }
 
 const godetail = (itemid, purchaseid) => {
-  router.push({name: "PurchaseDetail", query: {itemid: itemid, purchaseid: purchaseid}})
+  router.replace({name: "PurchaseDetail", query: {itemid: itemid, purchaseid: purchaseid}})
 }
 
 </script>

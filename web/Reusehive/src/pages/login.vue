@@ -46,19 +46,18 @@ import router from "../router";
 import {LocalStorage} from "../storage/LocalStorage.ts";
 import {LockOnIcon, UserCircleIcon} from "tdesign-icons-vue-next"
 import {notify_err} from "../utils/notify.ts";
-
-
 const form = reactive({
   username: "",
   password: "",
 });
 
 const login = async () => {
-  await loginApi({password: form.password, name: form.username}).then(res => {
+
+  await loginApi({password: form.password, name: form.username}).then(async res => {
     if (res.code == 1) {
       localStorage.setItem("token", res.data)
       LocalStorage().setToken(res.data, '14514', form.username)
-      router.push({name: "item-list"})
+      await router.replace({name: "item-list"})
     } else {
       notify_err(res.msg)
     }
@@ -68,10 +67,10 @@ const login = async () => {
 }
 
 const goToRegister = () => {
-  router.push({name: "register"})
+  router.replace({name: "register"})
 }
 const gosetting=()=>{
-  router.push({name:"setting"})
+  router.replace({name:"setting"})
 }
 
 </script>

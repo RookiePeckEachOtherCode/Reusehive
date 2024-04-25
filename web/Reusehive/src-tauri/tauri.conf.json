@@ -6,7 +6,8 @@
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "npm run build",
-    "frontendDist": "../dist"
+    "frontendDist": "../dist",
+    "withGlobalTauri": true
   },
   "app": {"windows": [
       {
@@ -29,5 +30,13 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "tauri": {
+    "allowlist": {
+      "http": {
+        "all": true,
+        "request": true
+      }
+    }
   }
 }

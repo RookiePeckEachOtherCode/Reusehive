@@ -143,10 +143,10 @@ const onSearch = async () => {
   isLoading.value = false;
 }
 const gosell = async () => {
-  await router.push({name: "itme-new"})
+  await router.replace({name: "itme-new"})
 }
 const golostfind=async ()=>{
-  await  router.push({name:"lostfind"})
+  await  router.replace({name:"lostfind"})
 }
 </script>
 

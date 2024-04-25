@@ -186,7 +186,7 @@ const getBuyer = async () => {
   buyer.academy = res.data.academy;
 }
 const exit = () => {
-  router.push({name: "purchase"})
+  router.replace({name: "purchase"})
 }
 const sevenday = () => {
   if (Pinfo.lock !== true) return true
@@ -197,17 +197,17 @@ const sevenday = () => {
   return daysDiff >= 7;
 }
 const gochat = (name, id) => {
-  router.push({name: "chat", query: {tousername: name, touserid: id}});
+  router.replace({name: "chat", query: {tousername: name, touserid: id}});
 }
 const endPurchase = () => {
   EndPurchase({purchase_id: Pinfo.id}).then(res => {
-    router.push({name: "purchase"})
+    router.replace({name: "purchase"})
   })
 
 }
 const cancelPurchase = () => {
   CancelPurchase({purchase_id: Pinfo.id}).then(res => {
-    router.push({name: "purchase"})
+    router.replace({name: "purchase"})
   })
 }
 </script>

@@ -118,10 +118,10 @@ const send=async ()=>{
   text.value=null;
 }
 const exit=()=>{
-  router.push({name:"message"})
+  router.replace({name:"message"})
 }
 const gouserinfo=(id)=>{
-  router.push({name:"user-info",query:{id:id}})
+  router.replace({name:"user-info",query:{id:id}})
 }
 </script>
 <style scoped></style>
