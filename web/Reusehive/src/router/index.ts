@@ -10,10 +10,6 @@ const router = createRouter({
     strict: undefined,
     routes: [
         {
-            path: "/",
-            redirect:"/main/item-list"
-        },
-        {
             path: "/login",
             name: "login",
             component: () => import("../pages/login.vue"),
@@ -80,9 +76,8 @@ const router = createRouter({
             component: () => import("../pages/user-info.vue")
         },
         {
-            path: "/main",
+            path: "/",
             name: "main",
-            redirect: "/main/item-list",
             component: () => Main,
             children: [
                 {
