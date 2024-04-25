@@ -100,19 +100,19 @@ export const UploadUserInfo = (data: {
         data: formData
     })
 }
-export const getAllUserInfoApi = () => {
-    return $http({
-        method: "get",
-        url: "/user/all",
-    })
-}
-export const verifylogin = () => {
-    return $http({
-        method: "get",
-        url: "/user/verify",
-        //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
-    })
-}
+// export const getAllUserInfoApi = () => {
+//     return $http({
+//         method: "get",
+//         url: "/user/all",
+//     })
+// }
+// export const verifylogin = () => {
+//     return $http({
+//         method: "get",
+//         url: "/user/verify",
+//         //url:"http://127.0.0.1:4523/m1/4280410-0-default/user/verify"
+//     })
+// }
 
 export const getUserItemList = (data: { id: string }) => {
     return $http({

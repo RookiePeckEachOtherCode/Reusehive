@@ -12,7 +12,7 @@
             :title="info.item.name"
             @click="GoItemDetail(info.item.id.toString())"
             :image="info.images[0]"
-            :description="info.item.itemType"
+            :description=info.item.description
     >
     </t-cell>
 
@@ -21,19 +21,20 @@
 </template>
 <script setup lang="ts">
 import router from "../router";
-import {ref,onMounted,h} from "vue";
+import {ref,onMounted} from "vue";
 import {SerachItem} from "../apis/ItemApi.ts";
 import {DrawerItem} from "tdesign-mobile-vue/es/drawer";
 import {getUserInfoByName} from "../apis/UserApi.ts";
 import {LocalStorage} from "../storage/LocalStorage.ts";
 import {Toast} from "tdesign-mobile-vue";
-const List=ref([])
+import ItemDetail from "../model/itemDetail.ts";
+const List=ref<Array<ItemDetail>>([])
 const theme=ref("切换到失物悬赏列表")
 const uid=ref("")
 onMounted(async ()=>{
    await onSerach("失物招领")
-    const res=await getUserInfoByName({name:LocalStorage().getusername()})
-  uid.value=res.data.id.toString()
+   const res=await getUserInfoByName({name:LocalStorage().getusername()??""})
+   uid.value=res.data.id.toString()
 
 })
 const onSerach= async (condition:string)=>{

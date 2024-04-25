@@ -5,7 +5,7 @@
     </div>
     <div class="app-body">
       <keep-alive>
-        <RouterView :key="$route.fullPath"></RouterView>
+        <RouterView></RouterView>
       </keep-alive>
     </div>
   </div>

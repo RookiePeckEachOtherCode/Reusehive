@@ -1,2 +1,4 @@
 target
 service/target
+web/Reusehive/src-tauri/gen
+web/Reusehive/src-tauri/target
