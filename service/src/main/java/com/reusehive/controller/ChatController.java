@@ -9,7 +9,10 @@ import jakarta.annotation.Resource;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.spi.CopyOnWrite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -29,17 +32,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @ServerEndpoint("/chat/{username}/{tousername}") //暴露的ws应用的路径
 public class ChatController {
+    @Setter
+    @Getter
+    private String username;
+
     private static ChatServiceImpl chatService;
     @Autowired
     public void setChatService(ChatServiceImpl service){
         ChatController.chatService=service;
     }
-    /** 当前在线客户端数量（线程安全的） */
-    private static AtomicInteger onlineClientNumber = new AtomicInteger(0);
+//    /** 当前在线客户端数量（线程安全的） */
+//    private static AtomicInteger onlineClientNumber = new AtomicInteger(0);
+//
+//    /** 当前在线客户端集合（线程安全的）：以键值对方式存储，key是连接的编号，value是连接的对象 */
+//    private static Map<String ,Session> onlineClientMap = new ConcurrentHashMap<>();
 
-    /** 当前在线客户端集合（线程安全的）：以键值对方式存储，key是连接的编号，value是连接的对象 */
-    private static Map<String ,Session> onlineClientMap = new ConcurrentHashMap<>();
-
+    private static CopyOnWriteArraySet<ChatController> sessions=new CopyOnWriteArraySet<ChatController>();
+    private  Session session;
     /**
      * 客户端与服务端连接成功
      * @param session
@@ -48,13 +57,14 @@ public class ChatController {
     @OnOpen
     public void onOpen(Session session,@PathParam("username") String username,@PathParam("tousername") String tousername){
         synchronized (session) {
-            onlineClientNumber.incrementAndGet();//在线数+1
-            onlineClientMap.put(username, session);//添加当前连接的session
-            log.info("时间[{}]：与用户[{}]的连接成功，当前连接编号[{}]，当前连接总数[{}]",
-                    new Date().toLocaleString(),
-                    username,
-                    session.getId(),
-                    onlineClientNumber);
+            this.setUsername(username);
+            this.session=session;
+            sessions.add(this);
+//            log.info("时间[{}]：与用户[{}]的连接成功，当前连接编号[{}]，当前连接总数[{}]",
+//                    new Date().toLocaleString(),
+//                    username,
+//                    session.getId(),
+//                    onlineClientNumber);
 
             try {
                 List<Message> messageList = chatService.getMessageList(username, tousername);
@@ -79,13 +89,15 @@ public class ChatController {
      */
     @OnClose
     public void onClose(Session session,@PathParam("username") String username){
-        onlineClientNumber.decrementAndGet();//在线数-1
-        onlineClientMap.remove(session.getId());//移除当前连接的session
-        log.info("时间[{}]：与用户[{}]的连接关闭，当前连接编号[{}]，当前连接总数[{}]",
-                new Date().toLocaleString(),
-                username,
-                session.getId(),
-                onlineClientNumber);
+//        onlineClientNumber.decrementAndGet();//在线数-1
+//        onlineClientMap.remove(session.getId());//移除当前连接的session
+        sessions.remove(this);
+//        log.info("时间[{}]：与用户[{}]的连接关闭，当前连接编号[{}]，当前连接总数[{}]",
+//                new Date().toLocaleString(),
+//                username,
+//                session.getId(),
+//                onlineClientNumber);
+        log.info(this.username+"link closed");
     }
 
     /**
@@ -111,7 +123,6 @@ public class ChatController {
      */
     @OnMessage
     public void onMsg(Session session,String message,@PathParam("username") String username,@PathParam("tousername") String tousername) throws IOException {
-
         log.info("时间[{}]：来自连接编号为[{}]的消息：[{}]",
                 new Date().toLocaleString(),
                 session.getId(),
@@ -120,29 +131,32 @@ public class ChatController {
     }
 
     //向所有客户端发送消息（广播）
-    private void sendAllMessage(String message){
-        Set<String> sessionIdSet = onlineClientMap.keySet(); //获得Map的Key的集合
-        for (String sessionId : sessionIdSet) { //迭代Key集合
-            Session session = onlineClientMap.get(sessionId); //根据Key得到value
-            session.getAsyncRemote().sendText(message); //发送消息给客户端
-        }
-    }
+//    private void sendAllMessage(String message){
+//        Set<String> sessionIdSet = onlineClientMap.keySet(); //获得Map的Key的集合
+//        for (String sessionId : sessionIdSet) { //迭代Key集合
+//            Session session = onlineClientMap.get(sessionId); //根据Key得到value
+//            session.getAsyncRemote().sendText(message); //发送消息给客户端
+//        }
+//    }
     private void sendMessage(String message,String username,String tousername){
-        Session session = onlineClientMap.get(username);
+
         Message nmsg=new Message();
         nmsg.setTousername(tousername);
         nmsg.setFromusername(username);
         nmsg.setContent(message);
         nmsg.setCreateTime(LocalDateTime.now());
         try {
-            session=onlineClientMap.get(tousername);
-            session.getAsyncRemote().sendText(JSON.toJSONString(nmsg));
+            for (ChatController chatController : sessions) {
+                if (chatController.getUsername().equals(username)) {
+                    session.getAsyncRemote().sendText(JSON.toJSONString(nmsg));
+                }
+            }
+//            session=onlineClientMap.get(tousername);
+//            session.getAsyncRemote().sendText(JSON.toJSONString(nmsg));
         }catch (NullPointerException e){
             log.info("对方用户不在线");
         }
         chatService.AddMessage(nmsg);
     }
-
-
 
 }

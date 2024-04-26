@@ -5,7 +5,7 @@
   --td-navbar-title-font-size:24px
 " />
   <div style="max-height: 82vh;overflow: auto">
-    <ul style="list-style-type: none">
+    <ul style="list-style-type: none;margin-bottom: 10vh">
     <li v-for="mes in List"  style="margin-top: 20px; list-style-type: none;margin-left: -30px">
       <div v-if="mes.tousername===userinfo.name" style="display: flex;">
         <el-avatar :src="touserinfo.avatar" :size="50" style=""  @click="gouserinfo(touserinfo.id)"></el-avatar>
@@ -95,7 +95,7 @@ const init=async ()=>{
   socket.onmessage=function (msg) {
     const parse = JSON.parse(msg.data);
     List.value.push(parse)
-    console.log(List.value)
+   // console.log(List.value)
   }
   socket.onclose = function () {
     console.log("websocket link has closed");
@@ -110,11 +110,11 @@ const send=async ()=>{
     return
   }
   await socket.send(text.value);
-   List.value.push({
-    content:text.value,
-    fromusername:userinfo.name,
-    tousername:touserinfo.name,
-  })
+  //  List.value.push({
+  //   content:text.value,
+  //   fromusername:userinfo.name,
+  //   tousername:touserinfo.name,
+  // })
   text.value=null;
 }
 const exit=()=>{

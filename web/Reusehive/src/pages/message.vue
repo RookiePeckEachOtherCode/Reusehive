@@ -43,8 +43,17 @@ onMounted(async ()=>{
 const loadData=async ()=>{
   const res=await userChatInfoApi();
   if(res.code!==1)Toast(res.msg)
-  List.value=res.data;
-  return true;
+  // 使用 Set 来过滤重复项
+  const uniqueIds = new Set();
+ res.data.filter(item => {
+    if (!uniqueIds.has(item.id.toString())) {
+      //console.log(uniqueIds)
+      List.value.push(item)
+      uniqueIds.add(item.id.toString());
+      return true;
+    }
+    return false;
+  });
 }
 const gochat=(name,id)=>{
   router.push({name:"chat",query:{tousername:name,touserid:id}});
