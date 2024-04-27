@@ -1,6 +1,6 @@
 # ReuseHive
 
-RuseHive，译名 `蜂巢回收`。是由的[牟俊洁](https://github.com/Beriholic) 和[赵震宇](https://github.com/lingluosama) 开发的一个校园二手交易app
+RuseHive，译名 `蜂巢回收`。一个校园二手交易app
 
 
 **接口文档**
