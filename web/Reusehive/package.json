@@ -14,7 +14,7 @@
     "@tauri-apps/plugin-http": "^2.0.0-beta.2",
     "@tauri-apps/plugin-shell": ">=2.0.0-beta.0",
     "axios": "^1.6.8",
-    "element-plus": "^2.7.0",
+    "element-plus": "^2.7.2",
     "json-bigint": "^1.0.0",
     "pinia": "^2.1.7",
     "sass": "^1.75.0",
