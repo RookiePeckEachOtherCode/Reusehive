@@ -1,7 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Main from "../layout/main.vue";
-import ItemList from "../pages/item-list.vue";
-import Userhome from "../pages/userhome.vue";
 
 const router = createRouter({
     end: undefined,
@@ -15,16 +13,21 @@ const router = createRouter({
             component: () => import("../pages/Login.vue"),
         },
         {
+            path: "/bar",
+            name: "bar",
+            component: () => import("../layout/TabBar.vue")
+        },
+        {
             path: "/register",
             name: "register",
             component: () => import("../pages/Register.vue")
 
         },
-        {
-            path: "/item",
-            name: "item",
-            component: () => import("../pages/item.vue"),
-        },
+        // {
+        //     path: "/item",
+        //     name: "item",
+        //     component: () => import("../pages/item.vue"),
+        // },
         {
             path: "/item/new",
             name: "item-new",
@@ -91,7 +94,7 @@ const router = createRouter({
                 {
                     path: "item-list",
                     name: "item-list",
-                    component: () => ItemList,
+                    component: () => import("../pages/item-list.vue"),
                     meta: {
                         showFather: true,
                     }
@@ -108,7 +111,7 @@ const router = createRouter({
                 {
                     path: "home",
                     name: "home",
-                    component: () => Userhome,
+                    component: () => import("../pages/userhome.vue"),
                     meta: {
                         showFather: true,
                     }

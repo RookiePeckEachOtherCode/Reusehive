@@ -1,44 +1,17 @@
 <template>
-
-  <div class="app-container">
-    <div v-if="showNavBar" class="app-header">
-    </div>
-    <div class="app-body">
+  <div class="h-screen flex flex-col">
+    <div class="content bg-white ">
       <keep-alive>
         <RouterView></RouterView>
       </keep-alive>
     </div>
-  </div>
-  <div class="app-footer">
-    <Tabs>
-    </Tabs>
+    <div>
+      <TabBar/>
+    </div>
   </div>
 </template>
 
 
 <script lang="ts" setup>
-import {ref} from "vue";
-import Tabs from "./Tabs.vue";
-
-const showNavBar = ref(true);
+import TabBar from "./TabBar.vue";
 </script>
-<style scoped>
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 92vh;
-
-  .app-body {
-    flex: 1;
-
-  }
-
-  .app-footer {
-    .app-footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-    }
-  }
-}
-</style>
