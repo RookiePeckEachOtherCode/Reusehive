@@ -12,12 +12,12 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
-            component: () => import("../pages/login.vue"),
+            component: () => import("../pages/Login.vue"),
         },
         {
             path: "/register",
             name: "register",
-            component: () => import("../pages/register.vue")
+            component: () => import("../pages/Register.vue")
 
         },
         {
@@ -27,7 +27,7 @@ const router = createRouter({
         },
         {
             path: "/item/new",
-            name: "itme-new",
+            name: "item-new",
             component: () => import("../pages/item-new.vue"),
         },
         {
@@ -84,22 +84,34 @@ const router = createRouter({
                     path: "message",
                     name: "message",
                     component: () => import("../pages/message.vue"),
+                    meta: {
+                        showFather: true,
+                    }
                 },
                 {
                     path: "item-list",
                     name: "item-list",
-                    component: () => ItemList
+                    component: () => ItemList,
+                    meta: {
+                        showFather: true,
+                    }
                 },
 
                 {
                     path: "purchase",
                     name: "purchase",
                     component: () => import("../pages/purchase.vue"),
+                    meta: {
+                        showFather: true,
+                    }
                 },
                 {
                     path: "home",
                     name: "home",
-                    component: () => Userhome
+                    component: () => Userhome,
+                    meta: {
+                        showFather: true,
+                    }
                 },
             ],
         },

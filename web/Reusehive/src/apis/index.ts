@@ -3,10 +3,10 @@ import axios, {AxiosError} from "axios";
 import JSONbig from 'json-bigint';
 import {ElLoading} from "element-plus";
 import {Toast} from "tdesign-mobile-vue";
-import {LocalStorage} from "../storage/LocalStorage.ts";
 
 export const httpInstance = axios.create();
-httpInstance.defaults.baseURL = LocalStorage().gethost() ?? "http://127.0.0.1:8888";
+// httpInstance.defaults.baseURL = LocalStorage().gethost() ?? "http://127.0.0.1:8888";
+httpInstance.defaults.baseURL = "http://127.0.0.1:8888";
 
 httpInstance.defaults.transformResponse = [
     function (data) {

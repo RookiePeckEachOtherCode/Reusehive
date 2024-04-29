@@ -1,44 +1,49 @@
 import {$http} from "./index";
 
-export const loginApi = (data: { password: string; name: string }) => {
+export const UserLogin = (data: { password: string; name: string }) => {
     return $http({
         method: "post",
         // url: "http://127.0.0.1:4523/m1/4280410-3922518-default/user/login",
         url: "/user/login",
         params: data,
-        headers: {},
     });
 };
-
-export const registerApi = (data: {
-    name: string,
-    password: string,
-    grade: string,
-    academy: string,
-    phone_number: string,
-    social_info: string,
-    avatar_img: any,
-    back_img: any,
-    gender: string,
-}) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("password", data.password);
-    formData.append("grade", data.grade);
-    formData.append("academy", data.academy);
-    formData.append("phone_number", data.phone_number);
-    formData.append("social_info", data.social_info);
-    formData.append("gender", data.gender);
-    formData.append("avatar_img", data.avatar_img.raw);
-    formData.append("back_img", data.back_img.raw);
-
-
+export const UserRegister = (data: { name: string, password: string, phone_number: string }) => {
     return $http({
         method: "post",
         url: "/user/register",
-        data: formData
+        params: data,
     })
 }
+// export const registerApi = (data: {
+//     name: string,
+//     password: string,
+//     grade: string,
+//     academy: string,
+//     phone_number: string,
+//     social_info: string,
+//     avatar_img: any,
+//     back_img: any,
+//     gender: string,
+// }) => {
+//     const formData = new FormData();
+//     formData.append("name", data.name);
+//     formData.append("password", data.password);
+//     formData.append("grade", data.grade);
+//     formData.append("academy", data.academy);
+//     formData.append("phone_number", data.phone_number);
+//     formData.append("social_info", data.social_info);
+//     formData.append("gender", data.gender);
+//     formData.append("avatar_img", data.avatar_img.raw);
+//     formData.append("back_img", data.back_img.raw);
+//
+//
+//     return $http({
+//         method: "post",
+//         url: "/user/register",
+//         data: formData
+//     })
+// }
 
 export const userChatInfoApi = () => {
     return $http({
