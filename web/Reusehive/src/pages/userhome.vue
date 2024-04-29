@@ -40,16 +40,32 @@
   <div class="profile-container" style="background-color: rgba(112,207,97,0.49) ">
 
     <div :style="{ 'background-image': 'url(' + userinfo.back_img + ')' }" class="profile-header">
-      <div class="profile-info">
-        <el-avatar :src="userinfo.avatar_img" size="large"></el-avatar>
-        <span class="profile-info-nickname" style="background-color: rgb(0,0,0,0.4)">{{ userinfo.name }}</span>
-        <span class="profile-info-ad  dress" style="background-color: rgb(0,0,0,0.4)">
-                    <Icon name="location-o"/> {{ userinfo.academy }}
-                </span>
+    </div>
+    <div style="max-width: 100vw;height:18vh;background-color: rgba(255,255,255,0.4);display: flex">
+      <div style="display: grid;margin-top: -4vh;margin-left: 6vw;">
+        <el-avatar :src="userinfo.avatar_img" :size="80" style=""></el-avatar>
+        <svg style="position: absolute" t="1714390287618" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24264" width="16" height="16"><path d="M512 438.1c-125.9 0-230 104-230 235.5S386.1 909 512 909s230-104 230-235.5-104.1-235.4-230-235.4z m0 454.5c-115 0-213.6-98.6-213.6-219s93.1-219 213.6-219 213.6 98.6 213.6 219c-5.5 120.4-98.6 219-213.6 219z" fill="#C7AC56" p-id="24265"></path><path d="M616 640.7h-76.7l-21.9-71.2c0-5.5-16.4-5.5-16.4 0l-21.9 71.2H408c-5.5 0-5.5 0-11 5.5 0 5.5 0 5.5 5.5 11l60.2 43.8-21.9 71.2c0 5.5 0 5.5 5.5 11h11l60.2-43.8 60.2 43.8h11c5.5 0 5.5-5.5 5.5-11L561.3 701l60.2-43.8c5.5 0 5.5-5.5 5.5-11-5.5-5.5-5.5-5.5-11-5.5z" fill="#C7AC56" p-id="24266"></path><path d="M846 38.3c0-5.4 0-5.4 0 0C846 16.4 829.6 0 807.7 0H216.3c-21.9 0-32.9 16.4-32.9 32.9v235.5l125.9 136.9C227.3 465.5 178 564 178 673.5c0 191.7 147.9 350.5 334 350.5s334-153.3 334-350.5c0-109.5-49.3-208.1-125.9-268.3L846 268.3v-230zM386.1 60.2h246.4v301.2l-11-5.5c-71.2-27.4-147.9-27.4-219 0l-11 5.5V60.2h-5.4zM238.2 240.9V60.2h115v312.1l-115-131.4z m547.6 432.6c0 158.8-120.5 284.7-273.8 284.7S238.2 832.3 238.2 673.5 358.7 388.8 512 388.8c147.9 0 273.8 125.9 273.8 284.7z m0-432.6l-115 131.4V60.2h115v180.7z" fill="#C7AC56" p-id="24267"></path></svg>
+          <el-text  style="justify-self: center;color: #0f0f0f;font-size: 18px;margin-top: -5vh">
+            {{ userinfo.name }}
+
+          </el-text>
+
       </div>
+      <div style="display:grid;margin-left: 8vw;">
+        <el-text style="margin-left: 10px">{{userinfo.academy}}</el-text>
+        <el-text style="max-width: 45vw;margin-top: -5vh;
+        background-color: rgb(255,255,255,0.1);width: 520px;border-radius: 15px;
+         padding: 10px;
+        box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1),
+                0 0 0 2px rgb(255, 255, 255),
+                0.5em 0.5em 3em rgba(255, 255, 255, 0.3);
+">{{userinfo.social_info}}</el-text>
+
+      </div>
+
     </div>
     <t-grid :column="3" class="grid" style="max-height: 80px;--td-grid-item-image-width:25px;">
-      <t-grid-item style="background-color: rgba(255,255,255,0.4) " text="我的出售" @click="gosell">
+      <t-grid-item style="background-color:transparent " text="我的出售" @click="gosell">
         <template #image>
           <div class="icon-wrapper" style="">
             <svg class="icon" height="64" p-id="7832" t="1713774645004" version="1.1"
@@ -281,9 +297,9 @@
           </div>
         </template>
       </t-grid-item>
-      <t-grid-item style="background-color: rgba(255,255,255,0.4) " text="收藏" @click="GoCollections()">
+      <t-grid-item style="background-color: transparent " text="收藏" @click="GoCollections()">
         <template #image>
-          <div class="icon-wrapper" style="background-color: rgba(174,228,172,0.49) ">
+          <div class="icon-wrapper" style="background-color: transparent ">
             <svg class="icon" height="32" p-id="14487" t="1713143637009" version="1.1"
                  viewBox="0 0 1024 1024" width="32" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -297,9 +313,9 @@
           </div>
         </template>
       </t-grid-item>
-      <t-grid-item style="background-color: rgba(255,255,255,0.4) " text="待收取">
+      <t-grid-item style="background-color: transparent " text="待收取">
         <template #image>
-          <div class="icon-wrapper" style="background-color: rgba(174,228,172,0.49) ">
+          <div class="icon-wrapper" style="background-color: transparent ">
             <svg class="icon" height="32" p-id="15510" t="1713143762402" version="1.1"
                  viewBox="0 0 1024 1024" width="32" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -314,7 +330,7 @@
       </t-grid-item>
     </t-grid>
     <t-cell-group bordered style="background-color: rgba(115,222,98,0.68) ">
-      <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="个人信息" @click="goinfo"/>
+      <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="编辑个人信息" @click="goinfo"/>
       <t-cell arrow hover style="background-color: rgba(255,255,255,0.4) " title="设置" @click="goToSetting">
       </t-cell>
       <t-cell arrow hover note="关于软件" style="background-color: rgba(255,255,255,0.4) " title="其他"/>
@@ -349,8 +365,9 @@ const getinfo = async () => {
     userinfo.id = res.data.id.toString()
     userinfo.academy = res.data.academy;
     userinfo.grade = res.data.grade;
-    userinfo.avatar_img = res.data.avatar_img;
-    userinfo.back_img = res.data.back_img;
+    userinfo.avatar_img = res.data.avatar_img ? res.data.avatar_img:"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+    userinfo.back_img = res.data.back_img ? res.data.back_img:"https://th.bing.com/th/id/OIP.Xs1EA7xl1HD86KAZZoNZvQHaJQ?rs=1&pid=ImgDetMain";
+    userinfo.social_info=res.data.social_info;
   })
 }
 const GoCollections = () => {
@@ -388,7 +405,7 @@ const goToSetting = () => {
     }
 
     width: 100vw;
-    height: 220px;
+    height: 20vh;
     background-size: cover;
 
     display: flex;
