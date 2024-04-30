@@ -3,10 +3,18 @@ import {$http} from "./index";
 export const GetAllItem = () => {
     return $http({
         method: "get",
-        url: "http://127.0.0.1:4523/m1/4280410-0-default/item/all",
-        // url: "/item/all"
+        url: "/item/all"
     });
 };
+export const GetItemByType = (type: string) => {
+    const url = "/item/type";
+    return $http({
+        method: "get",
+        url: url,
+        params: {type: type}
+    })
+
+}
 
 export const getItemByItemIdApi = (data: { id: string }) => {
     const url = "/item/" + data.id;
@@ -23,7 +31,7 @@ export const newItemApi = (data: {
     itemType: String;
     images: Array<any>;
 }) => {
-    var formData = new FormData();
+    let formData = new FormData();
     for (let i = 0; i < data.images.length; i++) {
         formData.append("images", data.images[i].raw);
     }

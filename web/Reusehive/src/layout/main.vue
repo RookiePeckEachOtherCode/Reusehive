@@ -5,11 +5,13 @@
         <RouterView></RouterView>
       </keep-alive>
     </div>
-    <!--    <div>-->
-    <!--      <TabBar/>-->
-    <!--    </div>-->
+    <div>
+      <TabBar/>
+    </div>
   </div>
 </template>
 
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import TabBar from "./TabBar.vue";
+</script>

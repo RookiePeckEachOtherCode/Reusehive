@@ -4,7 +4,8 @@ class BaseItem {
     name: String;
     description: String;
     prices: number;
-    itemType: number;
+    itemType: String;
+    itemStatus: number;
 
     constructor(
         id?: String,
@@ -12,14 +13,16 @@ class BaseItem {
         name?: String,
         description?: String,
         prices?: number,
-        type?: number
+        itemType?: String,
+        itemStatus?: number,
     ) {
         this.id = id || "";
         this.uid = uid || "";
         this.name = name || "";
         this.description = description || "";
         this.prices = prices || 1000000;
-        this.itemType = type || 0;
+        this.itemType = itemType || "";
+        this.itemStatus = itemStatus || -1;
     }
 }
 

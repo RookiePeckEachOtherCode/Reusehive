@@ -1,5 +1,5 @@
 <template>
-  <div class="container flex flex-col" @click="goToItem()">
+  <div class="container flex flex-col mb-2" @click="goToItem()">
     <div class="item-image">
       <t-image :src="fimage" :style="{ width: '10rem', height: '12rem' }" fit="cover" shape="round"></t-image>
     </div>
@@ -47,6 +47,10 @@ const goToItem = () => {
 <style scoped>
 .item-desc {
   font-weight: bold;
+  max-width: 10rem;
+  max-height: 3rem;
+  overflow-wrap: break-word;
+  overflow-y: hidden;
 }
 
 .symbol {
