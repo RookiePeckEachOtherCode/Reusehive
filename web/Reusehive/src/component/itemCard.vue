@@ -1,16 +1,14 @@
 <template>
-  <div class="container" @click="goToItem()">
+  <div class="container flex flex-col" @click="goToItem()">
     <div class="item-image">
-      <t-image :src="fimage" :style="{ width: '20vh', height: '25vh' }" fit=" cover" shape="round"></t-image>
+      <t-image :src="fimage" :style="{ width: '10rem', height: '12rem' }" fit="cover" shape="round"></t-image>
     </div>
     <div class="item-desc">
       {{ item!.name }}
     </div>
     <div class="price">
       <span class="symbol">¥</span>
-      <span class="data">
-                {{ item!.prices }}
-            </span>
+      <span class="data"> {{ item!.prices }} </span>
     </div>
   </div>
 
@@ -47,38 +45,18 @@ const goToItem = () => {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  max-width: 20vh;
-}
-
-.item-image {
-  border-radius: 10px;
-}
-
 .item-desc {
-  margin-top: 5px;
-  margin-left: 5px;
   font-weight: bold;
-  max-height: 15vh;
-  overflow-y: auto;
 }
 
-.price {
-  margin-left: 5px;
-
-  .symbol {
-    font-size: 15px;
-    font-weight: bold;
-    color: #F00;
-  }
-
-  .data {
-    font-size: 25px;
-    font-weight: bold;
-    color: #F00;
-  }
+.symbol {
+  font-weight: bold;
+  color: #F00;
 }
+
+.data {
+  font-weight: bold;
+  color: #F00;
+}
+
 </style>

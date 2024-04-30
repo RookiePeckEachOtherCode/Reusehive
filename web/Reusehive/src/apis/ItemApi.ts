@@ -1,10 +1,10 @@
 import {$http} from "./index";
 
-export const getAllItemsApi = () => {
+export const GetAllItem = () => {
     return $http({
         method: "get",
-        // url: "http://127.0.0.1:4523/m1/4280410-0-default/item/all",
-        url: "/item/all"
+        url: "http://127.0.0.1:4523/m1/4280410-0-default/item/all",
+        // url: "/item/all"
     });
 };
 

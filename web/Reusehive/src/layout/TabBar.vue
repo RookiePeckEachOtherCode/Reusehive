@@ -13,13 +13,15 @@ import homeSvg from '../assets/tabs/home.svg'
 import messageSvg from '../assets/tabs/message.svg'
 import orderSvg from '../assets/tabs/order.svg'
 import userSvg from '../assets/tabs/user.svg'
+import likeSvg from '../assets/tabs/like.svg'
 import router from "../router";
 
 
 const list = ref([{value: "1", svg: homeSvg},
   {value: "2", svg: messageSvg},
   {value: "3", svg: orderSvg},
-  {value: "4", svg: userSvg}
+  {value: "4", svg: likeSvg},
+  {value: "5", svg: userSvg}
 ])
 
 const i = ref("1")
@@ -33,6 +35,8 @@ function handleChange(val: string) {
   } else if (val === "3") {
     router.push('purchase')
   } else if (val === "4") {
+    router.push('collections')
+  } else if (val === "5") {
     router.push('home')
   }
 }

@@ -49,11 +49,6 @@ const router = createRouter({
             component: () => import("../pages/purchase-detail.vue")
         },
         {
-            path: "/collections",
-            name: "collections",
-            component: () => import("../pages/Collections.vue")
-        },
-        {
             path: "/lostfind",
             name: "lostfind",
             component: () => import("../pages/lostfind.vue")
@@ -94,7 +89,7 @@ const router = createRouter({
                 {
                     path: "item-list",
                     name: "item-list",
-                    component: () => import("../pages/item-list.vue"),
+                    component: () => import("../pages/ItemList.vue"),
                     meta: {
                         showFather: true,
                     }
@@ -116,23 +111,31 @@ const router = createRouter({
                         showFather: true,
                     }
                 },
+                {
+                    path: "/collections",
+                    name: "collections",
+                    component: () => import("../pages/Collections.vue"),
+                    meta: {
+                        showFather: true,
+                    }
+                },
             ],
         },
     ]
 });
 export default router;
 
-const whiteList = ['/login', '/register', '/setting']
-
-router.beforeEach((to, _from, next) => {
-        if (localStorage.getItem('token') == null) {
-            if (whiteList.indexOf(to.path) !== -1) {
-                next()
-            } else {
-                next({path: '/login'})
-            }
-        } else {
-            next()
-        }
-    }
-)
+// const whiteList = ['/login', '/register', '/setting']
+//
+// router.beforeEach((to, _from, next) => {
+//         if (localStorage.getItem('token') == null) {
+//             if (whiteList.indexOf(to.path) !== -1) {
+//                 next()
+//             } else {
+//                 next({path: '/login'})
+//             }
+//         } else {
+//             next()
+//         }
+//     }
+// )
