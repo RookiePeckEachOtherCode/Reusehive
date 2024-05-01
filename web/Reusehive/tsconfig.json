@@ -19,9 +19,9 @@
     /* Linting */
     "strict": true,
     /* 检查未使用的变量 */
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     /* 检查未使用的函数参数 */
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowJs": true
   },

@@ -187,8 +187,8 @@ public class ItemController {
     /**
      * 根据物品类型获取物品列表
      */
-    @GetMapping("/item/type/{type}")
-    public Result<List<Item>> getItemByType(@PathVariable String type) {
+    @GetMapping("/item/type")
+    public Result<List<ItemDetail>> getItemByType(String type) {
         try {
             var items = itemService.getItemByType(type);
             return Result.ok(items);
@@ -198,6 +198,7 @@ public class ItemController {
             return Result.error(msg);
         }
     }
+
 
     /**
      * 当前用户添加物品到收藏

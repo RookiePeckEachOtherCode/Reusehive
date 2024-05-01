@@ -1,12 +1,9 @@
 <template>
   <div class="h-screen flex flex-col ">
-    <div class="search flex py-5 justify-between mx-5 ">
-      <div class="bg-gray-100 flex py-3 w-4/5 sm:w-1/3 rounded-3xl">
+    <div class="search flex py-5 justify-between mx-12">
+      <div class="bg-gray-100 flex py-3 w-full sm:w-1/3 rounded-3xl">
         <img alt="" class="mx-2" src="../assets/search.svg">
         <input class="focus:outline-none w-4/5 bg-gray-100" type="text">
-      </div>
-      <div class="shop-bag ">
-        <img alt="" class="mt-2  size-8" src="../assets/shop_bag.svg">
       </div>
     </div>
     <div class="tags flex flex-wrap">
@@ -16,28 +13,34 @@
           class="item-type"
           @click="handleSwitchItem(tag.type)"
       >
-        <div :class="{'tag-active':itemTypeTag==tag.type}" class="p-1.5">
+        <div :class="{'tag-active':itemTypeTag==tag.type}" class="m-1 p-2">
           <img :src="tag.icon" alt="">
           <div class="text-center">{{ tag.type }}</div>
         </div>
       </div>
     </div>
 
-    <div class="pb-14">
-      <el-scrollbar height="100vh">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-h-20 ">
-          <div v-for="itemDetail in itemDetails" :key="itemDetail.item.id.toString()" class="mx-auto">
-            <itemCard :images="itemDetail.images" :item="itemDetail.item"></itemCard>
+    <div>
+      <el-scrollbar height="92%">
+        <masonry-infinite-grid>
+          <div
+              v-for="itemDetail in itemDetails"
+              :key="itemDetail.item.id.toString()"
+              :data-grid-groupkey="itemDetail.item.id.toString()"
+          >
+            <div class="mx-2">
+              <itemCard :images="itemDetail.images" :item="itemDetail.item"></itemCard>
+            </div>
           </div>
-        </div>
+        </masonry-infinite-grid>
       </el-scrollbar>
     </div>
+
   </div>
 </template>
 
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
-import itemCard from '../component/itemCard.vue'
 import deviceSvg from '../assets/item-types/device.svg'
 import bookSvg from '../assets/item-types/book.svg'
 import clothesSvg from '../assets/item-types/clothes.svg'
@@ -48,6 +51,8 @@ import blockSvg from '../assets/item-types/block.svg'
 import otherSvg from '../assets/item-types/other.svg'
 import {GetAllItem, GetItemByType} from "../apis/ItemApi.ts";
 import ItemDetail from "../model/itemDetail.ts";
+import ItemCard from "../component/ItemCard.vue";
+import {MasonryInfiniteGrid} from "@egjs/vue3-infinitegrid";
 
 const tags = ref([
   {type: '电子数码', icon: deviceSvg},
@@ -92,6 +97,9 @@ function handleSwitchItem(type: string) {
     itemTypeTag.value = type
     getItemByType(type)
   }
+}
+
+function goToPurchaseList() {
 }
 
 </script>

@@ -23,11 +23,11 @@ const router = createRouter({
             component: () => import("../pages/Register.vue")
 
         },
-        // {
-        //     path: "/item",
-        //     name: "item",
-        //     component: () => import("../pages/item.vue"),
-        // },
+        {
+            path: "/item-detail",
+            name: "item-detail",
+            component: () => import("../pages/ItemDetail.vue"),
+        },
         {
             path: "/item/new",
             name: "item-new",

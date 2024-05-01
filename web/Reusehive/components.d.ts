@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
@@ -30,6 +32,7 @@ declare module 'vue' {
     TGridItem: typeof import('tdesign-mobile-vue')['GridItem']
     TIcon: typeof import('tdesign-mobile-vue')['Icon']
     TImage: typeof import('tdesign-mobile-vue')['Image']
+    TImageViewer: typeof import('tdesign-mobile-vue')['ImageViewer']
     TInput: typeof import('tdesign-mobile-vue')['Input']
     TList: typeof import('tdesign-mobile-vue')['List']
     TNavbar: typeof import('tdesign-mobile-vue')['Navbar']

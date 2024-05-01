@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="h-screen">
+    <div class="h-screen flex flex-col">
       <keep-alive>
         <RouterView></RouterView>
       </keep-alive>

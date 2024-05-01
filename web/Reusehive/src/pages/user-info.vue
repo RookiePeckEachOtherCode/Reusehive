@@ -26,7 +26,7 @@ import {useRoute} from "vue-router";
 import User from "../model/user.ts";
 import {getUserItemInfo} from "../apis/UserApi.ts";
 import ItemDetail from "../model/itemDetail.ts";
-import itemCard from '../component/itemCard.vue'
+import itemCard from '../component/ItemCard.vue'
 import router from "../router";
 
 const user = ref<User>(new User())

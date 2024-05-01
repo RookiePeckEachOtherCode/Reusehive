@@ -1,14 +1,14 @@
 <template>
-  <div class="container flex flex-col mb-2" @click="goToItem()">
-    <div class="item-image">
-      <t-image :src="fimage" :style="{ width: '10rem', height: '12rem' }" fit="cover" shape="round"></t-image>
-    </div>
-    <div class="item-desc">
-      {{ item!.name }}
-    </div>
-    <div class="price">
-      <span class="symbol">¥</span>
-      <span class="data"> {{ item!.prices }} </span>
+  <div class="bg-gray-100 p-5 rounded-2xl my-2 ">
+    <div class="container flex flex-col " @click="goToItem()">
+      <img :src="fimage" alt="" class="item-image w-40 sm:w-44"/>
+      <div class="item-desc">
+        {{ item!.name }}
+      </div>
+      <div class="price">
+        <span class="symbol">¥</span>
+        <span class="data"> {{ item!.prices }} </span>
+      </div>
     </div>
   </div>
 
@@ -34,7 +34,7 @@ const goToItem = () => {
   const tid: string = props.item?.id.toString() ?? '';
   const uid: string = props.item?.uid.toString() ?? '';
   router.push({
-    path: `/item`,
+    name: "item-detail",
     query: {
       tid: tid,
       uid: uid
@@ -47,7 +47,6 @@ const goToItem = () => {
 <style scoped>
 .item-desc {
   font-weight: bold;
-  max-width: 10rem;
   max-height: 3rem;
   overflow-wrap: break-word;
   overflow-y: hidden;

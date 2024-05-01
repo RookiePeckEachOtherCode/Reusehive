@@ -166,12 +166,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Cacheable(value = CacheKey.ITEM_TYPE_LIST, key = "#type")
-    public List<Item> getItemByType(String type) {
+    public List<ItemDetail> getItemByType(String type) {
         return QueryChain.of(itemMapper)
-                .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
                 .where(ItemTableDef.ITEM.ITEM_STATUS.eq(ItemStatus.UNDO))
-                .list();
+                .where(ItemTableDef.ITEM.ITEM_TYPE.eq(type))
+                .list()
+                .stream()
+                .map(it -> new ItemDetail(it, this.getItemImage(it.getId())))
+                .toList();
     }
+
 
     @Override
     @Cacheable(value = CacheKey.ITEM_IMAGE_LIST_ID, key = "#id")

@@ -95,17 +95,13 @@ onMounted(() => {
       notify_err("请先登录")
       return
     }
-
     if (res.code == 1) {
+      console.log(res.data)
       originData.value = res.data
       originAvatar.value = res.data.avatar_img
       originBackImg.value = res.data.back_img
       onReset()
-    } else {
-      notify_err(res.msg)
     }
-  }).catch(err => {
-    notify_err(err)
   })
 })
 
@@ -144,13 +140,29 @@ const formData = reactive({
 
 const form = ref(null);
 const onReset = () => {
-  formData.grade = originData.value!.grade.toString()
-  formData.phone_number = originData.value!.phone_number.toString()
-  formData.academy = originData.value!.academy.toString()
-  formData.name = originData.value!.name.toString()
-  formData.social_info = originData.value!.social_info.toString()
-  formData.gender = originData.value!.gender.toString()
-  console.log(formData)
+  if (originData.value?.grade) {
+    formData.grade = originData.value!.grade.toString()
+  } else {
+    formData.grade = ''
+  }
+
+  if (originData.value?.academy) {
+    formData.academy = originData.value!.academy.toString()
+  } else {
+    formData.academy = ''
+  }
+  if (originData.value?.gender) {
+    formData.gender = originData.value?.gender.toString();
+  } else {
+    formData.academy = ''
+  }
+  if (originData.value?.phone_number) {
+    formData.phone_number = originData.value!.phone_number.toString()
+  } else {
+    formData.phone_number = ''
+  }
+
+  formData.name = originData.value!.name.toString() ?? ''
 }
 const onSubmit = async () => {
   await UploadUserInfo(formData).then(res => {
