@@ -4,11 +4,11 @@ USE reusehive;
 CREATE TABLE user
 (
     id           BIGINT PRIMARY KEY,
-    name         VARCHAR(50) UNIQUE             NOT NULL,
-    gender       TINYINT COMMENT '性别 男1 女0' NOT NULL,
-    grade        VARCHAR(20) COMMENT '年级'     NOT NULL,
-    academy      VARCHAR(20) COMMENT '学院'     NOT NULL,
-    phone_number VARCHAR(20)                    NOT NULL,
+    name         VARCHAR(50) UNIQUE NOT NULL,
+    gender       TINYINT COMMENT '性别 男1 女0',
+    grade        VARCHAR(20) COMMENT '年级',
+    academy      VARCHAR(20) COMMENT '学院',
+    phone_number VARCHAR(20)        NOT NULL,
     social_info  VARCHAR(255) COMMENT '社交信息',
     avatar_img   VARCHAR(255),
     back_img     VARCHAR(255),

@@ -36,19 +36,10 @@ public class UserController {
     public Result<String> register(
             String name,
             String password,
-            String gender,
-            String grade,
-            String academy,
-            String phone_number,
-            String social_info,
-            MultipartFile avatar_img,
-            MultipartFile back_img
+            String phone_number
     ) {
         try {
-            var avatar_img_url = minioUtils.UploadUserIcon(avatar_img);
-            var back_img_url = minioUtils.UploadUserBackImg(back_img);
-
-            var user = new User(null, name, gender, grade, academy, phone_number, social_info, avatar_img_url, back_img_url);
+            var user = new User(null, name, null, null, null, phone_number, null, null, null);
             var userPassword = new UserPassword(null, password);
             var uid = userService.register(user, userPassword).getId();
             StpUtil.login(uid);
@@ -60,6 +51,7 @@ public class UserController {
             return Result.error(msg);
         }
     }
+
 
     /**
      * 用户登陆

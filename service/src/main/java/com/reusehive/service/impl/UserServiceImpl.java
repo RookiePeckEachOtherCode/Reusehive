@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private ItemService itemService;
-    @Autowired
+    @Resource
     private MinioUtils minioUtils;
 
     @Override

@@ -125,17 +125,17 @@ const router = createRouter({
 });
 export default router;
 
-// const whiteList = ['/login', '/register', '/setting']
-//
-// router.beforeEach((to, _from, next) => {
-//         if (localStorage.getItem('token') == null) {
-//             if (whiteList.indexOf(to.path) !== -1) {
-//                 next()
-//             } else {
-//                 next({path: '/login'})
-//             }
-//         } else {
-//             next()
-//         }
-//     }
-// )
+const whiteList = ['/login', '/register', '/setting']
+
+router.beforeEach((to, _from, next) => {
+        if (localStorage.getItem('token') == null) {
+            if (whiteList.indexOf(to.path) !== -1) {
+                next()
+            } else {
+                next({path: '/login'})
+            }
+        } else {
+            next()
+        }
+    }
+)
