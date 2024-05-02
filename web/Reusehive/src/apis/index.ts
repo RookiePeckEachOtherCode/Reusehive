@@ -6,7 +6,8 @@ import {Toast} from "tdesign-mobile-vue";
 
 export const httpInstance = axios.create();
 // httpInstance.defaults.baseURL = LocalStorage().gethost() ?? "http://127.0.0.1:8888";
-httpInstance.defaults.baseURL = "http://127.0.0.1:8888";
+
+httpInstance.defaults.baseURL = import.meta.env.VITE_API_URL
 
 httpInstance.defaults.transformResponse = [
     function (data) {

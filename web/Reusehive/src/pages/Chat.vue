@@ -63,7 +63,8 @@ import router from "../router";
 import {getUserInfoByName} from "../apis/UserApi.ts";
 import {ElMessage} from "element-plus";
 
-let url = "ws://127.0.0.1:8888/chat/"
+// let url = "ws://192.168.1.10:8888/chat/"
+let url = import.meta.env.VITE_SOCKET_URL;
 const route = useRoute();
 const userinfo = reactive({
   id: "lingluo",

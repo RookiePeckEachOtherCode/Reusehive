@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 p-5 rounded-2xl my-2 ">
+  <div class="bg-gray-100 p-5 rounded-2xl my-2">
     <div class="container flex flex-col " @click="goToItem()">
       <img :src="fimage" alt="" class="item-image w-40 sm:w-44"/>
       <div class="item-desc">

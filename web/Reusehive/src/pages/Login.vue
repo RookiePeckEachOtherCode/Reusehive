@@ -54,6 +54,7 @@
 import {reactive} from "vue";
 import {UserLogin} from "../apis/UserApi.ts";
 import router from "../router";
+import {LocalStorage} from "../storage/LocalStorage.ts";
 
 const loginForm = reactive({
   name: "",
@@ -63,8 +64,8 @@ const loginForm = reactive({
 function handleLogin() {
   UserLogin({name: loginForm.name, password: loginForm.password}).then(res => {
     if (res.code === 1) {
-      localStorage.setItem("token", res.data);
-      router.push({name: "item-list"})
+      LocalStorage().setToken(res.data, "", loginForm.name)
+      router.push("item-list")
     }
   })
 }

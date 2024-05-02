@@ -1,21 +1,25 @@
 <template>
   <div class="h-screen flex flex-col ">
     <div class="search flex py-5 justify-between mx-12">
-      <div class="bg-gray-100 flex py-3 w-full sm:w-1/3 rounded-3xl">
+      <div class="bg-gray-100 flex py-3  w-4/5 sm:w-1/3 rounded-3xl">
         <img alt="" class="mx-2" src="../assets/search.svg">
         <input class="focus:outline-none w-4/5 bg-gray-100" type="text">
       </div>
+      <div class="shop-bag pt-0.5" @click="goNewItem">
+        <img alt="" class="mt-2  size-8" src="../assets/item-new.svg">
+      </div>
     </div>
-    <div class="tags flex flex-wrap">
+
+    <div class="tags grid grid-cols-4 md:grid-cols-8">
       <div
           v-for="tag in tags"
           :key="tag.type"
-          class="item-type"
+          class="item-type mx-2"
           @click="handleSwitchItem(tag.type)"
       >
-        <div :class="{'tag-active':itemTypeTag==tag.type}" class="m-1 p-2">
+        <div :class="{'tag-active':itemTypeTag==tag.type}" class="p-2  ml-1">
           <img :src="tag.icon" alt="">
-          <div class="text-center">{{ tag.type }}</div>
+          <div class="text-left" style="font-size:0.8rem">{{ tag.type }}</div>
         </div>
       </div>
     </div>
@@ -53,6 +57,7 @@ import {GetAllItem, GetItemByType} from "../apis/ItemApi.ts";
 import ItemDetail from "../model/itemDetail.ts";
 import ItemCard from "../component/ItemCard.vue";
 import {MasonryInfiniteGrid} from "@egjs/vue3-infinitegrid";
+import router from '../router'
 
 const tags = ref([
   {type: '电子数码', icon: deviceSvg},
@@ -99,19 +104,13 @@ function handleSwitchItem(type: string) {
   }
 }
 
-function goToPurchaseList() {
+function goNewItem() {
+  router.push("/item/new")
 }
 
 </script>
 
 <style scoped>
-.item-type {
-  margin-left: 0.5rem;
-  margin-right: auto;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0.5rem;
-  border-radius: 1rem;
-}
 
 
 .tag-active {

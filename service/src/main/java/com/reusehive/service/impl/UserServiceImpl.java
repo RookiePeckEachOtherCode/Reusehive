@@ -106,20 +106,18 @@ public class UserServiceImpl implements UserService {
     )
     public void updateUser(User user) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         var dbUser = userMapper.selectOneById(user.getId());
-        UrlUtils.getFileNameFromUrl(dbUser.getAvatar_img());
 
         if (user.getAvatar_img() == null) {
             user.setAvatar_img(dbUser.getAvatar_img());
-        } else {
+        } else if(dbUser.getAvatar_img()!=null) {
             minioUtils.DeleteUserIcon(UrlUtils.getFileNameFromUrl(dbUser.getAvatar_img()));
         }
 
         if (user.getBack_img() == null) {
             user.setBack_img(dbUser.getBack_img());
-        } else {
+        } else if(dbUser.getBack_img()!=null) {
             minioUtils.DeleteUserBackImg(UrlUtils.getFileNameFromUrl(dbUser.getBack_img()));
         }
-
 
         userMapper.update(user);
     }

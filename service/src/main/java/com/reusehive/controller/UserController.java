@@ -9,11 +9,15 @@ import com.reusehive.entity.database.UserPassword;
 import com.reusehive.service.UserService;
 import com.reusehive.utils.MinioUtils;
 import com.reusehive.utils.Result;
+import io.minio.errors.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -161,7 +165,9 @@ public class UserController {
 
             userService.updateUser(user);
             return Result.ok();
-        } catch (Exception e) {
+        } catch (RuntimeException | IOException | ServerException | InsufficientDataException | ErrorResponseException |
+                 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
+                 InternalException e) {
             var msg = "修改用户信息失败: " + e.getMessage();
             log.error(msg);
             return Result.error(msg);

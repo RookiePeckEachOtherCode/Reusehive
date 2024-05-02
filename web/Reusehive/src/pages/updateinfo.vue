@@ -1,5 +1,8 @@
 <template>
   <t-navbar :fixed="false" left-arrow title="更新个人信息" @left-click="back"/>
+  {{ formData }}
+  {{ avatar }}
+  {{ back_img }}
   <t-form
       ref="form"
       :data="formData"
@@ -16,7 +19,7 @@
         <t-upload :autoUpload="false" :beforeUpload="beforeUploadAvatar" :max="1" :onRemove="onRemoveAvatar"
                   :size-limit="{ size: 5, unit: 'MB' }"
         >
-          <template #addContent>
+          <template v-if="originData?.avatar_img.length" #addContent>
             <div class="add-content">
               <t-image
                   alt=""
@@ -30,7 +33,7 @@
         <t-upload :autoUpload="false" :beforeUpload="beforeUploadBackImg" :max="1" :onRemove="onRemoveBackImg"
                   :size-limit="{ size: 5, unit: 'MB' }"
         >
-          <template #addContent>
+          <template v-if="originData?.back_img.length" #addContent>
             <div class="add-content">
               <t-image
                   alt=""
@@ -96,10 +99,13 @@ onMounted(() => {
       return
     }
     if (res.code == 1) {
-      console.log(res.data)
-      originData.value = res.data
-      originAvatar.value = res.data.avatar_img
-      originBackImg.value = res.data.back_img
+      let data = res.data;
+      if (data.avatar_img == null) data.avatar_img = '';
+      if (data.back_img == null) data.back_img = '';
+
+      originData.value = data
+      originAvatar.value = res.data.avatar_img ?? '';
+      originBackImg.value = res.data.back_img ?? '';
       onReset()
     }
   })
@@ -165,18 +171,18 @@ const onReset = () => {
   formData.name = originData.value!.name.toString() ?? ''
 }
 const onSubmit = async () => {
+  formData.avatar_img = avatar[0]
+  formData.back_img = back_img[0]
+
   await UploadUserInfo(formData).then(res => {
-    if (res.code == 1) {
-      router.push({name: "home"});
-    } else {
-      notify_err(res.msg)
-    }
-  }).catch(err => {
-    notify_err(err)
-  })
+        if (res.code == 1) {
+          router.push("item-list");
+        }
+      }
+  )
 }
 const back = () => {
-  router.push({name: "home"});
+  router.push({name: "item-list"});
 }
 const options = areaList;
 const visibleCascader = ref(false)
