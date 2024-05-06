@@ -70,7 +70,9 @@ const onChangeCascader = (value: string, options: any) => {
   } else disablepirce.value = false;
 };
 const goBack = () => {
-  router.push("item-list")
+  router.push({
+    path: "/item-list"
+  })
 }
 const onSubmit = () => {
 
@@ -88,7 +90,9 @@ const onSubmit = () => {
     } else {
       console.log('发布失败')
     }
-    router.push("item-list")
+    router.push({
+      path: "/item-list"
+    })
   })
 }
 

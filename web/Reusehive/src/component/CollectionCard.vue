@@ -6,7 +6,7 @@
            class="w-28 h-24 object-cover rounded-xl mx-2">
 
       <div class="justify-center items-center my-auto ml-5">
-        <div class="text-xl">
+        <div class="text-xl text-ellipsis overflow-hidden ... max-w-48">
           {{ props.desc }}
         </div>
         <div class="price">

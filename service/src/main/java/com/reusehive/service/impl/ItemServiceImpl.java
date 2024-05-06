@@ -42,7 +42,13 @@ public class ItemServiceImpl implements ItemService {
     private CollectionMapper collectionMapper;
 
     @Override
-    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = CacheKey.ITEM_LIST_ALL, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_LIST_UID, allEntries = true),
+                    @CacheEvict(value = CacheKey.ITEM_TYPE_LIST, allEntries = true)
+            }
+    )
     public void newItem(Item item, MultipartFile[] images) {
         var imageUrls = new CopyOnWriteArrayList<String>();
 

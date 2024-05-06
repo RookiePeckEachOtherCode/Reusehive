@@ -1,8 +1,5 @@
 <template>
   <t-navbar :fixed="false" left-arrow title="更新个人信息" @left-click="back"/>
-  {{ formData }}
-  {{ avatar }}
-  {{ back_img }}
   <t-form
       ref="form"
       :data="formData"

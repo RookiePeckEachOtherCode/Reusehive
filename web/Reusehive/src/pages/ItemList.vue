@@ -2,8 +2,8 @@
   <div class="h-screen flex flex-col ">
     <div class="search flex py-5 justify-between mx-12">
       <div class="bg-gray-100 flex py-3  w-4/5 sm:w-1/3 rounded-3xl">
-        <img alt="" class="mx-2" src="../assets/search.svg">
-        <input class="focus:outline-none w-4/5 bg-gray-100" type="text">
+        <img alt="" class="mx-2" src="../assets/search.svg" @click="search">
+        <input v-model="searchCondition" class="focus:outline-none w-4/5 bg-gray-100" type="text">
       </div>
       <div class="shop-bag pt-0.5" @click="goNewItem">
         <img alt="" class="mt-2  size-8" src="../assets/item-new.svg">
@@ -25,7 +25,7 @@
     </div>
 
     <div>
-      <el-scrollbar height="92%">
+      <el-scrollbar height="90vh">
         <masonry-infinite-grid>
           <div
               v-for="itemDetail in itemDetails"
@@ -53,7 +53,7 @@ import findSvg from '../assets/item-types/find.svg'
 import rewardSvg from '../assets/item-types/reward.svg'
 import blockSvg from '../assets/item-types/block.svg'
 import otherSvg from '../assets/item-types/other.svg'
-import {GetAllItem, GetItemByType} from "../apis/ItemApi.ts";
+import {GetAllItem, GetItemByType, SerachItem} from "../apis/ItemApi.ts";
 import ItemDetail from "../model/itemDetail.ts";
 import ItemCard from "../component/ItemCard.vue";
 import {MasonryInfiniteGrid} from "@egjs/vue3-infinitegrid";
@@ -72,6 +72,7 @@ const tags = ref([
 
 const itemDetails = ref(new Array<ItemDetail>());
 const itemTypeTag = ref<string>("")
+const searchCondition = ref("")
 
 onMounted(async () => {
   await getItemAll()
@@ -108,6 +109,15 @@ function goNewItem() {
   router.push("/item/new")
 }
 
+
+async function search() {
+  await SerachItem({condition: searchCondition.value}).then(res => {
+    console.log(res)
+    if (res.code == 1) {
+      itemDetails.value = res.data;
+    }
+  })
+}
 </script>
 
 <style scoped>

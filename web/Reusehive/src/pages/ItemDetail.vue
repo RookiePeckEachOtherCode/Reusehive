@@ -56,7 +56,7 @@
         <span class="symbol text-xl font-semibold">¥</span>
         <span class="data text-2xl font-semibold">{{ itemDetail.item.prices }}</span>
       </div>
-      <div class="desc text-2xl mt-5">
+      <div class="desc text-2xl mt-5 text-wrap">
         {{ itemDetail.item.description }}
       </div>
     </div>
@@ -68,8 +68,9 @@
             @click="buy">
           <img alt="" class="ml-2  " src="../assets/buy.svg">
         </button>
-        <button class="flex justify-center items-center bg-green-500 hover:bg-green-500 text-white font-bold ml-1 py-4  w-1/2 px-auto rounded-r-2xl focus:outline-none focus:shadow-outline"
-                @click="goChat">
+        <button
+            class="flex justify-center items-center bg-green-500 hover:bg-green-500 text-white font-bold ml-1 py-4  w-1/2 px-auto rounded-r-2xl focus:outline-none focus:shadow-outline"
+            @click="goChat">
           <img alt="" class="ml-2" src="../assets/communication.svg">
         </button>
       </div>
@@ -87,7 +88,6 @@ import {addCollection, deleteCollection, getItemByItemIdApi, isCollected} from '
 import {getUserInfoByUidApi} from '../apis/UserApi';
 import ItemDetail from '../model/itemDetail.ts';
 import {CreatePurchase} from "../apis/PurchaseApi.ts";
-import {MasonryInfiniteGrid} from "@egjs/vue3-infinitegrid";
 
 const itemDetail = ref<ItemDetail>(new ItemDetail());
 const user = ref<User>(new User());
@@ -184,4 +184,8 @@ onMounted(async () => {
   color: #F00;
 }
 
+.desc {
+  white-space: normal;
+  word-wrap: break-word; /* 允许在长单词内换行 */
+}
 </style>

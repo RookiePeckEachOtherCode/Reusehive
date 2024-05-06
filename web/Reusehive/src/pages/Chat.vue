@@ -7,7 +7,7 @@
   <div style="max-height: 82vh;overflow: auto">
     <ul style="list-style-type: none;margin-bottom: 10vh">
       <li v-for="mes in List" style="margin-top: 20px; list-style-type: none;margin-left: -30px">
-        <div v-if="mes.tousername===userinfo.name" style="display: flex;">
+        <div v-if="mes.tousername===userinfo.name" class="mx-10" style="display: flex;">
           <el-avatar :size="50" :src="touserinfo.avatar" style="" @click="gouserinfo(touserinfo.id)"></el-avatar>
           <el-text style="
         word-break: break-all;
@@ -64,7 +64,7 @@ import {getUserInfoByName} from "../apis/UserApi.ts";
 import {ElMessage} from "element-plus";
 
 // let url = "ws://192.168.1.10:8888/chat/"
-let url = import.meta.env.VITE_SOCKET_URL;
+let url = import.meta.env.VITE_SOCKET_URL + "/chat/";
 const route = useRoute();
 const userinfo = reactive({
   id: "lingluo",
