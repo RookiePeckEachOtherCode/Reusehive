@@ -5,11 +5,27 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver, TDesignResolver} from 'unplugin-vue-components/resolvers'
 import {VantResolver} from '@vant/auto-import-resolver';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+
 
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM);
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+    build: {
+        target: ['edge90', 'chrome90', 'firefox90', 'safari15']
+    },
+
+    css: {
+        postcss: {
+            plugins: [
+                tailwindcss,
+                autoprefixer,
+            ]
+        }
+    },
+
 
     plugins: [
         vue(),
