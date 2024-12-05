@@ -29,7 +29,7 @@
     "@types/json-bigint": "^1.0.4",
     "@vant/auto-import-resolver": "^1.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
-    "internal-ip": "^7.0.0",
+    "internal-ip": "^8.0.0",
     "less": "^4.2.0",
     "typescript": "^5.0.2",
     "unplugin-auto-import": "^0.17.5",
